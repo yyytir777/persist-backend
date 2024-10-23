@@ -1,6 +1,7 @@
 package yyytir777.persist.domain.log.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import yyytir777.persist.domain.log.entity.Log;
 import yyytir777.persist.domain.log.repository.LogRepository;
 import yyytir777.persist.domain.log.dto.LogResponseDto;
@@ -9,6 +10,7 @@ import yyytir777.persist.domain.member.MemberRepository;
 
 import java.util.List;
 
+@Service
 @RequiredArgsConstructor
 public class LogServiceImpl implements LogService{
 
