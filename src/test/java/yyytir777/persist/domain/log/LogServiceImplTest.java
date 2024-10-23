@@ -8,7 +8,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import yyytir777.persist.domain.common.Role;
 import yyytir777.persist.domain.common.Type;
-import yyytir777.persist.domain.log.dto.LogSaveRequestDto;
+import yyytir777.persist.domain.log.dto.LogCreateRequestDto;
 import yyytir777.persist.domain.log.service.LogServiceImpl;
 import yyytir777.persist.domain.member.Member;
 import yyytir777.persist.domain.member.MemberRepository;
@@ -37,13 +37,13 @@ class LogServiceImplTest {
                 .build();
         memberRepository.save(member);
 
-        LogSaveRequestDto logSaveRequestDto1 = LogSaveRequestDto.builder().title("title1").thumbnail("thumbnail1").content("content1").build();
-        LogSaveRequestDto logSaveRequestDto2 = LogSaveRequestDto.builder().title("title2").thumbnail("thumbnail2").content("content2").build();
-        LogSaveRequestDto logSaveRequestDto3 = LogSaveRequestDto.builder().title("title3").thumbnail("thumbnail3").content("content3").build();
+        LogCreateRequestDto logCreateRequestDto1 = LogCreateRequestDto.builder().title("title1").thumbnail("thumbnail1").content("content1").build();
+        LogCreateRequestDto logCreateRequestDto2 = LogCreateRequestDto.builder().title("title2").thumbnail("thumbnail2").content("content2").build();
+        LogCreateRequestDto logCreateRequestDto3 = LogCreateRequestDto.builder().title("title3").thumbnail("thumbnail3").content("content3").build();
 
-        logService.save(logSaveRequestDto1);
-        logService.save(logSaveRequestDto2);
-        logService.save(logSaveRequestDto3);
+        logService.save(logCreateRequestDto1);
+        logService.save(logCreateRequestDto2);
+        logService.save(logCreateRequestDto3);
     }
 
     @Test

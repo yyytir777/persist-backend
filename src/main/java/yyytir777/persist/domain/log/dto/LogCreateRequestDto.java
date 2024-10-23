@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class LogSaveRequestDto {
+public class LogCreateRequestDto {
 
     private String title;
     private String thumbnail;
