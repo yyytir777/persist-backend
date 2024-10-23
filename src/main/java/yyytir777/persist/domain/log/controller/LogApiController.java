@@ -47,7 +47,6 @@ public class LogApiController {
     @PostMapping("/save")
     public ApiResponse<?> saveLog(@RequestBody @Valid LogSaveRequestDto logSaveRequestDto) {
         logService.save(logSaveRequestDto);
-        return ApiResponse.onSuccess("");
+        return ApiResponse.onSuccess();
     }
-
 }

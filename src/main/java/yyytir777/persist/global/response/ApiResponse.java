@@ -26,6 +26,10 @@ public class ApiResponse<T> {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private T result;
 
+    public static ApiResponse<?> onSuccess() {
+        return new ApiResponse<>(true, HttpStatus.OK.toString(), null, null);
+    }
+
     public static <T> ApiResponse<T> onSuccess(T result) {
         if (result instanceof List<?>) {
             Integer size = ((List<?>) result).size();
