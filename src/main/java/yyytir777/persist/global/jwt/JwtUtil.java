@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import yyytir777.persist.domain.member.dto.MemberInfoDto;
+import yyytir777.persist.global.error.ErrorCode;
+import yyytir777.persist.global.error.exception.TokenException;
 import yyytir777.persist.global.jwt.dto.JwtInfoDto;
 
 import java.security.Key;
@@ -97,13 +99,16 @@ public class JwtUtil {
             return true;
         } catch (SecurityException | MalformedJwtException e) {
             log.info("JWT 토큰이 유효하지 않습니다.", e);
+            throw new TokenException(ErrorCode.INVALID_TOKEN);
         } catch (ExpiredJwtException e) {
             log.info("JWT 토큰이 만료되었습니다.", e);
+            throw new TokenException(ErrorCode.TOKEN_EXPIRED);
         } catch (UnsupportedJwtException e) {
             log.info("지원하지 않는 JWT 토큰 입니다.", e);
+            throw new TokenException(ErrorCode.UNSUPPORTED_TOKEN);
         } catch (IllegalArgumentException e) {
             log.info("JWT claims가 비어있습니다.", e);
+            throw new TokenException(ErrorCode.JWT_CLAIMS_EMPTY);
         }
-        return false;
     }
 }

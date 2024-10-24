@@ -39,7 +39,10 @@ public class SecurityConfig {
             "/oauth/kakao/**",
 
             // register
-            "/api/v1/member/register"
+            "/api/v1/member/register",
+
+            //index.html
+            "/"
     };
 
     @Bean

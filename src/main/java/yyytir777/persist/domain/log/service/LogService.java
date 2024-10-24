@@ -14,7 +14,7 @@ public interface LogService {
 
     List<LogResponseDto> readAllLogs(String memberId);
 
-    LogResponseDto updateLog(LogUpdateRequestDto logUpdateRequestDto, String logId);
+    LogResponseDto updateLog(LogUpdateRequestDto logUpdateRequestDto, String logId, String memberId);
 
-    void deleteLog(String logId);
+    void deleteLog(String logId, String memberId);
 }

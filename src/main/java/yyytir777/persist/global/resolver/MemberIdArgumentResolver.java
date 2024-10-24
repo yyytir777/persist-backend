@@ -15,21 +15,23 @@ import yyytir777.persist.global.jwt.JwtUtil;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class MemberInfoArgumentResolver implements HandlerMethodArgumentResolver {
+public class MemberIdArgumentResolver implements HandlerMethodArgumentResolver {
 
     private final JwtUtil jwtUtil;
 
+    @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        boolean hasAccessTokenAnnotation = parameter.hasParameterAnnotation(MemberInfo.class);
-        boolean hasAccessTokenType = String.class.isAssignableFrom(parameter.getParameterType());
-        return hasAccessTokenType && hasAccessTokenAnnotation;
+        boolean hasMemberIdAnnotation = parameter.hasParameterAnnotation(MemberId.class);
+        boolean hasMemberIdDto = MemberIdDto.class.isAssignableFrom(parameter.getParameterType());
+        return hasMemberIdAnnotation && hasMemberIdDto;
     }
 
+    @Override
     public Object resolveArgument(@NonNull MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
         String authorizationHeader = request.getHeader("Authorization");
         String accessToken = authorizationHeader.split(" ")[1];
-
-        return jwtUtil.getMemberId(accessToken);
+        String memberId = jwtUtil.getMemberId(accessToken);
+        return MemberIdDto.builder().memberId(memberId).build();
     }
 }

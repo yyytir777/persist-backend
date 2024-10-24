@@ -54,7 +54,6 @@ public class KakaoLoginService {
 
     public String getEmail(String accessToken) {
         KakaoInfoResponseDto userInfoResponseDto = getKakaoUserInfo(accessToken);
-        log.info(userInfoResponseDto.getKakaoAccount().toString());
         KakaoInfoResponseDto.KakaoAccount kakaoAccount = userInfoResponseDto.getKakaoAccount();
         return kakaoAccount.getEmail();
     }

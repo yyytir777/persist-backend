@@ -13,9 +13,9 @@ public interface MemberService {
 
     MemberResponseDto readMember(String memberId);
 
-    MemberResponseDto updateMember(MemberUpdateRequestDto memberUpdateRequestDto, String memberId);
+    MemberResponseDto updateMember(MemberUpdateRequestDto memberUpdateRequestDto, String memberId, String currentMemberId);
 
-    void deleteMember(String memberId);
+    void deleteMember(String memberId, String currentMemberId);
 
     Member findByEmail(String email);
 }

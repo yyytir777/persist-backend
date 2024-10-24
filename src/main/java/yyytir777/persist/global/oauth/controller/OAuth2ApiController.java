@@ -1,6 +1,7 @@
 package yyytir777.persist.global.oauth.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/api/v1/oauth")
+@Tag(name = "OAuth2 API Controller")
 public class OAuth2ApiController {
 
     @Value("${spring.security.oauth2.client.registration.kakao.client-id}")

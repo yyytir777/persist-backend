@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -18,6 +19,7 @@ import yyytir777.persist.domain.member.service.MemberService;
 import java.io.IOException;
 import java.util.Collections;
 
+@Slf4j
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -33,7 +35,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             if(jwtUtil.validateToken(token)) {
                 String email = jwtUtil.getEmail(token);
-
                 Member member = memberService.findByEmail(email);
 
                 SimpleGrantedAuthority grantedAuthority = new SimpleGrantedAuthority(member.getRole().toString());
@@ -42,6 +43,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             }
         }
+        log.info("JWT Filter 통과");
         filterChain.doFilter(request, response);
     }
 }

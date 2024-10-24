@@ -45,9 +45,11 @@ public class MemberServiceImpl implements MemberService {
         return MemberResponseDto.of(member);
     }
 
-    public MemberResponseDto updateMember(MemberUpdateRequestDto memberUpdateRequestDto, String memberId) {
+    public MemberResponseDto updateMember(MemberUpdateRequestDto memberUpdateRequestDto, String memberId, String currentMemberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(() ->
                 new MemberException(ErrorCode.MEMBER_NOT_EXIST));
+
+        if(!memberId.equals(currentMemberId)) throw new MemberException(ErrorCode.NOT_MY_MEMBER);
 
         member = Member.builder()
                 .Id(memberId)
@@ -63,7 +65,9 @@ public class MemberServiceImpl implements MemberService {
         return MemberResponseDto.of(member);
     }
 
-    public void deleteMember(String memberId) {
+    public void deleteMember(String memberId, String currentMemberId) {
+        if(!memberId.equals(currentMemberId)) throw new MemberException(ErrorCode.NOT_MY_MEMBER);
+
         memberRepository.findById(memberId).orElseThrow(() ->
                 new MemberException(ErrorCode.MEMBER_NOT_EXIST));
 
@@ -71,9 +75,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     public Member findByEmail(String email) {
-        Member member = memberRepository.findByEmail(email).orElseThrow(() ->
+        return memberRepository.findByEmail(email).orElseThrow(() ->
                 new MemberException(ErrorCode.MEMBER_NOT_EXIST));
-        return member;
     }
 
 }
