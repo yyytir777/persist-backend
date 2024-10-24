@@ -8,13 +8,13 @@ import java.util.List;
 
 public interface LogService {
 
-    void save(LogCreateRequestDto logCreateRequestDto);
+    void saveLog(LogCreateRequestDto logCreateRequestDto, String memberId);
 
     LogResponseDto readLog(String logId);
 
-    List<LogResponseDto> readAllLogs();
+    List<LogResponseDto> readAllLogs(String memberId);
 
-    void update(LogUpdateRequestDto logUpdateRequestDto, String logId);
+    LogResponseDto updateLog(LogUpdateRequestDto logUpdateRequestDto, String logId);
 
-    void delete(String logId);
+    void deleteLog(String logId);
 }

@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import yyytir777.persist.domain.common.BaseEntity;
-import yyytir777.persist.domain.member.Member;
+import yyytir777.persist.domain.member.entity.Member;
 
 @Getter
 @Entity

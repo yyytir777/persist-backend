@@ -1,0 +1,79 @@
+package yyytir777.persist.domain.member.service;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import yyytir777.persist.domain.common.Role;
+import yyytir777.persist.domain.member.entity.Member;
+import yyytir777.persist.domain.member.repository.MemberRepository;
+import yyytir777.persist.domain.member.dto.MemberRegisterRequestDto;
+import yyytir777.persist.domain.member.dto.MemberResponseDto;
+import yyytir777.persist.domain.member.dto.MemberUpdateRequestDto;
+import yyytir777.persist.global.error.ErrorCode;
+import yyytir777.persist.global.error.exception.MemberException;
+
+import java.util.Optional;
+
+@Service
+@RequiredArgsConstructor
+public class MemberServiceImpl implements MemberService {
+
+    private final MemberRepository memberRepository;
+
+    public void register(MemberRegisterRequestDto memberRegisterRequestDto) {
+
+        Optional<Member> findMember = memberRepository.findByEmail(memberRegisterRequestDto.getEmail());
+
+        if(findMember.isPresent()) {
+            throw new MemberException(ErrorCode.MEMBER_EXIST);
+        } else {
+            Member member = Member.builder()
+                    .email(memberRegisterRequestDto.getEmail())
+                    .name(memberRegisterRequestDto.getName())
+                    .logName(memberRegisterRequestDto.getLogName())
+                    .type(memberRegisterRequestDto.getType())
+                    .role(Role.USER)
+                    .build();
+
+            memberRepository.save(member);
+        }
+    }
+
+    public MemberResponseDto readMember(String memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow(()
+                -> new MemberException(ErrorCode.MEMBER_NOT_EXIST));
+
+        return MemberResponseDto.of(member);
+    }
+
+    public MemberResponseDto updateMember(MemberUpdateRequestDto memberUpdateRequestDto, String memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow(() ->
+                new MemberException(ErrorCode.MEMBER_NOT_EXIST));
+
+        member = Member.builder()
+                .Id(memberId)
+                .email(member.getEmail())
+                .name(memberUpdateRequestDto.getName())
+                .logName(memberUpdateRequestDto.getLogName())
+                .thumbnail(memberUpdateRequestDto.getThumbnail())
+                .role(member.getRole())
+                .type(member.getType())
+                .build();
+
+        memberRepository.save(member);
+        return MemberResponseDto.of(member);
+    }
+
+    public void deleteMember(String memberId) {
+        memberRepository.findById(memberId).orElseThrow(() ->
+                new MemberException(ErrorCode.MEMBER_NOT_EXIST));
+
+        memberRepository.deleteById(memberId);
+    }
+
+    public Member findByEmail(String email) {
+        Member member = memberRepository.findByEmail(email).orElseThrow(() ->
+                new MemberException(ErrorCode.MEMBER_NOT_EXIST));
+        return member;
+    }
+
+}
