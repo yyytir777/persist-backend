@@ -10,8 +10,8 @@ import yyytir777.persist.domain.common.Role;
 import yyytir777.persist.domain.common.Type;
 import yyytir777.persist.domain.log.dto.LogCreateRequestDto;
 import yyytir777.persist.domain.log.service.LogServiceImpl;
-import yyytir777.persist.domain.member.Member;
-import yyytir777.persist.domain.member.MemberRepository;
+import yyytir777.persist.domain.member.entity.Member;
+import yyytir777.persist.domain.member.repository.MemberRepository;
 
 import java.util.UUID;
 
@@ -41,9 +41,6 @@ class LogServiceImplTest {
         LogCreateRequestDto logCreateRequestDto2 = LogCreateRequestDto.builder().title("title2").thumbnail("thumbnail2").content("content2").build();
         LogCreateRequestDto logCreateRequestDto3 = LogCreateRequestDto.builder().title("title3").thumbnail("thumbnail3").content("content3").build();
 
-        logService.save(logCreateRequestDto1);
-        logService.save(logCreateRequestDto2);
-        logService.save(logCreateRequestDto3);
     }
 
     @Test

@@ -2,17 +2,15 @@ package yyytir777.persist.domain.common;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 import yyytir777.persist.domain.log.entity.Log;
 import yyytir777.persist.domain.log.repository.LogRepository;
-import yyytir777.persist.domain.member.Member;
-import yyytir777.persist.domain.member.MemberRepository;
+import yyytir777.persist.domain.member.entity.Member;
+import yyytir777.persist.domain.member.repository.MemberRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@Component
 @RequiredArgsConstructor
 public class DataInitializer {
 

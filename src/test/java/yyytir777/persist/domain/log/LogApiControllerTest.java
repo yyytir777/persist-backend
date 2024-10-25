@@ -7,7 +7,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import yyytir777.persist.domain.common.Role;
 import yyytir777.persist.domain.common.Type;
 import yyytir777.persist.domain.log.controller.LogApiController;
-import yyytir777.persist.domain.member.Member;
+import yyytir777.persist.domain.member.entity.Member;
 
 import java.util.UUID;
 

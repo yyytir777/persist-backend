@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
-import yyytir777.persist.global.response.error.ErrorCode;
+import yyytir777.persist.global.error.ErrorCode;
 
 import java.util.List;
 

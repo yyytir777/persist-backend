@@ -1,4 +1,4 @@
-package yyytir777.persist.domain.member;
+package yyytir777.persist.domain.member.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -24,8 +24,14 @@ public class Member extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String Id;
 
+    @Column(name = "email", nullable = false, unique = true)
+    private String email;
+
     @Column(name = "name", nullable = false)
     private String name;
+
+    @Column(name = "log_name", nullable = false)
+    private String logName;
 
     @Column(name = "thumbnail")
     private String thumbnail;
