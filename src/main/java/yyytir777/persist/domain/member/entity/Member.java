@@ -34,7 +34,7 @@ public class Member extends BaseEntity {
     private String logName;
 
     @Column(name = "thumbnail")
-    private String thumbnail;
+    private String thumbnail = "Default";
 
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
