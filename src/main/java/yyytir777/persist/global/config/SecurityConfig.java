@@ -35,8 +35,8 @@ public class SecurityConfig {
             // social login
             "/api/v1/oauth/**",
 
-            // kakao callback
-            "/oauth/kakao/**",
+            // social login callback
+            "/oauth/**",
 
             // register
             "/api/v1/member/register",

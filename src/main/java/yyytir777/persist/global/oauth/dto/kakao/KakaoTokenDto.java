@@ -1,4 +1,4 @@
-package yyytir777.persist.global.oauth.dto;
+package yyytir777.persist.global.oauth.dto.kakao;
 
 import lombok.Builder;
 import lombok.Getter;

@@ -1,9 +1,13 @@
-package yyytir777.persist.global.oauth.dto;
+package yyytir777.persist.global.oauth.dto.kakao;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class KakaoInfoResponseDto {
     private Long id;
 
