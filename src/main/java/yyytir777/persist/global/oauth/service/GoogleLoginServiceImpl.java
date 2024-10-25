@@ -2,7 +2,6 @@ package yyytir777.persist.global.oauth.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -22,12 +21,8 @@ import yyytir777.persist.global.jwt.dto.JwtInfoDto;
 import yyytir777.persist.global.oauth.dto.google.GoogleInfoResponseDto;
 import yyytir777.persist.global.oauth.dto.google.GoogleTokenDto;
 
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
-
 @Slf4j
-@Service
+@Service("google")
 @RequiredArgsConstructor
 public class GoogleLoginServiceImpl implements SocialLoginService{
 
@@ -35,7 +30,6 @@ public class GoogleLoginServiceImpl implements SocialLoginService{
     private final JwtUtil jwtUtil;
 
     private final RestTemplate restTemplate = new RestTemplate();
-    private final String content_type = "application/x-www-form-urlencoded;charset=utf-8";
 
     @Value("${spring.security.oauth2.client.registration.google.client_id}")
     private String clientId;
@@ -63,11 +57,9 @@ public class GoogleLoginServiceImpl implements SocialLoginService{
 
     @Override
     public JwtInfoDto callback(String authCode) {
-        log.info("authCode = {}", authCode);
         GoogleTokenDto.Response responseDto = getToken(authCode);
         String email = getEmail(responseDto.getAccessToken());
 
-        log.info("email = {}", email);
         Member member = memberRepository.findByEmail(email).orElseThrow(() ->
                 new MemberException(ErrorCode.MEMBER_NOT_EXIST));
 
@@ -75,8 +67,8 @@ public class GoogleLoginServiceImpl implements SocialLoginService{
     }
 
     private GoogleTokenDto.Response getToken(String authCode) {
-        log.info("authCode = {}", authCode);
         HttpHeaders headers = new HttpHeaders();
+        String content_type = "application/x-www-form-urlencoded;charset=utf-8";
         headers.add("Content-type", content_type);
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
