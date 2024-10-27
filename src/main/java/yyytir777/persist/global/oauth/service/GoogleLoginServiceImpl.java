@@ -1,7 +1,6 @@
 package yyytir777.persist.global.oauth.service;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -21,7 +20,7 @@ import yyytir777.persist.global.jwt.dto.JwtInfoDto;
 import yyytir777.persist.global.oauth.dto.google.GoogleInfoResponseDto;
 import yyytir777.persist.global.oauth.dto.google.GoogleTokenDto;
 
-@Slf4j
+
 @Service("google")
 @RequiredArgsConstructor
 public class GoogleLoginServiceImpl implements SocialLoginService{
@@ -92,7 +91,6 @@ public class GoogleLoginServiceImpl implements SocialLoginService{
 
     private GoogleInfoResponseDto getGoogleUserInfo(String accessToken) {
         HttpHeaders headers = new HttpHeaders();
-        log.info("accessToken = {}", accessToken);
         headers.setBearerAuth(accessToken);
 
         HttpEntity<Object> entity = new HttpEntity<>(headers);
