@@ -30,6 +30,9 @@ public class Log extends BaseEntity {
     @Column(name = "content", nullable = false)
     private String content;
 
+    @Column(name = "preview")
+    private String preview;
+
     @Builder.Default
     @Column(name = "view_count")
     private long viewCount = 0L;

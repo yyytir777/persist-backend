@@ -3,6 +3,7 @@ package yyytir777.persist.domain.log.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import yyytir777.persist.domain.log.dto.LogUpdateRequestDto;
 import yyytir777.persist.domain.log.entity.Log;
 import yyytir777.persist.domain.log.repository.LogRepository;
@@ -15,6 +16,8 @@ import yyytir777.persist.global.error.exception.LogException;
 import yyytir777.persist.global.error.exception.MemberException;
 
 import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @Service
@@ -41,12 +44,15 @@ public class LogServiceImpl implements LogService {
     public LogResponseDto readLog(String logId) {
         Log findLog = logRepository.findById(logId).orElseThrow(() ->
                 new LogException(ErrorCode.LOG_NOT_EXIST));
-        return LogResponseDto.of(findLog);
+        return LogResponseDto.of(findLog, findLog.getMember());
     }
 
+    @Transactional
     public List<LogResponseDto> readAllLogs(String memberId) {
         return logRepository.findByMemberId(memberId).stream()
-                .map(LogResponseDto::of)
+                .map(log -> {
+                    return LogResponseDto.of(log, log.getMember());
+                })
                 .toList();
     }
 
@@ -69,7 +75,7 @@ public class LogServiceImpl implements LogService {
                 .build();
 
         logRepository.save(log);
-        return LogResponseDto.of(log);
+        return LogResponseDto.of(log, log.getMember());
     }
 
     public void deleteLog(String logId, String memberId) {
