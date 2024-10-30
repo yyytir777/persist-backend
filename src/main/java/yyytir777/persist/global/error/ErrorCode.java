@@ -20,9 +20,10 @@ public enum ErrorCode {
 
     // Token
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "T001", "JWT토큰이 유효하지 않습니다."),
-    TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "T002", "JWT토큰이 만료되었습니다."),
+    ACCESS_TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "T002", "accessToken이 만료되었습니다."),
     UNSUPPORTED_TOKEN(HttpStatus.UNAUTHORIZED, "T003", "지원하지 않는 JWT토큰 입니다."),
-    JWT_CLAIMS_EMPTY(HttpStatus.UNAUTHORIZED, "T004", "JWT Claims가 비어있습니다.");
+    JWT_CLAIMS_EMPTY(HttpStatus.UNAUTHORIZED, "T004", "JWT Claims가 비어있습니다."),
+    REFRESH_TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "T005", "refreshToken이 만료되었습니다.");
 
 
     private final HttpStatus httpStatus;

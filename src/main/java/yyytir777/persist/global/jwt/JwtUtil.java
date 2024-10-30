@@ -48,7 +48,7 @@ public class JwtUtil {
                 .build();
     }
 
-    private String createAccessToken(MemberInfoDto memberInfoDto, Date accessTokenExpireTime) {
+    public String createAccessToken(MemberInfoDto memberInfoDto, Date accessTokenExpireTime) {
         return Jwts.builder()
                 .setHeaderParam("typ", "JWT")
                 .setSubject("AccessToken")
@@ -73,7 +73,7 @@ public class JwtUtil {
                 .compact();
     }
 
-    private Date createExpireTime(Long expireTime) {
+    public Date createExpireTime(Long expireTime) {
         return new Date(System.currentTimeMillis() + expireTime);
     }
 
@@ -102,7 +102,7 @@ public class JwtUtil {
             throw new TokenException(ErrorCode.INVALID_TOKEN);
         } catch (ExpiredJwtException e) {
             log.info("JWT 토큰이 만료되었습니다.", e);
-            throw new TokenException(ErrorCode.TOKEN_EXPIRED);
+            throw new TokenException(ErrorCode.ACCESS_TOKEN_EXPIRED);
         } catch (UnsupportedJwtException e) {
             log.info("지원하지 않는 JWT 토큰 입니다.", e);
             throw new TokenException(ErrorCode.UNSUPPORTED_TOKEN);

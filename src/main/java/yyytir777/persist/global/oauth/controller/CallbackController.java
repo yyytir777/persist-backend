@@ -21,7 +21,7 @@ public class CallbackController {
 
     private final Map<String, SocialLoginService> socialLoginServices;
 
-    @GetMapping("/oauth/{provider}/callback")
+    @GetMapping("/oauth/callback/{provider}")
     public ApiResponse<JwtInfoDto> callback(@PathVariable String provider,
                                             @RequestParam(name = "code") String authCode) {
         SocialLoginService socialLoginService = socialLoginServices.get(provider);

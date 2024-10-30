@@ -15,7 +15,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(TokenException.class)
     public ApiResponse<?> handlerTokenException(TokenException e) {
         log.info("[" + e.getClass().getSimpleName() + "] : " + e.getMessage() + " (ErrorCode : " + e.getErrorCode().getHttpStatus().value() + ")");
-        return ApiResponse.onFailure(e.getErrorCode().getHttpStatus(), e.getMessage());
+        return new ApiResponse<>(false, e.getErrorCode().getCode(), null, e.getErrorCode().getMessage());
     }
 
     @ExceptionHandler(BusinessException.class)
