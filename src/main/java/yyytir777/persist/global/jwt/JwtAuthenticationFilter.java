@@ -15,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 import yyytir777.persist.domain.member.entity.Member;
 import yyytir777.persist.domain.member.service.MemberService;
+import yyytir777.persist.global.error.exception.TokenException;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -44,11 +45,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 }
             }
-        } catch (Exception e) {
-            request.setAttribute("exception", e);
+        } catch (TokenException e) {
+            request.setAttribute("tokenException", e);
         }
 
-        log.info("JWT Filter 통과");
         filterChain.doFilter(request, response);
     }
 }

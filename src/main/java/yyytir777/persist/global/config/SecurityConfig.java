@@ -43,7 +43,10 @@ public class SecurityConfig {
             "/api/v1/member/register",
 
             //index.html
-            "/"
+            "/",
+
+            // reissue accessToken by refreshToken
+            "/api/v1/token/reissue"
     };
 
     @Bean

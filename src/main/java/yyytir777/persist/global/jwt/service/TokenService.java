@@ -20,6 +20,9 @@ public class TokenService {
     Long accessTokenExpireTime;
 
     public AccessTokenResponseDto createAccessTokenByRefreshToken(String refreshToken) {
+
+        jwtUtil.validateToken(refreshToken);
+
         String memberId = jwtUtil.getMemberId(refreshToken);
         String email = jwtUtil.getEmail(refreshToken);
         Date accessTokenExpireTime = jwtUtil.createExpireTime(this.accessTokenExpireTime);
