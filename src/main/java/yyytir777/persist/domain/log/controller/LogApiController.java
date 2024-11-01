@@ -41,9 +41,15 @@ public class LogApiController {
     }
 
     @Operation(summary = "사용자의 모든 로그 조회")
-    @GetMapping("/")
-    public ApiResponse<List<LogResponseDto>> readLogList(@MemberId MemberIdDto memberIdDto) {
-        return ApiResponse.onSuccess(logService.readAllLogs(memberIdDto.getMemberId()));
+    @GetMapping("/member/{member_id}")
+    public ApiResponse<List<LogResponseDto>> getAllLogsByMemberId(@PathVariable(name = "member_id") String memberId) {
+        return ApiResponse.onSuccess(logService.readAllLogsByMemberId(memberId));
+    }
+
+    @Operation(summary = "모든 로그 조회")
+    @GetMapping("/all")
+    public ApiResponse<List<LogResponseDto>> readAllLog() {
+        return ApiResponse.onSuccess(logService.readAllLogs());
     }
 
     @Operation(summary = "로그 수정")

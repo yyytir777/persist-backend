@@ -16,6 +16,7 @@ import yyytir777.persist.global.error.exception.LogException;
 import yyytir777.persist.global.error.exception.MemberException;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -47,7 +48,14 @@ public class LogServiceImpl implements LogService {
     }
 
     @Transactional
-    public List<LogResponseDto> readAllLogs(String memberId) {
+    public List<LogResponseDto> readAllLogs() {
+        return logRepository.findAll().stream()
+                .map(log -> LogResponseDto.of(log, log.getMember()))
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public List<LogResponseDto> readAllLogsByMemberId(String memberId) {
         return logRepository.findByMemberId(memberId).stream()
                 .map(log -> LogResponseDto.of(log, log.getMember()))
                 .toList();

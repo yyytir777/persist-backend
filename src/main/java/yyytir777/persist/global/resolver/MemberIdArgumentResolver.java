@@ -31,6 +31,7 @@ public class MemberIdArgumentResolver implements HandlerMethodArgumentResolver {
         HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
         String authorizationHeader = request.getHeader("Authorization");
         String accessToken = authorizationHeader.split(" ")[1];
+        jwtUtil.validateToken(accessToken);
         String memberId = jwtUtil.getMemberId(accessToken);
         return MemberIdDto.builder().memberId(memberId).build();
     }
