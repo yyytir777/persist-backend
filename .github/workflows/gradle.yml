@@ -61,6 +61,9 @@ jobs:
               docker rm persist
             fi
             
+            # 사용되지 않는 이미지 삭제
+            docker image prune -f
+
             # 최신 이미지로 업데이트
             docker pull ${{ secrets.DOCKER_USERNAME }}/persist:latest
             
