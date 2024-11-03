@@ -34,4 +34,8 @@ public class TokenService {
                 .accessTokenExpireTime(accessTokenExpireTime)
                 .build();
     }
+
+    public String getMemberIdByAccessToken(String accessToken) {
+        return jwtUtil.getMemberId(accessToken);
+    }
 }

@@ -41,6 +41,7 @@ public class LogServiceImpl implements LogService {
         logRepository.save(log);
     }
 
+    @Transactional
     public LogResponseDto readLog(String logId) {
         Log findLog = logRepository.findById(logId).orElseThrow(() ->
                 new LogException(ErrorCode.LOG_NOT_EXIST));

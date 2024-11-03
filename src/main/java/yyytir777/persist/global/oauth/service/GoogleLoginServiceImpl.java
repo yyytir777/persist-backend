@@ -85,7 +85,6 @@ public class GoogleLoginServiceImpl implements SocialLoginService{
 
     private String getEmail(String accessToken) {
         GoogleInfoResponseDto googleInfoResponseDto = getGoogleUserInfo(accessToken);
-        System.out.println("googleInfoResponseDto = " + googleInfoResponseDto);
         return googleInfoResponseDto.getEmail();
     }
 

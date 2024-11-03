@@ -2,6 +2,7 @@ package yyytir777.persist.global.jwt.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,7 +22,14 @@ public class TokenController {
         String header = httpServletRequest.getHeader("Authorization");
         String refreshToken = header.split(" ")[1];
 
-        AccessTokenResponseDto accessTokenDto = tokenService.createAccessTokenByRefreshToken(refreshToken);
-        return ApiResponse.onSuccess(accessTokenDto);
+        return ApiResponse.onSuccess(tokenService.createAccessTokenByRefreshToken(refreshToken));
+    }
+
+    @GetMapping("/memberId")
+    public ApiResponse<String> getMemberIdByAccessToken(HttpServletRequest httpServletRequest) {
+        String header = httpServletRequest.getHeader("Authorization");
+        String accessToken = header.split(" ")[1];
+
+        return ApiResponse.onSuccess(tokenService.getMemberIdByAccessToken(accessToken));
     }
 }

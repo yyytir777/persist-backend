@@ -18,6 +18,7 @@ public class LogResponseDto {
     private String preview;
     private long viewCount;
     private LocalDate createdDate;
+    private String content;
 
     // 멤버 (author)
     private String memberId;
@@ -36,6 +37,7 @@ public class LogResponseDto {
                 .memberId(member.getId())
                 .name(member.getName())
                 .authorThumbnail(member.getThumbnail())
+                .content(log.getContent())
                 .build();
     }
 }
