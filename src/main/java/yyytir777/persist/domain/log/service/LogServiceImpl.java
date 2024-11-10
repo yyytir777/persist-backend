@@ -45,24 +45,29 @@ public class LogServiceImpl implements LogService {
         return log.getId();
     }
 
-    @Transactional
-    public LogDetailResponseDto readLog(String logId) {
-        Log findLog = logRepository.findById(logId).orElseThrow(() ->
+    /**
+     * 로그를 읽어들이고 viewCount 증가
+     */
+    public LogDetailResponseDto readLog(String logId, boolean hasViewed) {
+        Log findLog = logRepository.findLogAndMemberById(logId).orElseThrow(() ->
                 new LogException(ErrorCode.LOG_NOT_EXIST));
-        return LogDetailResponseDto.of(findLog, findLog.getMember());
+
+        if(!hasViewed) logRepository.increaseViewCountByLog(findLog);
+
+        return LogDetailResponseDto.of(findLog);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<LogThumbnailResponseDto> readAllLogs() {
-        return logRepository.findAll().stream()
-                .map(log -> LogThumbnailResponseDto.of(log, log.getMember()))
+        return logRepository.findAllWithMember().stream()
+                .map(LogThumbnailResponseDto::of)
                 .collect(Collectors.toList());
     }
 
     @Transactional
     public List<LogThumbnailResponseDto> readAllLogsByMemberId(String memberId) {
         return logRepository.findByMemberId(memberId).stream()
-                .map(log -> LogThumbnailResponseDto.of(log, log.getMember()))
+                .map(LogThumbnailResponseDto::of)
                 .toList();
     }
 
@@ -85,7 +90,7 @@ public class LogServiceImpl implements LogService {
                 .build();
 
         logRepository.save(log);
-        return LogThumbnailResponseDto.of(log, log.getMember());
+        return LogThumbnailResponseDto.of(log);
     }
 
     public void deleteLog(String logId, String memberId) {

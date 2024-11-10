@@ -25,7 +25,7 @@ public class LogThumbnailResponseDto {
     private String authorThumbnail;
 
 
-    public static LogThumbnailResponseDto of(Log log, Member member) {
+    public static LogThumbnailResponseDto of(Log log) {
         return LogThumbnailResponseDto.builder()
                 .id(log.getId())
                 .title(log.getTitle())
@@ -33,9 +33,9 @@ public class LogThumbnailResponseDto {
                 .preview(log.getPreview())
                 .viewCount(log.getViewCount())
                 .modifiedDate(log.getCreatedTime().toLocalDate())
-                .memberId(member.getId())
-                .name(member.getName())
-                .authorThumbnail(member.getThumbnail())
+                .memberId(log.getMember().getId())
+                .name(log.getMember().getName())
+                .authorThumbnail(log.getMember().getThumbnail())
                 .build();
     }
 }

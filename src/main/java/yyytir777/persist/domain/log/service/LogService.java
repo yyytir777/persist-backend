@@ -11,7 +11,7 @@ public interface LogService {
 
     String saveLog(LogCreateRequestDto logCreateRequestDto, String memberId);
 
-    LogDetailResponseDto readLog(String logId);
+    LogDetailResponseDto readLog(String logId, boolean hasViewed);
 
     List<LogThumbnailResponseDto> readAllLogs();
 

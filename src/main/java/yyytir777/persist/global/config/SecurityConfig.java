@@ -45,8 +45,12 @@ public class SecurityConfig {
             //index.html
             "/",
 
+            "/health/**",
+
             // reissue accessToken by refreshToken
-            "/api/v1/token/reissue"
+            "/api/v1/token/reissue",
+
+            "/api/v1/**",
     };
 
     @Bean
