@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface LogService {
 
-    void saveLog(LogCreateRequestDto logCreateRequestDto, String memberId);
+    String saveLog(LogCreateRequestDto logCreateRequestDto, String memberId);
 
     LogResponseDto readLog(String logId);
 
