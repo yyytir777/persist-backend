@@ -4,10 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import yyytir777.persist.domain.log.dto.LogDetailResponseDto;
 import yyytir777.persist.domain.log.dto.LogUpdateRequestDto;
 import yyytir777.persist.domain.log.entity.Log;
 import yyytir777.persist.domain.log.repository.LogRepository;
-import yyytir777.persist.domain.log.dto.LogResponseDto;
+import yyytir777.persist.domain.log.dto.LogThumbnailResponseDto;
 import yyytir777.persist.domain.log.dto.LogCreateRequestDto;
 import yyytir777.persist.domain.member.entity.Member;
 import yyytir777.persist.domain.member.repository.MemberRepository;
@@ -42,27 +43,27 @@ public class LogServiceImpl implements LogService {
     }
 
     @Transactional
-    public LogResponseDto readLog(String logId) {
+    public LogDetailResponseDto readLog(String logId) {
         Log findLog = logRepository.findById(logId).orElseThrow(() ->
                 new LogException(ErrorCode.LOG_NOT_EXIST));
-        return LogResponseDto.of(findLog, findLog.getMember());
+        return LogDetailResponseDto.of(findLog, findLog.getMember());
     }
 
     @Transactional
-    public List<LogResponseDto> readAllLogs() {
+    public List<LogThumbnailResponseDto> readAllLogs() {
         return logRepository.findAll().stream()
-                .map(log -> LogResponseDto.of(log, log.getMember()))
+                .map(log -> LogThumbnailResponseDto.of(log, log.getMember()))
                 .collect(Collectors.toList());
     }
 
     @Transactional
-    public List<LogResponseDto> readAllLogsByMemberId(String memberId) {
+    public List<LogThumbnailResponseDto> readAllLogsByMemberId(String memberId) {
         return logRepository.findByMemberId(memberId).stream()
-                .map(log -> LogResponseDto.of(log, log.getMember()))
+                .map(log -> LogThumbnailResponseDto.of(log, log.getMember()))
                 .toList();
     }
 
-    public LogResponseDto updateLog(LogUpdateRequestDto logUpdateRequestDto, String logId, String memberId) {
+    public LogThumbnailResponseDto updateLog(LogUpdateRequestDto logUpdateRequestDto, String logId, String memberId) {
         Log log = logRepository.findById(logId).orElseThrow(() ->
                 new LogException(ErrorCode.LOG_NOT_EXIST));
 
@@ -81,7 +82,7 @@ public class LogServiceImpl implements LogService {
                 .build();
 
         logRepository.save(log);
-        return LogResponseDto.of(log, log.getMember());
+        return LogThumbnailResponseDto.of(log, log.getMember());
     }
 
     public void deleteLog(String logId, String memberId) {

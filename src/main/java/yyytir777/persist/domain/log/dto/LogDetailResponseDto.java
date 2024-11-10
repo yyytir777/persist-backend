@@ -9,35 +9,32 @@ import java.time.LocalDate;
 
 @Getter
 @Builder
-public class LogResponseDto {
+public class LogDetailResponseDto {
 
-    // 로그
+    // log
     private String id;
     private String title;
     private String thumbnail;
-    private String preview;
     private long viewCount;
-    private LocalDate createdDate;
+    private LocalDate modifiedDate;
     private String content;
 
-    // 멤버 (author)
+    // member
     private String memberId;
-    private String name;
+    private String author;
     private String authorThumbnail;
 
-
-    public static LogResponseDto of(Log log, Member member) {
-        return LogResponseDto.builder()
+    public static LogDetailResponseDto of(Log log, Member member) {
+        return LogDetailResponseDto.builder()
                 .id(log.getId())
                 .title(log.getTitle())
                 .thumbnail(log.getThumbnail())
-                .preview(log.getPreview())
                 .viewCount(log.getViewCount())
-                .createdDate(log.getCreatedTime().toLocalDate())
-                .memberId(member.getId())
-                .name(member.getName())
-                .authorThumbnail(member.getThumbnail())
+                .modifiedDate(log.getModifiedTime().toLocalDate())
                 .content(log.getContent())
+                .memberId(member.getId())
+                .author(member.getName())
+                .authorThumbnail(member.getThumbnail())
                 .build();
     }
 }
