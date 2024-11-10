@@ -28,10 +28,10 @@ public class LogApiController {
 
     @Operation(summary = "작성한 로그 저장")
     @PostMapping("/create")
-    public ApiResponse<?> createLog(@MemberId MemberIdDto memberIdDto,
+    public ApiResponse<String> createLog(@MemberId MemberIdDto memberIdDto,
                                     @RequestBody LogCreateRequestDto logCreateRequestDto) {
-        logService.saveLog(logCreateRequestDto, memberIdDto.getMemberId());
-        return ApiResponse.onSuccess();
+        String logId = logService.saveLog(logCreateRequestDto, memberIdDto.getMemberId());
+        return ApiResponse.onSuccess(logId);
     }
 
     // TODO 로그 조회시 본인의 로그인지 체크 필요

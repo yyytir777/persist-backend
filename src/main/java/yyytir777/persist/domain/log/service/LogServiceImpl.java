@@ -28,7 +28,7 @@ public class LogServiceImpl implements LogService {
     private final LogRepository logRepository;
     private final MemberRepository memberRepository;
 
-    public void saveLog(LogCreateRequestDto logCreateRequestDto, String memberId) {
+    public String saveLog(LogCreateRequestDto logCreateRequestDto, String memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(() ->
                 new MemberException(ErrorCode.MEMBER_NOT_EXIST));
 
@@ -37,9 +37,12 @@ public class LogServiceImpl implements LogService {
                 .title(logCreateRequestDto.getTitle())
                 .thumbnail(logCreateRequestDto.getThumbnail())
                 .content(logCreateRequestDto.getContent())
+                .preview(logCreateRequestDto.getContent().substring(0, Math.min(logCreateRequestDto.getContent().length(), 30)))
+                .viewCount(0)
                 .build();
 
         logRepository.save(log);
+        return log.getId();
     }
 
     @Transactional
