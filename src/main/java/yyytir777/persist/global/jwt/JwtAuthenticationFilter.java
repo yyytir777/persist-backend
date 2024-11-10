@@ -15,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 import yyytir777.persist.domain.member.entity.Member;
 import yyytir777.persist.domain.member.service.MemberService;
+import yyytir777.persist.global.error.exception.TokenException;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -27,23 +28,27 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final MemberService memberService;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
-        String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+    protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
+        try {
+            String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 
-        if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            String token = authorizationHeader.substring(7);
+            if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+                String token = authorizationHeader.substring(7);
 
-            if(jwtUtil.validateToken(token)) {
-                String email = jwtUtil.getEmail(token);
-                Member member = memberService.findByEmail(email);
+                if(jwtUtil.validateToken(token)) {
+                    String email = jwtUtil.getEmail(token);
+                    Member member = memberService.findByEmail(email);
 
-                SimpleGrantedAuthority grantedAuthority = new SimpleGrantedAuthority(member.getRole().toString());
-                Authentication authentication = new UsernamePasswordAuthenticationToken(member.getId(), null, Collections.singletonList(grantedAuthority));
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                    SimpleGrantedAuthority grantedAuthority = new SimpleGrantedAuthority(member.getRole().toString());
+                    Authentication authentication = new UsernamePasswordAuthenticationToken(member.getId(), null, Collections.singletonList(grantedAuthority));
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
 
+                }
             }
+        } catch (TokenException e) {
+            request.setAttribute("tokenException", e);
         }
-        log.info("JWT Filter 통과");
+
         filterChain.doFilter(request, response);
     }
 }

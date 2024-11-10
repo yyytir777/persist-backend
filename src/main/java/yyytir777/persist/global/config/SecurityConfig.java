@@ -4,6 +4,7 @@ package yyytir777.persist.global.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -35,21 +36,24 @@ public class SecurityConfig {
             // social login
             "/api/v1/oauth/**",
 
-            // kakao callback
-            "/oauth/kakao/**",
+            // social login callback
+            "/oauth/**",
 
             // register
             "/api/v1/member/register",
 
             //index.html
-            "/"
+            "/",
+
+            // reissue accessToken by refreshToken
+            "/api/v1/token/reissue"
     };
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
+                .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable);
 

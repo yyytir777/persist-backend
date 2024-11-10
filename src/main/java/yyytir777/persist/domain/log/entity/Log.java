@@ -23,12 +23,15 @@ public class Log extends BaseEntity {
     @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "thumbnail")
+    @Column(name = "thumbnail", length = 1000)
     private String thumbnail;
 
     @Lob
-    @Column(name = "content", nullable = false)
+    @Column(name = "content", nullable = false, length = 10000)
     private String content;
+
+    @Column(name = "preview")
+    private String preview;
 
     @Builder.Default
     @Column(name = "view_count")

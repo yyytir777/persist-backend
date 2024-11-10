@@ -19,4 +19,13 @@ public class MemberInfoDto {
                 .role(member.getRole())
                 .build();
     }
+
+    public static MemberInfoDto of(String id, String email, Role role) {
+        return MemberInfoDto.builder()
+                .memberId(id)
+                .email(email)
+                .role(role)
+                .build();
+    }
+
 }
