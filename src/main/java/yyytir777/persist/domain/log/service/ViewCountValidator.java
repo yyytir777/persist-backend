@@ -18,7 +18,7 @@ public class ViewCountValidator {
 
     private final SimpleDateFormat dateFormatter = new SimpleDateFormat(DATE_FORMAT);
 
-    // 봤으면 true (조회수 오르면 안됨)
+    // 해당 게시글을 조회한게 유효한지 체크 (조회한 날짜 내에서만 유효)
     public boolean hasViewedInCoookie(HttpServletRequest request, HttpServletResponse response, String logId) {
 
         Cookie viewedCookie = getCookie(request);
