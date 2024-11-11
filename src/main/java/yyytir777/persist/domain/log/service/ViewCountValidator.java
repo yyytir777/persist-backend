@@ -8,75 +8,86 @@ import org.springframework.stereotype.Component;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 
 @Component
 public class ViewCountValidator {
 
+    private static final String COOKIE_NAME = "postViewed";
+    private static final int COOKIE_MAX_AGE = 24 * 60 * 60; // 1 day in seconds
+    private static final String DATE_FORMAT = "yyyyMMdd";
+
+    private final SimpleDateFormat dateFormatter = new SimpleDateFormat(DATE_FORMAT);
+
     // 봤으면 true (조회수 오르면 안됨)
     public boolean hasViewedInCoookie(HttpServletRequest request, HttpServletResponse response, String logId) {
 
+        Cookie viewedCookie = getCookie(request);
+
+        if (viewedCookie != null) {
+            if(isLogIdInCookie(viewedCookie, logId)) {
+                return checkAndUpdateCookie(viewedCookie, response, logId);
+            } else {
+                updateCookieWithLogId(viewedCookie, response, logId);
+                return false;
+            }
+        } else {
+            createNewCookie(response, logId);
+            return false;
+        }
+    }
+
+    // getCookies()에서 특정 이름의 쿠키를 찾음
+    private Cookie getCookie(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
-        List<Cookie> list = cookies != null ? Arrays.stream(cookies).toList() : List.of(); // null 체크 추가
-        String cookieName = "postViewed";
-        for (Cookie cookie : list) {
-            System.out.println("cookie = " + cookie);
-            // 게시글 이력 쿠키 조회
-            if(cookie.getName().equals(cookieName)) {
-                
-                //logId가 있을 시
-                if (findLogIdInCookie(cookie, logId)) {
-                    String dateStr = cookie.getValue().split(logId)[1].substring(1, 9);
-                    String today = new SimpleDateFormat("yyyyMMdd").format(new Date());
+        return (cookies == null) ? null : Arrays.stream(cookies)
+                        .filter(cookie -> cookie.getName().equals(COOKIE_NAME))
+                        .findFirst()
+                        .orElse(null);
+    }
 
-                    // 시간 안지났으면 return false
-                    if(dateStr.equals(today)) return true;
-                    // 시간 지났으면 return true & 그 밑으로 삭제
-                    else {
-                        String newValue = cookie.getValue().split(logId)[1].substring(9, cookie.getValue().length());
-                        Cookie newCookie = new Cookie(cookieName, newValue);
-                        newCookie.setPath("/");
-                        newCookie.setMaxAge(24 * 60 * 60);
-                        response.addCookie(newCookie);
-                        return false;
-                    }
-                } else {
-                    // 쿠키에 logId 없으면 생성 -> return true;
-                    Date date = new Date();
-                    SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
-                    String formattedDate = formatter.format(date);
+    // cookie에 특정 logId가 포함되어있는지 확인
+    private boolean isLogIdInCookie(Cookie cookie, String logId) {
+        return Arrays.stream(cookie.getValue().split("/"))
+                .anyMatch(entry -> entry.startsWith(logId + ":"));
+    }
 
-                    Cookie newCookie = new Cookie(cookieName, cookie.getValue() + "/" + logId + ":" + formattedDate);
-                    cookie.setPath("/");
-                    cookie.setMaxAge(24 * 60 * 60); // 30분
-                    response.addCookie(newCookie);
+    // 쿠키 날짜를 확인하고 필요시 업데이트하여 조회수를 막는 로직
+    private boolean checkAndUpdateCookie(Cookie cookie, HttpServletResponse response, String logId) {
+        String today = getCurrentDate();
+        String[] entries = cookie.getValue().split("/");
+
+        for (String entry : entries) {
+            String[] parts = entry.split(":");
+            if(parts[0].equals(logId)) {
+                if(parts[1].equals(today)) return true;
+                else {
+                    updateCookieWithLogId(cookie, response, logId);
                     return false;
                 }
             }
         }
-
-        // 게시글 이력 쿠키가 없는 경우 -> 쿠키 생성
-        Date date = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
-        String formattedDate = formatter.format(date);
-
-        Cookie cookie = new Cookie(cookieName, logId + ":" + formattedDate);
-        cookie.setPath("/");
-        cookie.setMaxAge(30 * 60); // 30분
-        response.addCookie(cookie);
         return false;
     }
 
-    // postViewed = "{logId}:20241110/"
+    // 만료된 logId를 없애는 로직 (시간 순서대로 정렬되어있으므로 조회하지 않는 logId도 한꺼번에 정리 가능)
+    private void updateCookieWithLogId(Cookie cookie, HttpServletResponse response, String logId) {
+        String updateValue = cookie.getValue().split(logId)[1].substring(10, cookie.getValue().length());
+        Cookie updateCookie = new Cookie(COOKIE_NAME, updateValue);
+        updateCookie.setPath("/");
+        updateCookie.setMaxAge(COOKIE_MAX_AGE);
+        response.addCookie(updateCookie);
+    }
 
-    private boolean findLogIdInCookie(Cookie cookie, String logId) {
-        String cookieValue = cookie.getValue();
-        String[] logInfos = cookieValue.split("/");
-        
-        for (String logInfo : logInfos) {
-            String id = logInfo.split(":")[0];
-            if (logId.equals(id)) return true;
-        }
-        return false;
+    // 새로운 쿠키 생성하는 로직 (logId 처음으로 정의)
+    private void createNewCookie(HttpServletResponse response, String logId) {
+        Cookie newCookie = new Cookie(COOKIE_NAME, logId + ":" + getCurrentDate());
+        newCookie.setPath("/");
+        newCookie.setMaxAge(COOKIE_MAX_AGE);
+        response.addCookie(newCookie);
+    }
+
+    // 현재 날짜(yyyyMMdd) 반환
+    private String getCurrentDate() {
+        return dateFormatter.format(new Date());
     }
 }
