@@ -42,7 +42,7 @@ public class LogApiController {
     @Operation(summary = "id로 로그 조회")
     @GetMapping("/{log_id}")
     public ApiResponse<LogDetailResponseDto> readLog(HttpServletRequest request, HttpServletResponse response, @PathVariable(name = "log_id") String logId) {
-        boolean hasViewed = viewCountValidator.findCookie(request, response, logId);
+        boolean hasViewed = viewCountValidator.hasViewedInCoookie(request, response, logId);
         return ApiResponse.onSuccess(logService.readLog(logId, hasViewed));
     }
 

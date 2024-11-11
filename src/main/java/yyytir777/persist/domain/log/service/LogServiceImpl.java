@@ -51,7 +51,8 @@ public class LogServiceImpl implements LogService {
     public LogDetailResponseDto readLog(String logId, boolean hasViewed) {
         Log findLog = logRepository.findLogAndMemberById(logId).orElseThrow(() ->
                 new LogException(ErrorCode.LOG_NOT_EXIST));
-
+        
+        // 보지 않았으면 조회수 증가
         if(!hasViewed) logRepository.increaseViewCountByLog(findLog);
 
         return LogDetailResponseDto.of(findLog);

@@ -13,15 +13,16 @@ import java.util.List;
 @Component
 public class ViewCountValidator {
 
-    private final String CookieName = "postViewed";
-
     // 봤으면 true (조회수 오르면 안됨)
-    public boolean findCookie(HttpServletRequest request, HttpServletResponse response, String logId) {
-        List<Cookie> list = Arrays.stream(request.getCookies()).toList();
+    public boolean hasViewedInCoookie(HttpServletRequest request, HttpServletResponse response, String logId) {
+
+        Cookie[] cookies = request.getCookies();
+        List<Cookie> list = cookies != null ? Arrays.stream(cookies).toList() : List.of(); // null 체크 추가
+        String cookieName = "postViewed";
         for (Cookie cookie : list) {
             System.out.println("cookie = " + cookie);
             // 게시글 이력 쿠키 조회
-            if(cookie.getName().equals(CookieName)) {
+            if(cookie.getName().equals(cookieName)) {
                 
                 //logId가 있을 시
                 if (findLogIdInCookie(cookie, logId)) {
@@ -33,7 +34,7 @@ public class ViewCountValidator {
                     // 시간 지났으면 return true & 그 밑으로 삭제
                     else {
                         String newValue = cookie.getValue().split(logId)[1].substring(9, cookie.getValue().length());
-                        Cookie newCookie = new Cookie(CookieName, newValue);
+                        Cookie newCookie = new Cookie(cookieName, newValue);
                         newCookie.setPath("/");
                         newCookie.setMaxAge(24 * 60 * 60);
                         response.addCookie(newCookie);
@@ -45,7 +46,7 @@ public class ViewCountValidator {
                     SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
                     String formattedDate = formatter.format(date);
 
-                    Cookie newCookie = new Cookie(CookieName, cookie.getValue() + "/" + logId + ":" + formattedDate);
+                    Cookie newCookie = new Cookie(cookieName, cookie.getValue() + "/" + logId + ":" + formattedDate);
                     cookie.setPath("/");
                     cookie.setMaxAge(24 * 60 * 60); // 30분
                     response.addCookie(newCookie);
@@ -59,7 +60,7 @@ public class ViewCountValidator {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
         String formattedDate = formatter.format(date);
 
-        Cookie cookie = new Cookie(CookieName, logId + ":" + formattedDate);
+        Cookie cookie = new Cookie(cookieName, logId + ":" + formattedDate);
         cookie.setPath("/");
         cookie.setMaxAge(30 * 60); // 30분
         response.addCookie(cookie);
