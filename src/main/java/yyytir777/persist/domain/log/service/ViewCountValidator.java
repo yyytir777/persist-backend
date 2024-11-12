@@ -3,6 +3,7 @@ package yyytir777.persist.domain.log.service;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
@@ -14,7 +15,7 @@ public class ViewCountValidator {
 
     private static final String COOKIE_NAME = "postViewed";
     private static final int COOKIE_MAX_AGE = 24 * 60 * 60; // 1 day in seconds
-    private static final String DATE_FORMAT = "yyyyMMdd";
+    private static final String DATE_FORMAT = "yyyyMMdd-HHmm";
 
     private final SimpleDateFormat dateFormatter = new SimpleDateFormat(DATE_FORMAT);
 
@@ -27,7 +28,7 @@ public class ViewCountValidator {
             if(isLogIdInCookie(viewedCookie, logId)) {
                 return checkAndUpdateCookie(viewedCookie, response, logId);
             } else {
-                updateCookieWithLogId(viewedCookie, response, logId);
+                updateCookieWithNewLogId(viewedCookie, response, logId);
                 return false;
             }
         } else {
@@ -35,7 +36,7 @@ public class ViewCountValidator {
             return false;
         }
     }
-
+    
     // getCookies()에서 특정 이름의 쿠키를 찾음
     private Cookie getCookie(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
@@ -69,21 +70,32 @@ public class ViewCountValidator {
         return false;
     }
 
-    // 만료된 logId를 없애는 로직 (시간 순서대로 정렬되어있으므로 조회하지 않는 logId도 한꺼번에 정리 가능)
+    // logId:yyyyMMdd-HHmm/
+    // 만료된 logId를 없애고 해당 logId 새로 추가하는 로직 (시간 순서대로 정렬되어있으므로 조회하지 않는 logId도 한꺼번에 정리 가능)
     private void updateCookieWithLogId(Cookie cookie, HttpServletResponse response, String logId) {
-        String updateValue = cookie.getValue().split(logId)[1].substring(10, cookie.getValue().length());
-        Cookie updateCookie = new Cookie(COOKIE_NAME, updateValue);
-        updateCookie.setPath("/");
-        updateCookie.setMaxAge(COOKIE_MAX_AGE);
-        response.addCookie(updateCookie);
+        System.out.println(getCurrentDate());
+        String deletedExpireLogIdInValue = cookie.getValue().split(logId)[1].substring(DATE_FORMAT.length() + 1);
+        String updateValue = deletedExpireLogIdInValue + "/" + logId + ":" + getCurrentDate();
+        addCookie(response, updateValue);
     }
-
+    
+    //새로 logId를 추가하여 쿠키 추가
+    private void updateCookieWithNewLogId(Cookie cookie, HttpServletResponse response, String logId) {
+        String updateValue = cookie.getValue() + "/" + logId + ":" + getCurrentDate();
+        addCookie(response, updateValue);
+    }
+    
     // 새로운 쿠키 생성하는 로직 (logId 처음으로 정의)
     private void createNewCookie(HttpServletResponse response, String logId) {
-        Cookie newCookie = new Cookie(COOKIE_NAME, logId + ":" + getCurrentDate());
-        newCookie.setPath("/");
-        newCookie.setMaxAge(COOKIE_MAX_AGE);
-        response.addCookie(newCookie);
+        addCookie(response, logId + ":" + getCurrentDate());
+    }
+
+    private void addCookie(HttpServletResponse response, String value) {
+        Cookie cookie = new Cookie(COOKIE_NAME, value);
+        cookie.setPath("/");
+        cookie.setMaxAge(COOKIE_MAX_AGE);
+        response.addCookie(cookie);
+        response.setCharacterEncoding("UTF-8");
     }
 
     // 현재 날짜(yyyyMMdd) 반환

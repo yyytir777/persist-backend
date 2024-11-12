@@ -35,8 +35,8 @@ public interface LogRepository extends JpaRepository<Log, String> {
     @Modifying
     @Query("UPDATE Log l " +
             "SET l.viewCount = l.viewCount + 1 " +
-            "WHERE l = :findLog")
-    void increaseViewCountByLog(Log findLog);
+            "WHERE l.id = :logId")
+    void increaseViewCountByLogId(String logId);
 
     @Query("SELECT distinct l " +
             "FROM Log l " +

@@ -49,11 +49,12 @@ public class LogServiceImpl implements LogService {
      * 로그를 읽어들이고 viewCount 증가
      */
     public LogDetailResponseDto readLog(String logId, boolean hasViewed) {
+
+        // 게시글 조회가 유효하지 않다면 조회수 증가
+        if(!hasViewed) logRepository.increaseViewCountByLogId(logId);
+
         Log findLog = logRepository.findLogAndMemberById(logId).orElseThrow(() ->
                 new LogException(ErrorCode.LOG_NOT_EXIST));
-        
-        // 게시글 조회가 유효하지 않다면 조회수 증가
-        if(!hasViewed) logRepository.increaseViewCountByLog(findLog);
 
         return LogDetailResponseDto.of(findLog);
     }
