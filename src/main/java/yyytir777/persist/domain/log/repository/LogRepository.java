@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import yyytir777.persist.domain.log.entity.Log;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,8 +21,6 @@ public interface LogRepository extends JpaRepository<Log, String> {
 
     /**
      * logId로 log -> member까지 가져오기 (지연로딩)
-     * @param logId
-     * @return
      */
     @Query("SELECT l " +
             "FROM Log l " +
