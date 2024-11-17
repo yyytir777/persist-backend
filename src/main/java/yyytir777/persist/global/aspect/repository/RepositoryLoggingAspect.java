@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 
@@ -15,10 +14,7 @@ import java.lang.reflect.Method;
 @Component
 public class RepositoryLoggingAspect {
 
-    @Pointcut("@within(org.springframework.stereotype.Repository)")
-    private void repositoryMethods() {}
-
-    @Before("repositoryMethods()")
+    @Before("@within(org.springframework.stereotype.Repository)")
     public void beforeRepositoryMethods(JoinPoint joinPoint) {
         Method method = getMethod(joinPoint);
         Class<?>[] interfaces = joinPoint.getTarget().getClass().getInterfaces();
