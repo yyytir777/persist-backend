@@ -3,7 +3,6 @@ package yyytir777.persist.global.jwt;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import yyytir777.persist.domain.member.dto.MemberInfoDto;
@@ -14,7 +13,6 @@ import yyytir777.persist.global.jwt.dto.JwtInfoDto;
 import java.security.Key;
 import java.util.Date;
 
-@Slf4j
 @Component
 public class JwtUtil {
 
@@ -98,7 +96,6 @@ public class JwtUtil {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
         } catch (SecurityException | MalformedJwtException e) {
-            log.info("JWT 토큰이 유효하지 않습니다.", e);
             throw new TokenException(ErrorCode.INVALID_TOKEN);
         } catch (ExpiredJwtException e) {
             // 만료된 토큰의 Claims를 얻음
@@ -106,19 +103,15 @@ public class JwtUtil {
             String subject = claims.getSubject();
 
             if ("AccessToken".equals(subject)) {
-                log.info("AccessToken이 만료되었습니다.", e);
                 throw new TokenException(ErrorCode.ACCESS_TOKEN_EXPIRED);
             } else if ("RefreshToken".equals(subject)) {
-                log.info("RefreshToken이 만료되었습니다.", e);
                 throw new TokenException(ErrorCode.REFRESH_TOKEN_EXPIRED);
             } else {
                 throw new TokenException(ErrorCode.INVALID_TOKEN);
             }
         } catch (UnsupportedJwtException e) {
-            log.info("지원하지 않는 JWT 토큰 입니다.", e);
             throw new TokenException(ErrorCode.UNSUPPORTED_TOKEN);
         } catch (IllegalArgumentException e) {
-            log.info("JWT claims가 비어있습니다.", e);
             throw new TokenException(ErrorCode.JWT_CLAIMS_EMPTY);
         }
     }

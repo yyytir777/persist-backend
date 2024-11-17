@@ -3,7 +3,6 @@ package yyytir777.persist.domain.log.service;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
@@ -73,7 +72,6 @@ public class ViewCountValidator {
     // logId:yyyyMMdd-HHmm/
     // 만료된 logId를 없애고 해당 logId 새로 추가하는 로직 (시간 순서대로 정렬되어있으므로 조회하지 않는 logId도 한꺼번에 정리 가능)
     private void updateCookieWithLogId(Cookie cookie, HttpServletResponse response, String logId) {
-        System.out.println(getCurrentDate());
         String deletedExpireLogIdInValue = cookie.getValue().split(logId)[1].substring(DATE_FORMAT.length() + 1);
         String updateValue = deletedExpireLogIdInValue + "/" + logId + ":" + getCurrentDate();
         addCookie(response, updateValue);
