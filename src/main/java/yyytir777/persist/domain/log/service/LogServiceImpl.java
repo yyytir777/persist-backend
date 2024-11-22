@@ -4,6 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import yyytir777.persist.domain.category.entity.Category;
+import yyytir777.persist.domain.category.repository.CategoryRepository;
+import yyytir777.persist.domain.log.LogConverter;
 import yyytir777.persist.domain.log.dto.LogDetailResponseDto;
 import yyytir777.persist.domain.log.dto.LogUpdateRequestDto;
 import yyytir777.persist.domain.log.entity.Log;
@@ -27,27 +30,51 @@ public class LogServiceImpl implements LogService {
 
     private final LogRepository logRepository;
     private final MemberRepository memberRepository;
+    private final CategoryRepository categoryRepository;
 
+    private final String defaultCategoryName = "Default";
+
+    /*
+    log를 저장하는 로직
+    Category가 살아있다면
+     */
     public String saveLog(LogCreateRequestDto logCreateRequestDto, String memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(() ->
                 new MemberException(ErrorCode.MEMBER_NOT_EXIST));
 
-        Log log = Log.builder()
-                .member(member)
-                .title(logCreateRequestDto.getTitle())
-                .thumbnail(logCreateRequestDto.getThumbnail())
-                .content(logCreateRequestDto.getContent())
-                .preview(logCreateRequestDto.getContent().substring(0, Math.min(logCreateRequestDto.getContent().length(), 30)))
-                .viewCount(0)
-                .build();
+        String categoryName = logCreateRequestDto.getCategoryName();
+        Category category = findOrCreateCategoryOfLog(categoryName, member);
+
+        Log log = LogConverter.CreateRequestToEntity(logCreateRequestDto, category);
 
         logRepository.save(log);
         return log.getId();
     }
 
-    /**
-     * 로그를 읽어들이고 viewCount 증가
+    /*
+    categoryName이 존재하면 해당 category를 찾음 (없으면 생성)
+    categoryName이 존재하지 않으면 기본 category를 사용
      */
+    private Category findOrCreateCategoryOfLog(String categoryName, Member member) {
+        if(categoryName != null) {
+            return categoryRepository.findByName(categoryName).orElseGet(() ->
+                    createAndSaveCategory(categoryName, member));
+        }
+
+        return categoryRepository.findByName(defaultCategoryName).orElseGet(() ->
+                createAndSaveCategory(defaultCategoryName, member));
+    }
+
+    /*
+    category생성하여 반환
+     */
+    private Category createAndSaveCategory(String categoryName, Member member) {
+        return categoryRepository.save(Category.builder()
+                .name(categoryName)
+                .member(member)
+                .build());
+    }
+
     public LogDetailResponseDto readLog(String logId, boolean hasViewed) {
 
         // 게시글 조회가 유효하지 않다면 조회수 증가
@@ -66,40 +93,35 @@ public class LogServiceImpl implements LogService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<LogThumbnailResponseDto> readAllLogsByMemberId(String memberId) {
         return logRepository.findByMemberId(memberId).stream()
                 .map(LogThumbnailResponseDto::of)
                 .toList();
     }
 
-    public LogThumbnailResponseDto updateLog(LogUpdateRequestDto logUpdateRequestDto, String logId, String memberId) {
+    public LogDetailResponseDto updateLog(LogUpdateRequestDto logUpdateRequestDto, String logId, String memberId) {
         Log log = logRepository.findById(logId).orElseThrow(() ->
                 new LogException(ErrorCode.LOG_NOT_EXIST));
 
-        String logMemberId = log.getMember().getId();
+        String logMemberId = log.getCategory().getMember().getId();
         if(!memberId.equals(logMemberId)) throw new LogException(ErrorCode.NOT_MY_LOG);
 
-        Member member = memberRepository.findById(logMemberId).orElseThrow(() ->
-                new MemberException(ErrorCode.MEMBER_NOT_EXIST));
+        String categoryName = logUpdateRequestDto.getCategoryName();
+        Category category = findOrCreateCategoryOfLog(categoryName, log.getCategory().getMember());
 
-        log = Log.builder()
-                .id(logId)
-                .member(member)
-                .title(logUpdateRequestDto.getTitle())
-                .thumbnail(logUpdateRequestDto.getThumbnail())
-                .content(logUpdateRequestDto.getContent())
-                .build();
+        log = LogConverter.UpdateRequestToEntity(logUpdateRequestDto, logId, category, log.getViewCount());
 
         logRepository.save(log);
-        return LogThumbnailResponseDto.of(log);
+        return LogDetailResponseDto.of(log);
     }
+
 
     public void deleteLog(String logId, String memberId) {
         Log log = logRepository.findById(logId).orElseThrow(() ->
                 new LogException(ErrorCode.LOG_NOT_EXIST));
 
-        String logMemberId = log.getMember().getId();
+        String logMemberId = log.getCategory().getMember().getId();
 
         if(!memberId.equals(logMemberId)) throw new LogException(ErrorCode.NOT_MY_LOG);
 

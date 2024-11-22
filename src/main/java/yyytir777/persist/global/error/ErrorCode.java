@@ -23,7 +23,12 @@ public enum ErrorCode {
     ACCESS_TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "T002", "accessToken이 만료되었습니다."),
     UNSUPPORTED_TOKEN(HttpStatus.UNAUTHORIZED, "T003", "지원하지 않는 JWT토큰 입니다."),
     JWT_CLAIMS_EMPTY(HttpStatus.UNAUTHORIZED, "T004", "JWT Claims가 비어있습니다."),
-    REFRESH_TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "T005", "refreshToken이 만료되었습니다.");
+    REFRESH_TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "T005", "refreshToken이 만료되었습니다."),
+
+    // Category
+    CATEGORY_NOT_EXIST(HttpStatus.BAD_REQUEST, "C001", "해당 카테고리가 존재하지 않습니다."),
+    CATEGORY_EXIST(HttpStatus.BAD_REQUEST, "C002", "이미 존재하는 카테고리 입니다."),
+    NO_AUTHORITY(HttpStatus.UNAUTHORIZED, "C003", "권한이 없습니다.");
 
 
     private final HttpStatus httpStatus;

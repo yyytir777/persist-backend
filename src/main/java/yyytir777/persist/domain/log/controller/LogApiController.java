@@ -60,9 +60,9 @@ public class LogApiController {
 
     @Operation(summary = "로그 수정")
     @PatchMapping("/update/{log_id}")
-    public ApiResponse<LogThumbnailResponseDto> updateLog(@MemberId MemberIdDto memberIdDto,
-                                                          @RequestBody @Valid LogUpdateRequestDto logUpdateRequestDto,
-                                                          @PathVariable(name = "log_id") String logId) {
+    public ApiResponse<LogDetailResponseDto> updateLog(@MemberId MemberIdDto memberIdDto,
+                                                       @RequestBody @Valid LogUpdateRequestDto logUpdateRequestDto,
+                                                       @PathVariable(name = "log_id") String logId) {
         return ApiResponse.onSuccess(logService.updateLog(logUpdateRequestDto, logId,memberIdDto.getMemberId()));
     }
 

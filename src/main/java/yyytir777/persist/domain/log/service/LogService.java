@@ -17,7 +17,7 @@ public interface LogService {
 
     List<LogThumbnailResponseDto> readAllLogsByMemberId(String memberId);
 
-    LogThumbnailResponseDto updateLog(LogUpdateRequestDto logUpdateRequestDto, String logId, String memberId);
+    LogDetailResponseDto updateLog(LogUpdateRequestDto logUpdateRequestDto, String logId, String memberId);
 
     void deleteLog(String logId, String memberId);
 

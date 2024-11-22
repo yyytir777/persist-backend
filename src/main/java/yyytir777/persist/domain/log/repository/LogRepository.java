@@ -15,8 +15,9 @@ public interface LogRepository extends JpaRepository<Log, String> {
 
     @Query("SELECT l " +
             "FROM Log l " +
-            "JOIN FETCH l.member " +
-            "WHERE l.member.Id = :memberId")
+            "JOIN FETCH l.category c " +
+            "JOIN FETCH c.member " +
+            "WHERE l.category.member.id = :memberId")
     List<Log> findByMemberId(String memberId);
 
     /**
@@ -24,7 +25,8 @@ public interface LogRepository extends JpaRepository<Log, String> {
      */
     @Query("SELECT l " +
             "FROM Log l " +
-            "JOIN FETCH l.member " +
+            "JOIN FETCH l.category c " +
+            "JOIN FETCH c.member " +
             "WHERE l.id = :logId")
     Optional<Log> findLogAndMemberById(String logId);
 
@@ -37,6 +39,12 @@ public interface LogRepository extends JpaRepository<Log, String> {
 
     @Query("SELECT distinct l " +
             "FROM Log l " +
-            "JOIN FETCH l.member ")
+            "JOIN FETCH l.category c " +
+            "JOIN FETCH c.member ")
     List<Log> findAllWithMember();
+
+    @Query("SELECT l " +
+            "FROM Log l " +
+            "WHERE l.category.id = :categoryId ")
+    List<Log> findAllByCategoryId(String categoryId);
 }

@@ -18,13 +18,13 @@ public class GlobalExceptionHandler {
         return new ApiResponse<>(false, e.getErrorCode().getCode(), null, e.getErrorCode().getMessage());
     }
 
-//    @ExceptionHandler(BusinessException.class)
+    @ExceptionHandler(BusinessException.class)
     public ApiResponse<?> handlerBusinessException(BusinessException e) {
         log.info("[" + e.getClass().getSimpleName() + "] : " + e.getMessage() + " (ErrorCode : " + e.getErrorCode().getHttpStatus().value() + ")");
         return ApiResponse.onFailure(e.getErrorCode());
     }
 
-//    @ExceptionHandler(Exception.class)
+    @ExceptionHandler(Exception.class)
     public ApiResponse<?> handlerException(Exception e) {
         log.info("BusinessException : " + e.getMessage());
         return ApiResponse.onFailure(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());

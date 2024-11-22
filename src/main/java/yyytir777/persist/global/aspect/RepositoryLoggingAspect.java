@@ -1,4 +1,4 @@
-package yyytir777.persist.global.aspect.repository;
+package yyytir777.persist.global.aspect;
 
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;

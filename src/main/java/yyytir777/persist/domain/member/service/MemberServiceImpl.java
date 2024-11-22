@@ -29,7 +29,7 @@ public class MemberServiceImpl implements MemberService {
             Member member = Member.builder()
                     .email(memberRegisterRequestDto.getEmail())
                     .name(memberRegisterRequestDto.getName())
-                    .logName(memberRegisterRequestDto.getLogName())
+                    .memberLogName(memberRegisterRequestDto.getLogName())
                     .type(memberRegisterRequestDto.getType())
                     .role(Role.USER)
                     .build();
@@ -52,10 +52,10 @@ public class MemberServiceImpl implements MemberService {
         if(!memberId.equals(currentMemberId)) throw new MemberException(ErrorCode.NOT_MY_MEMBER);
 
         member = Member.builder()
-                .Id(memberId)
+                .id(memberId)
                 .email(member.getEmail())
                 .name(memberUpdateRequestDto.getName())
-                .logName(memberUpdateRequestDto.getLogName())
+                .memberLogName(memberUpdateRequestDto.getLogName())
                 .thumbnail(memberUpdateRequestDto.getThumbnail())
                 .role(member.getRole())
                 .type(member.getType())

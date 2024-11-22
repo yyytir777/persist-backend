@@ -10,4 +10,5 @@ public class LogCreateRequestDto {
     private String title;
     private String thumbnail;
     private String content;
+    private String categoryName;
 }

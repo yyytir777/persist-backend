@@ -1,4 +1,4 @@
-package yyytir777.persist.global.aspect.controller;
+package yyytir777.persist.global.aspect;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
