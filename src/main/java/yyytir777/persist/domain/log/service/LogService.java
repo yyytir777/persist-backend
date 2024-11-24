@@ -11,13 +11,13 @@ public interface LogService {
 
     String saveLog(LogCreateRequestDto logCreateRequestDto, String memberId);
 
-    LogDetailResponseDto readLog(String logId);
+    LogDetailResponseDto readLog(String logId, boolean hasViewed);
 
     List<LogThumbnailResponseDto> readAllLogs();
 
     List<LogThumbnailResponseDto> readAllLogsByMemberId(String memberId);
 
-    LogThumbnailResponseDto updateLog(LogUpdateRequestDto logUpdateRequestDto, String logId, String memberId);
+    LogDetailResponseDto updateLog(LogUpdateRequestDto logUpdateRequestDto, String logId, String memberId);
 
     void deleteLog(String logId, String memberId);
 

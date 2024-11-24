@@ -17,7 +17,7 @@ public class MemberResponseDto {
         return MemberResponseDto.builder()
                 .email(member.getEmail())
                 .name(member.getName())
-                .logName(member.getLogName())
+                .logName(member.getMemberLogName())
                 .thumbnail(member.getThumbnail())
                 .build();
     }

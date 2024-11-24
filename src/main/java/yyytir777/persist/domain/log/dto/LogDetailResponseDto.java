@@ -3,7 +3,6 @@ package yyytir777.persist.domain.log.dto;
 import lombok.Builder;
 import lombok.Getter;
 import yyytir777.persist.domain.log.entity.Log;
-import yyytir777.persist.domain.member.entity.Member;
 
 import java.time.LocalDate;
 
@@ -24,7 +23,7 @@ public class LogDetailResponseDto {
     private String author;
     private String authorThumbnail;
 
-    public static LogDetailResponseDto of(Log log, Member member) {
+    public static LogDetailResponseDto of(Log log) {
         return LogDetailResponseDto.builder()
                 .id(log.getId())
                 .title(log.getTitle())
@@ -32,9 +31,9 @@ public class LogDetailResponseDto {
                 .viewCount(log.getViewCount())
                 .modifiedDate(log.getModifiedTime().toLocalDate())
                 .content(log.getContent())
-                .memberId(member.getId())
-                .author(member.getName())
-                .authorThumbnail(member.getThumbnail())
+                .memberId(log.getCategory().getMember().getId())
+                .author(log.getCategory().getMember().getName())
+                .authorThumbnail(log.getCategory().getMember().getThumbnail())
                 .build();
     }
 }

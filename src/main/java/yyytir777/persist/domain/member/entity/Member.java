@@ -5,10 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import yyytir777.persist.domain.category.entity.Category;
 import yyytir777.persist.domain.common.BaseEntity;
 import yyytir777.persist.domain.common.Role;
 import yyytir777.persist.domain.common.Type;
-import yyytir777.persist.domain.log.entity.Log;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ public class Member extends BaseEntity {
     @Id
     @Column(name = "member_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String Id;
+    private String id;
 
     @Column(name = "email", nullable = false, unique = true)
     private String email;
@@ -31,8 +31,9 @@ public class Member extends BaseEntity {
     private String name;
 
     @Column(name = "log_name", nullable = false)
-    private String logName;
+    private String memberLogName;
 
+    @Builder.Default
     @Column(name = "thumbnail")
     private String thumbnail = "Default";
 
@@ -45,5 +46,5 @@ public class Member extends BaseEntity {
     private Type type;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-    private List<Log> logList;
+    private List<Category> categoryList;
 }

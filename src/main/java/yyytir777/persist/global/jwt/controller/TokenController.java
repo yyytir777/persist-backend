@@ -32,4 +32,9 @@ public class TokenController {
 
         return ApiResponse.onSuccess(tokenService.getMemberIdByAccessToken(accessToken));
     }
+
+    @GetMapping("/loginCheck")
+    public ApiResponse<?> loginCheck() {
+        return ApiResponse.onSuccess();
+    }
 }
