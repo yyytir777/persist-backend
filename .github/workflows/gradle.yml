@@ -10,6 +10,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name : Check directory
+        run: ls -al
+
       # GitHub Actions 기본 제공 체크아웃 액션
       - name: Checkout code
         uses: actions/checkout@v2
