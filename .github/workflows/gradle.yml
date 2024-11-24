@@ -26,7 +26,7 @@ jobs:
       # 환경변수 복사
       - name: Extract application-prod.properties
         run: |
-          echo "${{ secrets.APPLICATION_PROD_PROPERTIES }}" > ./src/main/resources/application-prod.properties
+          echo "${{ secrets.APPLICATION_PROD_PROPERTIES }}" > /src/main/resources/application-prod.properties
 
       # Gradle 빌드
       - name: Build with Gradle
