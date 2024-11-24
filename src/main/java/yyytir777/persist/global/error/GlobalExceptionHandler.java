@@ -20,13 +20,13 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BusinessException.class)
     public ApiResponse<?> handlerBusinessException(BusinessException e) {
-        log.error("[" + e.getClass().getSimpleName() + "] : " + e.getMessage() + " (ErrorCode : " + e.getErrorCode().getHttpStatus().value() + ")", e);
+        log.warn("[" + e.getClass().getSimpleName() + "] : " + e.getMessage() + " (ErrorCode : " + e.getErrorCode().getHttpStatus().value() + ")");
         return ApiResponse.onFailure(e.getErrorCode());
     }
 
     @ExceptionHandler(Exception.class)
     public ApiResponse<?> handlerException(Exception e) {
-        log.info("BusinessException : " + e.getMessage());
+        log.error("Exception : " + e.getMessage(), e);
         return ApiResponse.onFailure(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
     }
 }
