@@ -74,4 +74,4 @@ jobs:
             docker pull ${{ secrets.DOCKER_USERNAME }}/persist:latest
             
             # 새로운 컨테이너 실행
-            docker run --name=persist -d -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/persist:latest
+            docker run --name=persist -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/persist:latest
