@@ -20,6 +20,10 @@ jobs:
         with:
           java-version: '17'
 
+      - name: Extract application-prod.properties
+        run: |
+          echo "${{ secrets.APPLICATION_PROD_PROPERTIES }}" > src/main/resources/application-prod.properties
+
       # Gradle 빌드
       - name: Build with Gradle
         run: |
@@ -68,4 +72,4 @@ jobs:
             docker pull ${{ secrets.DOCKER_USERNAME }}/persist:latest
             
             # 새로운 컨테이너 실행
-            docker run --name persist -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/persist:latest
+            docker run --name=persist -d -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/persist:latest
