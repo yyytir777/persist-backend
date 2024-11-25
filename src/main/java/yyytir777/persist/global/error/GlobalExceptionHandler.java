@@ -26,7 +26,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(IPException.class)
-    public ApiResponse<?> handlerIPException(BusinessException e) {
+    public ApiResponse<?> handlerIPException(IPException e) {
         log.warn("[" + e.getClass().getSimpleName() + "] : " + e.getMessage() + " (ErrorCode : " + e.getErrorCode().getHttpStatus().value() + ")");
         return ApiResponse.onFailure(e.getErrorCode());
     }
