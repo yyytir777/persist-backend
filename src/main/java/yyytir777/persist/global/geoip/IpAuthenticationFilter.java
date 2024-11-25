@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import yyytir777.persist.global.error.ErrorCode;
+import yyytir777.persist.global.error.exception.IPException;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -34,7 +36,7 @@ public class IpAuthenticationFilter extends OncePerRequestFilter {
 
             if(!"KR".equalsIgnoreCase(country.getIsoCode())) {
                 log.warn("{} was access deined from URL {}", clientIp, url);
-                return;
+                throw new IPException(ErrorCode.ACCESS_DENIED);
             }
         } catch (GeoIp2Exception e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "unable to process GeoIP data");

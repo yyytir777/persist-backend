@@ -28,7 +28,10 @@ public enum ErrorCode {
     // Category
     CATEGORY_NOT_EXIST(HttpStatus.BAD_REQUEST, "C001", "해당 카테고리가 존재하지 않습니다."),
     CATEGORY_EXIST(HttpStatus.BAD_REQUEST, "C002", "이미 존재하는 카테고리 입니다."),
-    NO_AUTHORITY(HttpStatus.UNAUTHORIZED, "C003", "권한이 없습니다.");
+    NO_AUTHORITY(HttpStatus.UNAUTHORIZED, "C003", "권한이 없습니다."),
+
+    //IP
+    ACCESS_DENIED(HttpStatus.FORBIDDEN, "I000", "ACCESS DENIED");
 
 
     private final HttpStatus httpStatus;
