@@ -2,8 +2,10 @@ package yyytir777.persist.global.config;
 
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -13,6 +15,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import yyytir777.persist.domain.common.Role;
 import yyytir777.persist.domain.member.service.MemberService;
+import yyytir777.persist.global.geoip.IpAuthenticationFilter;
 import yyytir777.persist.global.handler.CustomAccessDeniedHandler;
 import yyytir777.persist.global.handler.CustomAuthenticationEntryPoint;
 import yyytir777.persist.global.jwt.JwtAuthenticationFilter;
@@ -29,6 +32,11 @@ public class SecurityConfig {
     private final CustomAccessDeniedHandler accessDeniedHandler;
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
 
+    @Autowired(required = false)
+    private IpAuthenticationFilter ipAuthenticationFilter;
+
+    private final Environment environment;
+
     private static final String[] AUTH_WHITELIST = {
             //swagger
             "/swagger-ui/*", "/swagger-resources/*", "/v3/api-docs/**",
@@ -44,6 +52,8 @@ public class SecurityConfig {
 
             // healthCheck
             "/health/**",
+
+            "/",
 
             // reissue accessToken by refreshToken
             "/api/v1/token/reissue",
@@ -63,6 +73,8 @@ public class SecurityConfig {
 
         httpSecurity
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+
+        if(profile.equals("prod")) httpSecurity.addFilterBefore(ipAuthenticationFilter, JwtAuthenticationFilter.class)
 
         httpSecurity
                 .exceptionHandling(exception -> exception
