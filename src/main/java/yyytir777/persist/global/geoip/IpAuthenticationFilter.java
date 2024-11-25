@@ -27,12 +27,14 @@ public class IpAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String clientIp = getClientIp(request);
+        String url = request.getRequestURI();
         try {
             InetAddress ipAddress = InetAddress.getByName(clientIp);
             Country country = databaseReader.country(ipAddress).getCountry();
 
             if(!"KR".equalsIgnoreCase(country.getIsoCode())) {
                 response.sendError(HttpServletResponse.SC_FORBIDDEN, "Access Denied");
+                log.warn("{} was access deined from URL {}", clientIp, url);
                 return;
             }
         } catch (GeoIp2Exception e) {
