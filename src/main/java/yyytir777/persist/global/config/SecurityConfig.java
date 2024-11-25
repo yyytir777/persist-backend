@@ -32,10 +32,7 @@ public class SecurityConfig {
     private final CustomAccessDeniedHandler accessDeniedHandler;
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
 
-    @Autowired(required = false)
-    private IpAuthenticationFilter ipAuthenticationFilter;
-
-    private final Environment environment;
+    private final IpAuthenticationFilter ipAuthenticationFilter;
 
     private static final String[] AUTH_WHITELIST = {
             //swagger
@@ -74,7 +71,8 @@ public class SecurityConfig {
         httpSecurity
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
-        if(profile.equals("prod")) httpSecurity.addFilterBefore(ipAuthenticationFilter, JwtAuthenticationFilter.class)
+        httpSecurity
+                .addFilterBefore(ipAuthenticationFilter, JwtAuthenticationFilter.class);
 
         httpSecurity
                 .exceptionHandling(exception -> exception
