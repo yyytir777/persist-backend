@@ -26,12 +26,12 @@ public class IpAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String clientIp = request.getRemoteAddr();
+        String clientIp = getClientIp(request);
         try {
             InetAddress ipAddress = InetAddress.getByName(clientIp);
             Country country = databaseReader.country(ipAddress).getCountry();
 
-            if(!"KR".equals(country.getIsoCode())) {
+            if(!"KR".equalsIgnoreCase(country.getIsoCode())) {
                 response.sendError(HttpServletResponse.SC_FORBIDDEN, "Access Denied");
                 return;
             }
@@ -41,4 +41,19 @@ public class IpAuthenticationFilter extends OncePerRequestFilter {
         }
         filterChain.doFilter(request, response);
     }
+
+    private String getClientIp(HttpServletRequest request) {
+        String ip = request.getHeader("X-Forwarded-For");
+        if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("Proxy-Client-IP");
+        }
+        if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getRemoteAddr(); // 직접 연결된 클라이언트 IP
+        }
+        return ip;
+    }
+
 }
