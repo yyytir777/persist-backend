@@ -13,6 +13,12 @@ import yyytir777.persist.global.response.ApiResponse;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(IPException.class)
+    public ApiResponse<?> handlerIPException(IPException e) {
+        log.warn("[" + e.getClass().getSimpleName() + "] : " + e.getMessage() + " (ErrorCode : " + e.getErrorCode().getHttpStatus().value() + ")");
+        return ApiResponse.onFailure(e.getErrorCode());
+    }
+
     @ExceptionHandler(TokenException.class)
     public ApiResponse<?> handlerTokenException(TokenException e) {
         log.info("[" + e.getClass().getSimpleName() + "] : " + e.getMessage() + " (ErrorCode : " + e.getErrorCode().getHttpStatus().value() + ")");
@@ -24,13 +30,6 @@ public class GlobalExceptionHandler {
         log.warn("[" + e.getClass().getSimpleName() + "] : " + e.getMessage() + " (ErrorCode : " + e.getErrorCode().getHttpStatus().value() + ")");
         return ApiResponse.onFailure(e.getErrorCode());
     }
-
-    @ExceptionHandler(IPException.class)
-    public ApiResponse<?> handlerIPException(IPException e) {
-        log.warn("[" + e.getClass().getSimpleName() + "] : " + e.getMessage() + " (ErrorCode : " + e.getErrorCode().getHttpStatus().value() + ")");
-        return ApiResponse.onFailure(e.getErrorCode());
-    }
-
 
     @ExceptionHandler(Exception.class)
     public ApiResponse<?> handlerException(Exception e) {
