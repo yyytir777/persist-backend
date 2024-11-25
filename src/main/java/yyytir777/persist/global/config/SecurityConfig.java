@@ -42,15 +42,11 @@ public class SecurityConfig {
             // register
             "/api/v1/member/register",
 
-            //index.html
-            "/",
-
+            // healthCheck
             "/health/**",
 
             // reissue accessToken by refreshToken
             "/api/v1/token/reissue",
-
-            "/api/v1/**",
     };
 
     @Bean
