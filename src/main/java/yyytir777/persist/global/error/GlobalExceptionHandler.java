@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import yyytir777.persist.global.error.exception.BusinessException;
+import yyytir777.persist.global.error.exception.IPException;
 import yyytir777.persist.global.error.exception.TokenException;
 import yyytir777.persist.global.response.ApiResponse;
 
@@ -23,6 +24,13 @@ public class GlobalExceptionHandler {
         log.warn("[" + e.getClass().getSimpleName() + "] : " + e.getMessage() + " (ErrorCode : " + e.getErrorCode().getHttpStatus().value() + ")");
         return ApiResponse.onFailure(e.getErrorCode());
     }
+
+    @ExceptionHandler(IPException.class)
+    public ApiResponse<?> handlerIPException(BusinessException e) {
+        log.warn("[" + e.getClass().getSimpleName() + "] : " + e.getMessage() + " (ErrorCode : " + e.getErrorCode().getHttpStatus().value() + ")");
+        return ApiResponse.onFailure(e.getErrorCode());
+    }
+
 
     @ExceptionHandler(Exception.class)
     public ApiResponse<?> handlerException(Exception e) {
