@@ -33,7 +33,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ApiResponse<?> handlerException(Exception e) {
-        log.error("Exception : " + e.getMessage(), e);
+        log.error("Exception : " + e.getMessage());
         return ApiResponse.onFailure(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
     }
 }
