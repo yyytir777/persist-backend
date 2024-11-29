@@ -1,7 +1,6 @@
 package yyytir777.persist.global.config;
 
 import com.maxmind.geoip2.DatabaseReader;
-import com.maxmind.geoip2.exception.GeoIp2Exception;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,7 +17,7 @@ public class GeoIp2Config {
     private String path;
 
     @Bean
-    public DatabaseReader databaseReader() throws IOException, GeoIp2Exception {
+    public DatabaseReader databaseReader() throws IOException {
         File resource = new File(path);
         return new DatabaseReader.Builder(resource).build();
     }
