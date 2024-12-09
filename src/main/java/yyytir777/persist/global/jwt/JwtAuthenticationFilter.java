@@ -15,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 import yyytir777.persist.domain.member.entity.Member;
 import yyytir777.persist.domain.member.service.MemberService;
+import yyytir777.persist.global.error.ErrorCode;
 import yyytir777.persist.global.error.exception.TokenException;
 
 import java.io.IOException;
@@ -32,7 +33,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 
-            if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            if(authorizationHeader == null) throw new TokenException(ErrorCode.JWT_CLAIMS_EMPTY);
+
+            if(authorizationHeader.startsWith("Bearer ")) {
                 String token = authorizationHeader.substring(7);
 
                 if(jwtUtil.validateToken(token)) {
