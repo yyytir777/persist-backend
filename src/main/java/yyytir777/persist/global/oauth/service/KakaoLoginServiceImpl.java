@@ -17,8 +17,11 @@ import yyytir777.persist.global.error.ErrorCode;
 import yyytir777.persist.global.error.exception.MemberException;
 import yyytir777.persist.global.jwt.JwtUtil;
 import yyytir777.persist.global.jwt.dto.JwtInfoDto;
+import yyytir777.persist.global.oauth.dto.CallbackResponse;
 import yyytir777.persist.global.oauth.dto.kakao.KakaoInfoResponseDto;
 import yyytir777.persist.global.oauth.dto.kakao.KakaoTokenDto;
+
+import javax.security.auth.callback.Callback;
 
 
 @Service("kakao")
@@ -53,14 +56,19 @@ public class KakaoLoginServiceImpl implements SocialLoginService {
     }
 
     @Override
-    public JwtInfoDto callback(String authCode) {
+    public CallbackResponse callback(String authCode) {
         KakaoTokenDto.Response responseDto = getToken(authCode);
         String email = getEmail(responseDto.getAccess_token());
 
-        Member member = memberRepository.findByEmail(email).orElseThrow(() ->
-                new MemberException(ErrorCode.MEMBER_NOT_EXIST));
+        try {
+            Member member = memberRepository.findByEmail(email).orElseThrow(() ->
+                    new MemberException(ErrorCode.MEMBER_NOT_EXIST));
 
-        return jwtUtil.createToken(MemberInfoDto.of(member));
+            JwtInfoDto jwtInfoDto = jwtUtil.createToken(MemberInfoDto.of(member));
+            return CallbackResponse.getJwtInfoDto(jwtInfoDto);
+        } catch (MemberException e) {
+            return CallbackResponse.getEmail(email);
+        }
     }
 
     private KakaoTokenDto.Response getToken(String code) {

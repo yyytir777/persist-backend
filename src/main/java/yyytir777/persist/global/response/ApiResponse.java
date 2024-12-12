@@ -38,6 +38,15 @@ public class ApiResponse<T> {
         return new ApiResponse<>(true, HttpStatus.OK.toString(), null, result);
     }
 
+    public static <T> ApiResponse<T> onSuccessButFalse(T result) {
+        if (result instanceof List<?>) {
+            Integer size = ((List<?>) result).size();
+            return new ApiResponse<>(false, HttpStatus.OK.toString(), size, result);
+        }
+        return new ApiResponse<>(false, HttpStatus.OK.toString(), null, result);
+    }
+
+
     public static ApiResponse<?> onFailure(ErrorCode errorCode) {
         return new ApiResponse<>(false, errorCode.getHttpStatus().toString(), null, errorCode.getCode() + " : " + errorCode.getMessage());
     }

@@ -17,6 +17,7 @@ import yyytir777.persist.global.error.ErrorCode;
 import yyytir777.persist.global.error.exception.MemberException;
 import yyytir777.persist.global.jwt.JwtUtil;
 import yyytir777.persist.global.jwt.dto.JwtInfoDto;
+import yyytir777.persist.global.oauth.dto.CallbackResponse;
 import yyytir777.persist.global.oauth.dto.google.GoogleInfoResponseDto;
 import yyytir777.persist.global.oauth.dto.google.GoogleTokenDto;
 
@@ -55,14 +56,16 @@ public class GoogleLoginServiceImpl implements SocialLoginService{
     }
 
     @Override
-    public JwtInfoDto callback(String authCode) {
+    public CallbackResponse callback(String authCode) {
         GoogleTokenDto.Response responseDto = getToken(authCode);
         String email = getEmail(responseDto.getAccessToken());
 
         Member member = memberRepository.findByEmail(email).orElseThrow(() ->
                 new MemberException(ErrorCode.MEMBER_NOT_EXIST));
 
-        return jwtUtil.createToken(MemberInfoDto.of(member));
+        JwtInfoDto jwtInfoDto = jwtUtil.createToken(MemberInfoDto.of(member));
+
+        return CallbackResponse.getJwtInfoDto(jwtInfoDto);
     }
 
     private GoogleTokenDto.Response getToken(String authCode) {
