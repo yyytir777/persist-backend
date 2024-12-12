@@ -55,6 +55,9 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
     implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
+    // Validation
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
     // GeoIp2
     implementation group: 'com.maxmind.geoip2', name: 'geoip2', version: '2.15.0'
 }

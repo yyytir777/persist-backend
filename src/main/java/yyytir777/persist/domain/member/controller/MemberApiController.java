@@ -23,7 +23,7 @@ public class MemberApiController {
 
     @Operation(summary = "회원 가입", description = "소셜 로그인으로 이메일을 받아온 후 추가 정보 입력하고 나서의 회원가입")
     @PostMapping("/register")
-    public ApiResponse<?> register(@RequestBody MemberRegisterRequestDto memberRegisterRequestDto) {
+    public ApiResponse<?> register(@Valid @RequestBody MemberRegisterRequestDto memberRegisterRequestDto) {
         memberService.register(memberRegisterRequestDto);
         return ApiResponse.onSuccess();
     }
