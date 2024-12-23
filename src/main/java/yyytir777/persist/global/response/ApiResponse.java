@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
-import yyytir777.persist.global.response.error.ErrorCode;
+import yyytir777.persist.global.error.ErrorCode;
 
 import java.util.List;
 
@@ -26,6 +26,10 @@ public class ApiResponse<T> {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private T result;
 
+    public static ApiResponse<?> onSuccess() {
+        return new ApiResponse<>(true, HttpStatus.OK.toString(), null, null);
+    }
+
     public static <T> ApiResponse<T> onSuccess(T result) {
         if (result instanceof List<?>) {
             Integer size = ((List<?>) result).size();
@@ -33,6 +37,15 @@ public class ApiResponse<T> {
         }
         return new ApiResponse<>(true, HttpStatus.OK.toString(), null, result);
     }
+
+    public static <T> ApiResponse<T> onSuccessButFalse(T result) {
+        if (result instanceof List<?>) {
+            Integer size = ((List<?>) result).size();
+            return new ApiResponse<>(false, HttpStatus.OK.toString(), size, result);
+        }
+        return new ApiResponse<>(false, HttpStatus.OK.toString(), null, result);
+    }
+
 
     public static ApiResponse<?> onFailure(ErrorCode errorCode) {
         return new ApiResponse<>(false, errorCode.getHttpStatus().toString(), null, errorCode.getCode() + " : " + errorCode.getMessage());

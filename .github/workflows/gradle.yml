@@ -1,0 +1,77 @@
+name: Build and Deploy Spring Boot Application
+
+on:
+  push:
+    branches:
+      - deploy  # main 브랜치에 푸시될 때만 실행
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # GitHub Actions 기본 제공 체크아웃 액션
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # JDK 17 설정
+      - name: Set up JDK 17
+        uses: actions/setup-java@v1
+        with:
+          java-version: '17'
+      
+      # 환경변수 복사
+      - name: Extract application-prod.properties
+        run: |
+          touch ./src/main/resources/application-prod.properties
+          echo "${{ secrets.APPLICATION_PROD_PROPERTIES }}" > src/main/resources/application-prod.properties
+
+      # Gradle 빌드
+      - name: Build with Gradle
+        run: |
+          chmod +x ./gradlew
+          ./gradlew build
+
+      # Docker 로그인을 통해 DockerHub로 인증
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      # Docker 이미지를 빌드하고 DockerHub로 푸시
+      - name: Build and push Docker image
+        run: |
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/persist:latest .
+          docker push ${{ secrets.DOCKER_USERNAME }}/persist:latest
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      # SSH를 통해 원격 서버에 접속하고 Docker 이미지를 pull한 후 컨테이너 실행
+      - name: SSH into server and deploy
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            # 기존 실행 중인 컨테이너가 있으면 중지 및 삭제
+            if [ "$(docker ps -q -f name=persist)" ]; then
+              docker stop persist
+              docker rm persist
+            fi
+            
+            # 동일한 이름의 중지된 컨테이너가 있으면 삭제
+            if [ "$(docker ps -a -q -f status=exited -f name=persist)" ]; then
+              docker rm persist
+            fi
+            
+            # 사용되지 않는 이미지 삭제
+            docker image prune -f
+
+            # 최신 이미지로 업데이트
+            docker pull ${{ secrets.DOCKER_USERNAME }}/persist:latest
+            
+            # 새로운 컨테이너 실행
+            docker run --name=persist -d -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/persist:latest

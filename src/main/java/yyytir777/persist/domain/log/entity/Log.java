@@ -5,8 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import yyytir777.persist.domain.category.entity.Category;
 import yyytir777.persist.domain.common.BaseEntity;
-import yyytir777.persist.domain.member.Member;
 
 @Getter
 @Entity
@@ -23,18 +23,26 @@ public class Log extends BaseEntity {
     @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "thumbnail")
+    @Column(name = "thumbnail", length = 1000)
     private String thumbnail;
 
     @Lob
-    @Column(name = "content", nullable = false)
+    @Column(name = "content", nullable = false, columnDefinition = "TEXT")
     private String content;
+
+    @Column(name = "preview")
+    private String preview;
 
     @Builder.Default
     @Column(name = "view_count")
     private long viewCount = 0L;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+    public Log updateCategory(Category category) {
+        this.category = category;
+        return this;
+    }
 }

@@ -43,8 +43,34 @@ dependencies {
 
     // Swagger
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
+
+    // Security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    // AOP
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+
+    //jwt
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+    // Validation
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    // GeoIp2
+    implementation group: 'com.maxmind.geoip2', name: 'geoip2', version: '2.15.0'
+}
+
+configurations.configureEach {
+    exclude group: 'commons-logging', module: 'commons-logging'
 }
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+bootRun {
+    String activeProfile = System.properties['spring.profiles.active']
+    systemProperty "spring.profiles.active", activeProfile
 }

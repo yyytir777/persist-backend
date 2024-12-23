@@ -1,15 +1,24 @@
 package yyytir777.persist.domain.log.service;
 
-import yyytir777.persist.domain.log.dto.LogResponseDto;
-import yyytir777.persist.domain.log.dto.LogSaveRequestDto;
+import yyytir777.persist.domain.log.dto.LogDetailResponseDto;
+import yyytir777.persist.domain.log.dto.LogUpdateRequestDto;
+import yyytir777.persist.domain.log.dto.LogThumbnailResponseDto;
+import yyytir777.persist.domain.log.dto.LogCreateRequestDto;
 
 import java.util.List;
 
 public interface LogService {
 
-    void save(LogSaveRequestDto logSaveRequestDto);
+    String saveLog(LogCreateRequestDto logCreateRequestDto, String memberId);
 
-    LogResponseDto getLog(String logId);
+    LogDetailResponseDto readLog(String logId, boolean hasViewed);
 
-    List<LogResponseDto> getAllLogs();
+    List<LogThumbnailResponseDto> readAllLogs();
+
+    List<LogThumbnailResponseDto> readAllLogsByMemberId(String memberId);
+
+    LogDetailResponseDto updateLog(LogUpdateRequestDto logUpdateRequestDto, String logId, String memberId);
+
+    void deleteLog(String logId, String memberId);
+
 }
