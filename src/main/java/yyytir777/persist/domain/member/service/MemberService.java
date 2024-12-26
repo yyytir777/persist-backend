@@ -18,4 +18,6 @@ public interface MemberService {
     void deleteMember(String memberId, String currentMemberId);
 
     Member findByEmail(String email);
+
+    String getReadme(String memberId);
 }

@@ -45,6 +45,10 @@ public class Member extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Type type;
 
+    @Lob
+    @Column(name = "readme", columnDefinition = "TEXT")
+    private String readme;
+
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Category> categoryList;
 }

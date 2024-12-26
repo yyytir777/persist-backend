@@ -19,6 +19,7 @@ public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
 
+    @Override
     public void register(MemberRegisterRequestDto memberRegisterRequestDto) {
 
         Optional<Member> findMember = memberRepository.findByEmail(memberRegisterRequestDto.getEmail());
@@ -38,6 +39,7 @@ public class MemberServiceImpl implements MemberService {
         }
     }
 
+    @Override
     public MemberResponseDto readMember(String memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(()
                 -> new MemberException(ErrorCode.MEMBER_NOT_EXIST));
@@ -45,6 +47,7 @@ public class MemberServiceImpl implements MemberService {
         return MemberResponseDto.of(member);
     }
 
+    @Override
     public MemberResponseDto updateMember(MemberUpdateRequestDto memberUpdateRequestDto, String memberId, String currentMemberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(() ->
                 new MemberException(ErrorCode.MEMBER_NOT_EXIST));
@@ -65,6 +68,7 @@ public class MemberServiceImpl implements MemberService {
         return MemberResponseDto.of(member);
     }
 
+    @Override
     public void deleteMember(String memberId, String currentMemberId) {
         if(!memberId.equals(currentMemberId)) throw new MemberException(ErrorCode.NOT_MY_MEMBER);
 
@@ -74,9 +78,15 @@ public class MemberServiceImpl implements MemberService {
         memberRepository.deleteById(memberId);
     }
 
+    @Override
     public Member findByEmail(String email) {
         return memberRepository.findByEmail(email).orElseThrow(() ->
                 new MemberException(ErrorCode.MEMBER_NOT_EXIST));
+    }
+
+    @Override
+    public String getReadme(String memberId) {
+        return memberRepository.findReadmeById(memberId);
     }
 
 }

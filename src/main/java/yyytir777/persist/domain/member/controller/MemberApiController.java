@@ -50,4 +50,10 @@ public class MemberApiController {
         memberService.deleteMember(memberId, memberIdDto.getMemberId());
         return ApiResponse.onSuccess();
     }
+
+    @Operation(summary = "회원의 readme 조회")
+    @GetMapping("/readme/{member_id}")
+    public ApiResponse<?> getReadme(@PathVariable(name = "member_id") String memberId) {
+        return ApiResponse.onSuccess(memberService.getReadme(memberId));
+    }
 }
