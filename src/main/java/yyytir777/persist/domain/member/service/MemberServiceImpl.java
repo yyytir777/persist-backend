@@ -86,7 +86,8 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public String getReadme(String memberId) {
-        return memberRepository.findReadmeById(memberId);
+        return memberRepository.findReadmeById(memberId).orElseThrow(() ->
+                new MemberException(ErrorCode.MEMBER_NOT_EXIST));
     }
 
 }

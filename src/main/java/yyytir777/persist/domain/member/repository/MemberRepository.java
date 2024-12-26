@@ -15,5 +15,5 @@ public interface MemberRepository extends JpaRepository<Member, String> {
     @Query("select m.readme " +
             "from Member m " +
             "where m.id = :memberId")
-    String findReadmeById(String memberId);
+    Optional<String> findReadmeById(String memberId);
 }
