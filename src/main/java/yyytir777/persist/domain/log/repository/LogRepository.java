@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface LogRepository extends JpaRepository<Log, String> {
+public interface LogRepository extends JpaRepository<Log, String>, LogCustomRepository {
 
     @Query("SELECT l " +
             "FROM Log l " +
