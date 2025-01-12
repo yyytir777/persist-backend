@@ -46,7 +46,7 @@ public class Member extends BaseEntity {
     private Type type;
 
     @Lob
-    @Column(name = "readme", columnDefinition = "TEXT")
+    @Column(name = "readme", columnDefinition = "TEXT", nullable = false)
     private String readme;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)

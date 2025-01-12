@@ -31,6 +31,10 @@ public class Category extends BaseEntity {
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private List<Log> logList;
 
+    public Category(Member member) {
+        this.member = member;
+    }
+
     public Category updateName(String name) {
         this.name = name;
         return this;

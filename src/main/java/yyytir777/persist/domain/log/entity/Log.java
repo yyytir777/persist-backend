@@ -41,6 +41,10 @@ public class Log extends BaseEntity {
     @JoinColumn(name = "category_id")
     private Category category;
 
+    public Log(Category category) {
+        this.category = category;
+    }
+
     public Log updateCategory(Category category) {
         this.category = category;
         return this;
