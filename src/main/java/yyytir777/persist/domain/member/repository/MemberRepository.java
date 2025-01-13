@@ -8,7 +8,7 @@ import yyytir777.persist.domain.member.entity.Member;
 import java.util.Optional;
 
 @Repository
-public interface MemberRepository extends JpaRepository<Member, String>, MemberCustomRepository {
+public interface MemberRepository extends JpaRepository<Member, Long>, MemberCustomRepository {
 
     Optional<Member> findByEmail(String email);
 }

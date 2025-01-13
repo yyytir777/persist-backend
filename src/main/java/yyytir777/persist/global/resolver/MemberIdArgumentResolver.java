@@ -34,7 +34,7 @@ public class MemberIdArgumentResolver implements HandlerMethodArgumentResolver {
 
         String accessToken = authorizationHeader.split(" ")[1];
         jwtUtil.validateToken(accessToken);
-        String memberId = jwtUtil.getMemberId(accessToken);
+        Long memberId = jwtUtil.getMemberId(accessToken);
         return MemberIdDto.builder().memberId(memberId).build();
     }
 }

@@ -18,16 +18,17 @@ public class LogCustomRepositoryImpl implements LogCustomRepository{
     private final JPAQueryFactory jpaQueryFactory;
 
 
-    public List<Log> findByMemberId(String memberId) {
+    public List<Log> findByMemberId(Long memberId) {
         QLog log = QLog.log;
         QMember member = QMember.member;
 
         return jpaQueryFactory.selectFrom(log)
+                .join(log.category.member, member)
                 .where(member.id.eq(memberId))
                 .fetch();
     }
 
-    public Optional<Log> findLogAndMemberById(String logId) {
+    public Optional<Log> findLogAndMemberById(Long logId) {
         QLog log = QLog.log;
         QMember member = QMember.member;
         QCategory category = QCategory.category;
@@ -41,7 +42,7 @@ public class LogCustomRepositoryImpl implements LogCustomRepository{
         return Optional.ofNullable(result);
     }
 
-    public void increaseViewCountByLogId(String logId) {
+    public void increaseViewCountByLogId(Long logId) {
         QLog log = QLog.log;
 
         jpaQueryFactory.update(log)
@@ -59,7 +60,7 @@ public class LogCustomRepositoryImpl implements LogCustomRepository{
                 .fetch();
     }
 
-    public List<Log> findAllByCategoryId(String categoryId) {
+    public List<Log> findAllByCategoryId(Long categoryId) {
         QLog log = QLog.log;
 
         return jpaQueryFactory.selectFrom(log)

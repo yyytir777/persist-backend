@@ -11,7 +11,7 @@ import java.time.LocalDate;
 public class LogDetailResponseDto {
 
     // log
-    private String id;
+    private Long id;
     private String title;
     private String thumbnail;
     private long viewCount;
@@ -19,7 +19,7 @@ public class LogDetailResponseDto {
     private String content;
 
     // member
-    private String memberId;
+    private Long memberId;
     private String author;
     private String authorThumbnail;
 

@@ -18,7 +18,7 @@ public class LogConverter {
                 .build();
     }
 
-    public static Log UpdateRequestToEntity(LogUpdateRequestDto logUpdateRequestDto, String logId, Category category, long viewCount) {
+    public static Log UpdateRequestToEntity(LogUpdateRequestDto logUpdateRequestDto, Long logId, Category category, long viewCount) {
         return Log.builder()
                 .id(logId)
                 .title(logUpdateRequestDto.getTitle())

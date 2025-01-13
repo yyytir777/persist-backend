@@ -13,10 +13,10 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 
-    public Optional<String> findReadmeById(String memberId) {
+    public Optional<String> findReadmeById(Long memberId) {
         QMember member = QMember.member;
         String result = jpaQueryFactory
-                .select(member.id)
+                .select(member.readme)
                 .from(member)
                 .where(member.id.eq(memberId))
                 .fetchOne();

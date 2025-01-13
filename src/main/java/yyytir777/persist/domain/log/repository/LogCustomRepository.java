@@ -7,13 +7,13 @@ import java.util.Optional;
 
 public interface LogCustomRepository {
 
-    List<Log> findByMemberId(String memberId);
+    List<Log> findByMemberId(Long memberId);
 
-    Optional<Log> findLogAndMemberById(String logId);
+    Optional<Log> findLogAndMemberById(Long logId);
 
-    void increaseViewCountByLogId(String logId);
+    void increaseViewCountByLogId(Long logId);
 
     List<Log> findAllWithMember();
 
-    List<Log> findAllByCategoryId(String categoryId);
+    List<Log> findAllByCategoryId(Long categoryId);
 }

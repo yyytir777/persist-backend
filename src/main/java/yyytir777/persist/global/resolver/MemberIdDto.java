@@ -6,5 +6,5 @@ import lombok.Getter;
 @Getter
 @Builder
 public class MemberIdDto {
-    private String memberId;
+    private Long memberId;
 }

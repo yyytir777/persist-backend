@@ -29,7 +29,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     private final String defaultCategoryName = "Default";
 
-    public Category saveCategory(CategoryCreateRequestDto categoryCreateRequestDto, String memberId) {
+    public Category saveCategory(CategoryCreateRequestDto categoryCreateRequestDto, Long memberId) {
 
         Member member = memberRepository.findById(memberId).orElseThrow(() ->
                 new MemberException(ErrorCode.MEMBER_NOT_EXIST));
@@ -43,7 +43,7 @@ public class CategoryServiceImpl implements CategoryService {
         return category;
     }
 
-    public List<CategoryResponseDto> getAllCategory(String memberId) {
+    public List<CategoryResponseDto> getAllCategory(Long memberId) {
         memberRepository.findById(memberId).orElseThrow(() ->
                 new MemberException(ErrorCode.MEMBER_NOT_EXIST));
 
@@ -52,7 +52,7 @@ public class CategoryServiceImpl implements CategoryService {
                 .toList();
     }
 
-    public Category updateCategory(String memberId, String categoryId, CategoryUpdateRequestDto categoryUpdateRequestDto) {
+    public Category updateCategory(Long memberId, Long categoryId, CategoryUpdateRequestDto categoryUpdateRequestDto) {
         Member member = memberRepository.findById(memberId).orElseThrow(() ->
                 new MemberException(ErrorCode.MEMBER_NOT_EXIST));
 
@@ -70,7 +70,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     // 지울 카테고리에 존재하는 로그들을 기본 카테고리로 옮긴 후 카테고리 삭제
-    public void deleteCategory(String memberId, String categoryId) {
+    public void deleteCategory(Long memberId, Long categoryId) {
         Member member = memberRepository.findById(memberId).orElseThrow(() ->
                 new MemberException(ErrorCode.MEMBER_NOT_EXIST));
 

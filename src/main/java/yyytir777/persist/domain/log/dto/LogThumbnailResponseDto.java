@@ -11,7 +11,7 @@ import java.time.LocalDate;
 public class LogThumbnailResponseDto {
 
     // 로그
-    private String id;
+    private Long id;
     private String title;
     private String thumbnail;
     private String preview;
@@ -19,7 +19,7 @@ public class LogThumbnailResponseDto {
     private LocalDate modifiedDate;
 
     // 멤버 (author)
-    private String memberId;
+    private Long memberId;
     private String name;
     private String authorThumbnail;
 

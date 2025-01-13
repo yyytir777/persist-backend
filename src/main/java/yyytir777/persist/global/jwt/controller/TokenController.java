@@ -26,7 +26,7 @@ public class TokenController {
     }
 
     @GetMapping("/memberId")
-    public ApiResponse<String> getMemberIdByAccessToken(HttpServletRequest httpServletRequest) {
+    public ApiResponse<Long> getMemberIdByAccessToken(HttpServletRequest httpServletRequest) {
         String header = httpServletRequest.getHeader("Authorization");
         String accessToken = header.split(" ")[1];
 

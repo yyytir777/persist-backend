@@ -40,7 +40,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public MemberResponseDto readMember(String memberId) {
+    public MemberResponseDto readMember(Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(()
                 -> new MemberException(ErrorCode.MEMBER_NOT_EXIST));
 
@@ -48,7 +48,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public MemberResponseDto updateMember(MemberUpdateRequestDto memberUpdateRequestDto, String memberId, String currentMemberId) {
+    public MemberResponseDto updateMember(MemberUpdateRequestDto memberUpdateRequestDto, Long memberId, Long currentMemberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(() ->
                 new MemberException(ErrorCode.MEMBER_NOT_EXIST));
 
@@ -69,7 +69,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void deleteMember(String memberId, String currentMemberId) {
+    public void deleteMember(Long memberId, Long currentMemberId) {
         if(!memberId.equals(currentMemberId)) throw new MemberException(ErrorCode.NOT_MY_MEMBER);
 
         memberRepository.findById(memberId).orElseThrow(() ->
@@ -85,7 +85,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public String getReadme(String memberId) {
+    public String getReadme(Long memberId) {
         return memberRepository.findReadmeById(memberId).orElseThrow(() ->
                 new MemberException(ErrorCode.MEMBER_NOT_EXIST));
     }

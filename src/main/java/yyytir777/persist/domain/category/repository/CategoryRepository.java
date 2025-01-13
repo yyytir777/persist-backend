@@ -9,12 +9,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface CategoryRepository extends JpaRepository<Category, String> {
+public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     @Query("SELECT c " +
             "FROM Category c " +
             "WHERE c.member.id = :memberId ")
-    List<Category> findAllByMemberId(String memberId);
+    List<Category> findAllByMemberId(Long memberId);
 
     @Query("SELECT c " +
             "FROM Category c " +

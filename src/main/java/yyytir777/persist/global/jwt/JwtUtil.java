@@ -79,8 +79,8 @@ public class JwtUtil {
         return parseCliams(token).get("email", String.class);
     }
 
-    public String getMemberId(String token) {
-        return parseCliams(token).get("memberId", String.class);
+    public Long getMemberId(String token) {
+        return parseCliams(token).get("memberId", Long.class);
     }
 
     private Claims parseCliams(String token) {
