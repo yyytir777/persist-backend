@@ -53,9 +53,11 @@ public class LogCustomRepositoryImpl implements LogCustomRepository{
 
     public List<Log> findAllWithMember() {
         QLog log = QLog.log;
+        QCategory category = QCategory.category;
         QMember member = QMember.member;
 
         return jpaQueryFactory.selectFrom(log)
+                .join(log.category, category).fetchJoin()
                 .join(log.category.member, member).fetchJoin()
                 .fetch();
     }

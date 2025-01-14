@@ -4,10 +4,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -26,6 +23,8 @@ import yyytir777.persist.global.config.QueryDslConfig;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @ActiveProfiles("test")
@@ -66,15 +65,15 @@ class LogCustomRepositoryTest {
 
         List<Log> result = logRepository.findByMemberId(saveMember.getId());
 
-        Assertions.assertThat(result.size()).isEqualTo(2L);
+        assertThat(result.size()).isEqualTo(2L);
 
         // category 정보
-        Assertions.assertThat(result.get(0).getCategory().getId()).isEqualTo(1L);
-        Assertions.assertThat(result.get(1).getCategory().getId()).isEqualTo(1L);
+        assertThat(result.get(0).getCategory().getId()).isEqualTo(1L);
+        assertThat(result.get(1).getCategory().getId()).isEqualTo(1L);
 
         // member 정보
-        Assertions.assertThat(result.get(0).getCategory().getMember().getId()).isEqualTo(1L);
-        Assertions.assertThat(result.get(1).getCategory().getMember().getId()).isEqualTo(1L);
+        assertThat(result.get(0).getCategory().getMember().getId()).isEqualTo(1L);
+        assertThat(result.get(1).getCategory().getMember().getId()).isEqualTo(1L);
     }
 
     @Test
@@ -86,14 +85,65 @@ class LogCustomRepositoryTest {
         Log log1 = logRepository.save(LogTestConvertor.createLogInTest(3L, saveCategory));
         Log log2 = logRepository.save(LogTestConvertor.createLogInTest(4L, saveCategory));
 
-        Assertions.assertThat(log1.getId()).isEqualTo(3L);
-        Assertions.assertThat(log2.getId()).isEqualTo(4L);
+        assertThat(log1.getId()).isEqualTo(3L);
+        assertThat(log2.getId()).isEqualTo(4L);
 
         // category, member 정보까지 fetch되었는지
-        Assertions.assertThat(log1.getCategory().getId()).isEqualTo(2L);
-        Assertions.assertThat(log2.getCategory().getId()).isEqualTo(2L);
+        assertThat(log1.getCategory().getId()).isEqualTo(2L);
+        assertThat(log2.getCategory().getId()).isEqualTo(2L);
 
-        Assertions.assertThat(log1.getCategory().getMember().getId()).isEqualTo(2L);
-        Assertions.assertThat(log2.getCategory().getMember().getId()).isEqualTo(2L);
+        assertThat(log1.getCategory().getMember().getId()).isEqualTo(2L);
+        assertThat(log2.getCategory().getMember().getId()).isEqualTo(2L);
+    }
+
+    @Test
+    @Order(4)
+    @DisplayName("조회수 1증가")
+    void increaseViewCountByLogId() {
+        Member saveMember = memberRepository.save(MemberTestConvertor.createMemberInTest(3L));
+        Category saveCategory = categoryRepository.save(CategoryTestConvertor.createCategoryInTest(3L, saveMember));
+        Log saveLog = logRepository.save(LogTestConvertor.createLogInTest(5L, saveCategory));
+
+        assertThat(saveLog.getViewCount()).isEqualTo(0L);
+
+        logRepository.increaseViewCountByLogId(saveLog.getId());
+
+        em.flush();
+        em.clear();
+
+        assertThat(logRepository.findById(saveLog.getId()).get().getViewCount()).isEqualTo(1L);
+    }
+
+    @Test
+    @Order(5)
+    @DisplayName("모든 log fetch (member까지 fetch)")
+    void findAllWithMember() {
+        Member saveMember = memberRepository.save(MemberTestConvertor.createMemberInTest(4L));
+        Category saveCategory = categoryRepository.save(CategoryTestConvertor.createCategoryInTest(4L, saveMember));
+        logRepository.save(LogTestConvertor.createLogInTest(6L, saveCategory));
+        logRepository.save(LogTestConvertor.createLogInTest(7L, saveCategory));
+
+        em.flush();
+        em.clear();
+
+        List<Log> logList = logRepository.findAllWithMember();
+        assertThat(logList.size()).isEqualTo(2L);
+        assertThat(logList.get(0).getCategory().getMember().getName()).isNotNull();
+    }
+
+    @Test
+    @Order(6)
+    @DisplayName("categoryId로 모든 log fetch")
+    void findAllByCategoryId() {
+        Member saveMember = memberRepository.save(MemberTestConvertor.createMemberInTest(5L));
+        Category saveCategory = categoryRepository.save(CategoryTestConvertor.createCategoryInTest(5L, saveMember));
+        logRepository.save(LogTestConvertor.createLogInTest(8L, saveCategory));
+        logRepository.save(LogTestConvertor.createLogInTest(9L, saveCategory));
+
+        em.flush();
+        em.clear();
+
+        List<Log> logList = logRepository.findAllByCategoryId(saveCategory.getId());
+        assertThat(logList.size()).isEqualTo(2L);
     }
 }

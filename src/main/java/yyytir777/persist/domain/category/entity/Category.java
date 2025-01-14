@@ -21,7 +21,7 @@ public class Category extends BaseEntity {
     private Long id;
 
     @Builder.Default
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name = "None";
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -35,6 +35,12 @@ public class Category extends BaseEntity {
         this.id = categoryId;
         this.member = member;
         this.name = "demo";
+    }
+
+    public Category(Long categoryId, Member member, String name) {
+        this.id = categoryId;
+        this.member = member;
+        this.name = name;
     }
 
     public Category updateName(String name) {

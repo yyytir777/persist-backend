@@ -5,7 +5,12 @@ import yyytir777.persist.domain.member.entity.Member;
 
 public class CategoryTestConvertor {
 
+    public static Category createCategoryInTest(Long categoryId, Member member, String name) {
+        return new Category(categoryId, member, name);
+    }
+
     public static Category createCategoryInTest(Long categoryId, Member member) {
         return new Category(categoryId, member);
     }
+
 }
