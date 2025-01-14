@@ -10,6 +10,8 @@ import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
+import yyytir777.persist.global.error.ErrorCode;
+import yyytir777.persist.global.error.exception.TokenException;
 import yyytir777.persist.global.jwt.JwtUtil;
 
 @Slf4j
@@ -30,7 +32,7 @@ public class MemberIdArgumentResolver implements HandlerMethodArgumentResolver {
     public Object resolveArgument(@NonNull MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
         String authorizationHeader = request.getHeader("Authorization");
-        if(authorizationHeader == null) return null;
+        if(authorizationHeader == null) throw new TokenException(ErrorCode.HEADER_IS_NULL);
 
         String accessToken = authorizationHeader.split(" ")[1];
         jwtUtil.validateToken(accessToken);

@@ -2,19 +2,18 @@ package yyytir777.persist.domain.log.repository;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
-import yyytir777.persist.domain.category.CategoryTestConvertor;
+import yyytir777.persist.domain.category.CategoryTestConverter;
 import yyytir777.persist.domain.category.entity.Category;
 import yyytir777.persist.domain.category.repository.CategoryRepository;
-import yyytir777.persist.domain.log.LogTestConvertor;
+import yyytir777.persist.domain.log.LogTestConverter;
 import yyytir777.persist.domain.log.entity.Log;
-import yyytir777.persist.domain.member.MemberTestConvertor;
+import yyytir777.persist.domain.member.MemberTestConverter;
 import yyytir777.persist.domain.member.entity.Member;
 import yyytir777.persist.domain.member.repository.MemberRepository;
 import yyytir777.persist.global.config.JpaAuditingConfig;
@@ -58,10 +57,10 @@ class LogCustomRepositoryTest {
     @Order(2)
     @DisplayName("memberId로 사용자의 로그 찾기")
     void findByMemberId() {
-        Member saveMember = memberRepository.save(MemberTestConvertor.createMemberInTest(1L));
-        Category saveCategory = categoryRepository.save(CategoryTestConvertor.createCategoryInTest(1L, saveMember));
-        logRepository.save(LogTestConvertor.createLogInTest(1L, saveCategory));
-        logRepository.save(LogTestConvertor.createLogInTest(2L, saveCategory));
+        Member saveMember = memberRepository.save(MemberTestConverter.createMemberInTest(1L));
+        Category saveCategory = categoryRepository.save(CategoryTestConverter.createCategoryInTest(1L, saveMember));
+        logRepository.save(LogTestConverter.createLogInTest(1L, saveCategory));
+        logRepository.save(LogTestConverter.createLogInTest(2L, saveCategory));
 
         List<Log> result = logRepository.findByMemberId(saveMember.getId());
 
@@ -80,10 +79,10 @@ class LogCustomRepositoryTest {
     @Order(3)
     @DisplayName("memberId로 사용자의 로그 찾기 (fetch join)")
     void findLogAndMemberById() {
-        Member saveMember = memberRepository.save(MemberTestConvertor.createMemberInTest(2L));
-        Category saveCategory = categoryRepository.save(CategoryTestConvertor.createCategoryInTest(2L, saveMember));
-        Log log1 = logRepository.save(LogTestConvertor.createLogInTest(3L, saveCategory));
-        Log log2 = logRepository.save(LogTestConvertor.createLogInTest(4L, saveCategory));
+        Member saveMember = memberRepository.save(MemberTestConverter.createMemberInTest(2L));
+        Category saveCategory = categoryRepository.save(CategoryTestConverter.createCategoryInTest(2L, saveMember));
+        Log log1 = logRepository.save(LogTestConverter.createLogInTest(3L, saveCategory));
+        Log log2 = logRepository.save(LogTestConverter.createLogInTest(4L, saveCategory));
 
         assertThat(log1.getId()).isEqualTo(3L);
         assertThat(log2.getId()).isEqualTo(4L);
@@ -100,9 +99,9 @@ class LogCustomRepositoryTest {
     @Order(4)
     @DisplayName("조회수 1증가")
     void increaseViewCountByLogId() {
-        Member saveMember = memberRepository.save(MemberTestConvertor.createMemberInTest(3L));
-        Category saveCategory = categoryRepository.save(CategoryTestConvertor.createCategoryInTest(3L, saveMember));
-        Log saveLog = logRepository.save(LogTestConvertor.createLogInTest(5L, saveCategory));
+        Member saveMember = memberRepository.save(MemberTestConverter.createMemberInTest(3L));
+        Category saveCategory = categoryRepository.save(CategoryTestConverter.createCategoryInTest(3L, saveMember));
+        Log saveLog = logRepository.save(LogTestConverter.createLogInTest(5L, saveCategory));
 
         assertThat(saveLog.getViewCount()).isEqualTo(0L);
 
@@ -118,10 +117,10 @@ class LogCustomRepositoryTest {
     @Order(5)
     @DisplayName("모든 log fetch (member까지 fetch)")
     void findAllWithMember() {
-        Member saveMember = memberRepository.save(MemberTestConvertor.createMemberInTest(4L));
-        Category saveCategory = categoryRepository.save(CategoryTestConvertor.createCategoryInTest(4L, saveMember));
-        logRepository.save(LogTestConvertor.createLogInTest(6L, saveCategory));
-        logRepository.save(LogTestConvertor.createLogInTest(7L, saveCategory));
+        Member saveMember = memberRepository.save(MemberTestConverter.createMemberInTest(4L));
+        Category saveCategory = categoryRepository.save(CategoryTestConverter.createCategoryInTest(4L, saveMember));
+        logRepository.save(LogTestConverter.createLogInTest(6L, saveCategory));
+        logRepository.save(LogTestConverter.createLogInTest(7L, saveCategory));
 
         em.flush();
         em.clear();
@@ -135,10 +134,10 @@ class LogCustomRepositoryTest {
     @Order(6)
     @DisplayName("categoryId로 모든 log fetch")
     void findAllByCategoryId() {
-        Member saveMember = memberRepository.save(MemberTestConvertor.createMemberInTest(5L));
-        Category saveCategory = categoryRepository.save(CategoryTestConvertor.createCategoryInTest(5L, saveMember));
-        logRepository.save(LogTestConvertor.createLogInTest(8L, saveCategory));
-        logRepository.save(LogTestConvertor.createLogInTest(9L, saveCategory));
+        Member saveMember = memberRepository.save(MemberTestConverter.createMemberInTest(5L));
+        Category saveCategory = categoryRepository.save(CategoryTestConverter.createCategoryInTest(5L, saveMember));
+        logRepository.save(LogTestConverter.createLogInTest(8L, saveCategory));
+        logRepository.save(LogTestConverter.createLogInTest(9L, saveCategory));
 
         em.flush();
         em.clear();
