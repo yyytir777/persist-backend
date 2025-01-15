@@ -12,13 +12,16 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.filter.OncePerRequestFilter;
 import yyytir777.persist.domain.member.entity.Member;
 import yyytir777.persist.domain.member.service.MemberService;
 import yyytir777.persist.global.error.ErrorCode;
 import yyytir777.persist.global.error.exception.TokenException;
+import yyytir777.persist.global.security.PrincipalDetails;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.util.Collections;
 
 @Slf4j
@@ -39,11 +42,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 String token = authorizationHeader.substring(7);
 
                 if(jwtUtil.validateToken(token)) {
-                    String email = jwtUtil.getEmail(token);
-                    Member member = memberService.findByEmail(email);
+                    Member member = memberService.findByEmail(jwtUtil.getEmail(token));
 
-                    SimpleGrantedAuthority grantedAuthority = new SimpleGrantedAuthority(member.getRole().toString());
-                    Authentication authentication = new UsernamePasswordAuthenticationToken(member.getId(), null, Collections.singletonList(grantedAuthority));
+                    setAuthenticatedUser(member);
+
+                    UserDetails userDetails = new PrincipalDetails(member.getId(), member.getEmail(), member.getRole());
+                    Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                     SecurityContextHolder.getContext().setAuthentication(authentication);
 
                 }
@@ -53,5 +57,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request, response);
+    }
+
+    private void setAuthenticatedUser(Member member) {
+        UserDetails userDetails = new PrincipalDetails(member.getId(), member.getEmail(), member.getRole());
+        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 }
