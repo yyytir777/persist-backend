@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -21,8 +20,6 @@ import yyytir777.persist.global.error.exception.TokenException;
 import yyytir777.persist.global.security.PrincipalDetails;
 
 import java.io.IOException;
-import java.security.Principal;
-import java.util.Collections;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -45,11 +42,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     Member member = memberService.findByEmail(jwtUtil.getEmail(token));
 
                     setAuthenticatedUser(member);
-
-                    UserDetails userDetails = new PrincipalDetails(member.getId(), member.getEmail(), member.getRole());
-                    Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
-
                 }
             }
         } catch (TokenException e) {
