@@ -58,7 +58,7 @@ public class ViewCountValidator {
 
         for (String entry : entries) {
             String[] parts = entry.split(":");
-            if(parts[0].equals(logId)) {
+            if(parts[0].equals(logId.toString())) {
                 if(parts[1].equals(today)) return true;
                 else {
                     updateCookieWithLogId(cookie, response, logId);
