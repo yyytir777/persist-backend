@@ -30,18 +30,18 @@ public class Member extends BaseEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "log_name", nullable = false)
+    @Column(name = "log_name")
     private String memberLogName;
 
     @Builder.Default
-    @Column(name = "thumbnail", nullable = false)
+    @Column(name = "thumbnail")
     private String thumbnail = "Default";
 
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @Column(name = "type", nullable = false)
+    @Column(name = "type")
     @Enumerated(EnumType.STRING)
     private Type type;
 
