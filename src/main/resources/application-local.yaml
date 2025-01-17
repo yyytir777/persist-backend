@@ -1,0 +1,20 @@
+spring:
+  config:
+    activate:
+      on-profile: "local"
+
+  #datasource
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${LOCAL_DB_URL}
+    username: ${LOCAL_DB_USERNAME}
+    password: ${LOCAL_DB_PASSWORD}
+
+# jwt
+jwt:
+  access_expiration_time: 60000000
+
+# geoip2
+geoip2:
+  database:
+    path: C:\\Users\\yyyti\\Desktop\\GeoLite2-Country.mmdb

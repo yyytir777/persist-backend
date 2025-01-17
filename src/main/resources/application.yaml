@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: "persist"
+
+  profiles:
+    group:
+      test: "test"
+      local: "local"
+      prod: "prod"
+    include: # 공통 사항 추가
+      - security
+  threads:
+    virtual:
+      enabled: true
+
+#jpa
+  jpa:
+    show-sql: true
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        default_batch_fetch_size: 10

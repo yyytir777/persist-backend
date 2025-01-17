@@ -31,7 +31,7 @@ public class GoogleLoginServiceImpl implements SocialLoginService{
 
     private final RestTemplate restTemplate = new RestTemplate();
 
-    @Value("${spring.security.oauth2.client.registration.google.client_id}")
+    @Value("${spring.security.oauth2.client.registration.google.client-id}")
     private String clientId;
 
     @Value("${spring.security.oauth2.client.registration.google.client-secret}")

@@ -1,0 +1,12 @@
+spring:
+  config:
+    activate:
+      on-profile: "test"
+
+  datasource:
+    url: ${TEST_DB_URL}
+
+  jpa:
+    properties:
+      hibernate:
+        default_batch_fetch_size: 1000
