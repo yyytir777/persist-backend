@@ -11,13 +11,13 @@ public interface MemberService {
 
     void register(MemberRegisterRequestDto memberRegisterRequestDto);
 
-    MemberResponseDto readMember(String memberId);
+    MemberResponseDto readMember(Long memberId);
 
-    MemberResponseDto updateMember(MemberUpdateRequestDto memberUpdateRequestDto, String memberId, String currentMemberId);
+    MemberResponseDto updateMember(MemberUpdateRequestDto memberUpdateRequestDto, Long memberId, Long currentMemberId);
 
-    void deleteMember(String memberId, String currentMemberId);
+    void deleteMember(Long memberId, Long currentMemberId);
 
     Member findByEmail(String email);
 
-    String getReadme(String memberId);
+    String getReadme(Long memberId);
 }

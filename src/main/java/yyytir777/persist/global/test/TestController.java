@@ -19,8 +19,8 @@ public class TestController {
     }
 
     @GetMapping("/health/memberInfo")
-    public ApiResponse<String> healthWithMemberInfo(@MemberId MemberIdDto memberIdDto) {
-        String memberId = memberIdDto.getMemberId();
+    public ApiResponse<Long> healthWithMemberInfo(@MemberId MemberIdDto memberIdDto) {
+        Long memberId = memberIdDto.getMemberId();
         log.info("memberId ({}) called loginCheck api", memberId);
         return ApiResponse.onSuccess(memberId);
     }

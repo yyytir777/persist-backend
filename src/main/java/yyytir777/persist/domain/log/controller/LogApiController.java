@@ -32,23 +32,23 @@ public class LogApiController {
 
     @Operation(summary = "작성한 로그 저장")
     @PostMapping("/create")
-    public ApiResponse<String> createLog(@MemberId MemberIdDto memberIdDto,
+    public ApiResponse<Long> createLog(@MemberId MemberIdDto memberIdDto,
                                     @RequestBody LogCreateRequestDto logCreateRequestDto) {
-        String logId = logService.saveLog(logCreateRequestDto, memberIdDto.getMemberId());
+        Long logId = logService.saveLog(logCreateRequestDto, memberIdDto.getMemberId());
         return ApiResponse.onSuccess(logId);
     }
 
     // TODO 로그 조회시 본인의 로그인지 체크 필요
     @Operation(summary = "id로 로그 조회")
     @GetMapping("/{log_id}")
-    public ApiResponse<LogDetailResponseDto> readLog(HttpServletRequest request, HttpServletResponse response, @PathVariable(name = "log_id") String logId) {
+    public ApiResponse<LogDetailResponseDto> readLog(HttpServletRequest request, HttpServletResponse response, @PathVariable(name = "log_id") Long logId) {
         boolean hasViewed = viewCountValidator.hasViewedInCoookie(request, response, logId);
         return ApiResponse.onSuccess(logService.readLog(logId, hasViewed));
     }
 
     @Operation(summary = "사용자의 모든 로그 조회")
     @GetMapping("/member/{member_id}")
-    public ApiResponse<List<LogThumbnailResponseDto>> getAllLogsByMemberId(@PathVariable(name = "member_id") String memberId) {
+    public ApiResponse<List<LogThumbnailResponseDto>> getAllLogsByMemberId(@PathVariable(name = "member_id") Long memberId) {
         return ApiResponse.onSuccess(logService.readAllLogsByMemberId(memberId));
     }
 
@@ -62,14 +62,14 @@ public class LogApiController {
     @PatchMapping("/update/{log_id}")
     public ApiResponse<LogDetailResponseDto> updateLog(@MemberId MemberIdDto memberIdDto,
                                                        @RequestBody @Valid LogUpdateRequestDto logUpdateRequestDto,
-                                                       @PathVariable(name = "log_id") String logId) {
-        return ApiResponse.onSuccess(logService.updateLog(logUpdateRequestDto, logId,memberIdDto.getMemberId()));
+                                                       @PathVariable(name = "log_id") Long logId) {
+        return ApiResponse.onSuccess(logService.updateLog(logUpdateRequestDto, logId, memberIdDto.getMemberId()));
     }
 
     @Operation(summary = "로그 삭제")
     @DeleteMapping("/delete/{log_id}")
     public ApiResponse<?> deleteLog(@MemberId MemberIdDto memberIdDto,
-                                    @PathVariable(name = "log_id") String logId) {
+                                    @PathVariable(name = "log_id") Long logId) {
         logService.deleteLog(logId, memberIdDto.getMemberId());
         return ApiResponse.onSuccess();
     }

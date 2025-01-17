@@ -24,6 +24,7 @@ public enum ErrorCode {
     UNSUPPORTED_TOKEN(HttpStatus.UNAUTHORIZED, "T003", "지원하지 않는 JWT토큰 입니다."),
     JWT_CLAIMS_EMPTY(HttpStatus.UNAUTHORIZED, "T004", "JWT Claims가 비어있습니다."),
     REFRESH_TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "T005", "refreshToken이 만료되었습니다."),
+    HEADER_IS_NULL(HttpStatus.UNAUTHORIZED, "T006", "헤더가 빈 값입니다."),
 
     // Category
     CATEGORY_NOT_EXIST(HttpStatus.BAD_REQUEST, "C001", "해당 카테고리가 존재하지 않습니다."),

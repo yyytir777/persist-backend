@@ -9,16 +9,16 @@ import java.util.List;
 
 public interface LogService {
 
-    String saveLog(LogCreateRequestDto logCreateRequestDto, String memberId);
+    Long saveLog(LogCreateRequestDto logCreateRequest, Long memberId);
 
-    LogDetailResponseDto readLog(String logId, boolean hasViewed);
+    LogDetailResponseDto readLog(Long logId, boolean hasViewed);
 
     List<LogThumbnailResponseDto> readAllLogs();
 
-    List<LogThumbnailResponseDto> readAllLogsByMemberId(String memberId);
+    List<LogThumbnailResponseDto> readAllLogsByMemberId(Long memberId);
 
-    LogDetailResponseDto updateLog(LogUpdateRequestDto logUpdateRequestDto, String logId, String memberId);
+    LogDetailResponseDto updateLog(LogUpdateRequestDto logUpdateRequestDto, Long logId, Long memberId);
 
-    void deleteLog(String logId, String memberId);
+    void deleteLog(Long logId, Long memberId);
 
 }

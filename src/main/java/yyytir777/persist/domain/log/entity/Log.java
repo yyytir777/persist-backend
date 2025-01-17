@@ -17,8 +17,8 @@ public class Log extends BaseEntity {
 
     @Id
     @Column(name = "log_id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     @Column(name = "title", nullable = false)
     private String title;
@@ -40,6 +40,13 @@ public class Log extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
+
+    public Log(Long logId, Category category) {
+        this.id = logId;
+        this.category = category;
+        this.title = "demo";
+        this.content = "demo";
+    }
 
     public Log updateCategory(Category category) {
         this.category = category;

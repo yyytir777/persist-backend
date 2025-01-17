@@ -9,11 +9,11 @@ import java.util.List;
 
 public interface CategoryService {
 
-    Category saveCategory(CategoryCreateRequestDto categoryCreateRequestDto, String memberId);
+    Category saveCategory(CategoryCreateRequestDto categoryCreateRequestDto, Long memberId);
 
-    List<CategoryResponseDto> getAllCategory(String memberId);
+    List<CategoryResponseDto> getAllCategory(Long memberId);
 
-    Category updateCategory(String memberId, String categoryId, CategoryUpdateRequestDto categoryUpdateRequestDto);
+    Category updateCategory(Long memberId, Long categoryId, CategoryUpdateRequestDto categoryUpdateRequestDto);
 
-    void deleteCategory(String memberId, String categoryId);
+    void deleteCategory(Long memberId, Long categoryId);
 }

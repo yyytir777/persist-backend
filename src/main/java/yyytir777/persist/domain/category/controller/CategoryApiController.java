@@ -40,7 +40,7 @@ public class CategoryApiController {
     @PatchMapping("/update/{category_id}")
     public ApiResponse<CategoryResponseDto> updateCategory(@MemberId MemberIdDto memberIdDto,
                                                            @RequestBody CategoryUpdateRequestDto categoryUpdateRequestDto,
-                                                           @PathVariable(name = "category_id") String categoryId) {
+                                                           @PathVariable(name = "category_id") Long categoryId) {
         Category category = categoryService.updateCategory(memberIdDto.getMemberId(), categoryId, categoryUpdateRequestDto);
         CategoryResponseDto categoryResponseDto = CategoryResponseDto.of(category);
         return ApiResponse.onSuccess(categoryResponseDto);
@@ -48,7 +48,7 @@ public class CategoryApiController {
 
     @DeleteMapping("/delete/{category_id}")
     public ApiResponse<?> deleteCategory(@MemberId MemberIdDto memberIdDto,
-                                         @PathVariable(name = "category_id") String categoryId) {
+                                         @PathVariable(name = "category_id") Long categoryId) {
         categoryService.deleteCategory(memberIdDto.getMemberId(), categoryId);
         return ApiResponse.onSuccess();
     }

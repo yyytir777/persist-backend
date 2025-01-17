@@ -38,7 +38,7 @@ public class LogServiceImpl implements LogService {
     log를 저장하는 로직
     Category가 살아있다면
      */
-    public String saveLog(LogCreateRequestDto logCreateRequestDto, String memberId) {
+    public Long saveLog(LogCreateRequestDto logCreateRequestDto, Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(() ->
                 new MemberException(ErrorCode.MEMBER_NOT_EXIST));
 
@@ -75,7 +75,7 @@ public class LogServiceImpl implements LogService {
                 .build());
     }
 
-    public LogDetailResponseDto readLog(String logId, boolean hasViewed) {
+    public LogDetailResponseDto readLog(Long logId, boolean hasViewed) {
 
         // 게시글 조회가 유효하지 않다면 조회수 증가
         if(!hasViewed) logRepository.increaseViewCountByLogId(logId);
@@ -94,17 +94,17 @@ public class LogServiceImpl implements LogService {
     }
 
     @Transactional(readOnly = true)
-    public List<LogThumbnailResponseDto> readAllLogsByMemberId(String memberId) {
+    public List<LogThumbnailResponseDto> readAllLogsByMemberId(Long memberId) {
         return logRepository.findByMemberId(memberId).stream()
                 .map(LogThumbnailResponseDto::of)
                 .toList();
     }
 
-    public LogDetailResponseDto updateLog(LogUpdateRequestDto logUpdateRequestDto, String logId, String memberId) {
+    public LogDetailResponseDto updateLog(LogUpdateRequestDto logUpdateRequestDto, Long logId, Long memberId) {
         Log log = logRepository.findById(logId).orElseThrow(() ->
                 new LogException(ErrorCode.LOG_NOT_EXIST));
 
-        String logMemberId = log.getCategory().getMember().getId();
+        Long logMemberId = log.getCategory().getMember().getId();
         if(!memberId.equals(logMemberId)) throw new LogException(ErrorCode.NOT_MY_LOG);
 
         String categoryName = logUpdateRequestDto.getCategoryName();
@@ -117,11 +117,11 @@ public class LogServiceImpl implements LogService {
     }
 
 
-    public void deleteLog(String logId, String memberId) {
+    public void deleteLog(Long logId, Long memberId) {
         Log log = logRepository.findById(logId).orElseThrow(() ->
                 new LogException(ErrorCode.LOG_NOT_EXIST));
 
-        String logMemberId = log.getCategory().getMember().getId();
+        Long logMemberId = log.getCategory().getMember().getId();
 
         if(!memberId.equals(logMemberId)) throw new LogException(ErrorCode.NOT_MY_LOG);
 

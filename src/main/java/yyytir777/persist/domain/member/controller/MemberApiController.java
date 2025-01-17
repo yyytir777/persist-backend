@@ -31,7 +31,7 @@ public class MemberApiController {
     // TODO 본인을 조회하는지 남의 정보를 조회하는지 구분 필요
     @Operation(summary = "회원 조회")
     @GetMapping("/{member_id}")
-    public ApiResponse<MemberResponseDto> readMember(@PathVariable(name = "member_id") String memberId) {
+    public ApiResponse<MemberResponseDto> readMember(@PathVariable(name = "member_id") Long memberId) {
         return ApiResponse.onSuccess(memberService.readMember(memberId));
     }
 
@@ -39,21 +39,21 @@ public class MemberApiController {
     @PatchMapping("/update/{member_id}")
     public ApiResponse<MemberResponseDto> updateMember(@MemberId MemberIdDto memberIdDto,
                                                        @RequestBody @Valid MemberUpdateRequestDto memberUpdateRequestDto,
-                                                       @PathVariable(name = "member_id") String memberId) {
+                                                       @PathVariable(name = "member_id") Long memberId) {
         return ApiResponse.onSuccess(memberService.updateMember(memberUpdateRequestDto, memberId, memberIdDto.getMemberId()));
     }
 
     @Operation(summary = "회원 삭제")
     @DeleteMapping("/delete/{member_id}")
     public ApiResponse<?> deleteMember(@MemberId MemberIdDto memberIdDto,
-                                       @PathVariable(name = "member_id") String memberId) {
+                                       @PathVariable(name = "member_id") Long memberId) {
         memberService.deleteMember(memberId, memberIdDto.getMemberId());
         return ApiResponse.onSuccess();
     }
 
     @Operation(summary = "회원의 readme 조회")
     @GetMapping("/readme/{member_id}")
-    public ApiResponse<?> getReadme(@PathVariable(name = "member_id") String memberId) {
+    public ApiResponse<?> getReadme(@PathVariable(name = "member_id") Long memberId) {
         return ApiResponse.onSuccess(memberService.getReadme(memberId));
     }
 }

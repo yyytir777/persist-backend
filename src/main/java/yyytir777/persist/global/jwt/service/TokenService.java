@@ -23,7 +23,7 @@ public class TokenService {
 
         jwtUtil.validateToken(refreshToken);
 
-        String memberId = jwtUtil.getMemberId(refreshToken);
+        Long memberId = jwtUtil.getMemberId(refreshToken);
         String email = jwtUtil.getEmail(refreshToken);
         Date accessTokenExpireTime = jwtUtil.createExpireTime(this.accessTokenExpireTime);
         String accessToken = jwtUtil.createAccessToken(MemberInfoDto.of(memberId, email, Role.USER), accessTokenExpireTime);
@@ -35,7 +35,7 @@ public class TokenService {
                 .build();
     }
 
-    public String getMemberIdByAccessToken(String accessToken) {
+    public Long getMemberIdByAccessToken(String accessToken) {
         return jwtUtil.getMemberId(accessToken);
     }
 }
