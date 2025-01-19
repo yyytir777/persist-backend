@@ -11,12 +11,12 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import yyytir777.persist.domain.log.service.LogService;
 import yyytir777.persist.domain.log.service.ViewCountValidator;
-import yyytir777.persist.global.config.security.SecurityTestConfig;
+import yyytir777.persist.global.config.security.TestSecurityConfig;
 import yyytir777.persist.global.jwt.JwtUtil;
 
 
 @WebMvcTest(LogApiController.class)
-@Import(SecurityTestConfig.class)
+@Import(TestSecurityConfig.class)
 class LogApiControllerTest {
 
     @Autowired MockMvc mockMvc;

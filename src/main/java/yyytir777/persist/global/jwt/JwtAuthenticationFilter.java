@@ -35,19 +35,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             if(authorizationHeader == null) throw new TokenException(ErrorCode.JWT_CLAIMS_EMPTY);
 
-            if(authorizationHeader.startsWith("Bearer ")) {
-                String token = authorizationHeader.substring(7);
-                if(token.equals("admin")) {
-                    Member admin = memberService.findByEmail("admin@admin.com");
-                    setAuthenticatedUser(admin);
-                    filterChain.doFilter(request, response);
-                    return;
-                }
+            if(!authorizationHeader.startsWith("Bearer ")) throw new TokenException(ErrorCode.INVALID_TOKEN);
 
-                if(jwtUtil.validateToken(token)) {
-                    Member member = memberService.findByEmail(jwtUtil.getEmail(token));
-                    setAuthenticatedUser(member);
-                }
+            String token = authorizationHeader.substring(7);
+            if(token.equals("admin")) {
+                Member admin = memberService.findByEmail("admin@admin.com");
+                setAuthenticatedUser(admin);
+                filterChain.doFilter(request, response);
+                return;
+            }
+
+            if(jwtUtil.validateToken(token)) {
+                Member member = memberService.findByEmail(jwtUtil.getEmail(token));
+                setAuthenticatedUser(member);
             }
         } catch (TokenException e) {
             request.setAttribute("tokenException", e);
