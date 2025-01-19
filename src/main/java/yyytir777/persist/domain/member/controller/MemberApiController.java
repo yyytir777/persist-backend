@@ -9,8 +9,8 @@ import yyytir777.persist.domain.member.dto.MemberRegisterRequestDto;
 import yyytir777.persist.domain.member.dto.MemberResponseDto;
 import yyytir777.persist.domain.member.dto.MemberUpdateRequestDto;
 import yyytir777.persist.domain.member.service.MemberService;
-import yyytir777.persist.global.resolver.MemberId;
-import yyytir777.persist.global.resolver.MemberIdDto;
+import yyytir777.persist.global.resolver.memberId.MemberId;
+import yyytir777.persist.global.resolver.memberId.MemberIdDto;
 import yyytir777.persist.global.response.ApiResponse;
 
 @RestController
