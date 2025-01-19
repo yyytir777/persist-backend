@@ -1,7 +1,7 @@
 ## Description
 Provide a brief description of the changes.
 ## Related Issues
-Link to related issues, e.g., `Fixes #123`.
+- close #
 ## Changes Made
 - List the major changes made in this PR.
 - Example: Fixed a bug in `functionName`.
