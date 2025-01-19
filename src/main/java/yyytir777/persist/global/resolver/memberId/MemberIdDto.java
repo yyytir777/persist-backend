@@ -1,4 +1,4 @@
-package yyytir777.persist.global.resolver;
+package yyytir777.persist.global.resolver.memberId;
 
 import lombok.Builder;
 import lombok.Getter;
