@@ -18,3 +18,9 @@ jwt:
 geoip2:
   database:
     path: C:\\Users\\yyyti\\Desktop\\GeoLite2-Country.mmdb
+
+logging:
+  level:
+    org:
+      springframework:
+        security: TRACE
