@@ -1,4 +1,4 @@
-package yyytir777.persist.global.resolver;
+package yyytir777.persist.global.resolver.memberId;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.NonNull;
