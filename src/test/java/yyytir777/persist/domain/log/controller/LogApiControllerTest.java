@@ -3,7 +3,6 @@ package yyytir777.persist.domain.log.controller;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
@@ -12,7 +11,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import yyytir777.persist.domain.log.service.LogService;
 import yyytir777.persist.domain.log.service.ViewCountValidator;
-import yyytir777.persist.global.config.SecurityTestConfig;
+import yyytir777.persist.global.config.security.SecurityTestConfig;
 import yyytir777.persist.global.jwt.JwtUtil;
 
 

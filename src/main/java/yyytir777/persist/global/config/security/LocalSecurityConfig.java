@@ -1,4 +1,4 @@
-package yyytir777.persist.global.config;
+package yyytir777.persist.global.config.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
