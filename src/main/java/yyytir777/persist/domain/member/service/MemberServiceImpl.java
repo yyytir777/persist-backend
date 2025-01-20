@@ -10,6 +10,7 @@ import yyytir777.persist.domain.member.dto.MemberResponseDto;
 import yyytir777.persist.domain.member.dto.MemberUpdateRequestDto;
 import yyytir777.persist.global.error.ErrorCode;
 import yyytir777.persist.global.error.exception.MemberException;
+import yyytir777.persist.global.util.SecurityUtil;
 
 import java.util.Optional;
 
@@ -18,6 +19,7 @@ import java.util.Optional;
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
+    private final SecurityUtil securityUtil;
 
     @Override
     public void register(MemberRegisterRequestDto memberRegisterRequestDto) {
@@ -48,7 +50,9 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public MemberResponseDto updateMember(MemberUpdateRequestDto memberUpdateRequestDto, Long memberId, Long currentMemberId) {
+    public MemberResponseDto updateMember(MemberUpdateRequestDto memberUpdateRequestDto, Long memberId) {
+        Long currentMemberId = securityUtil.getCurrentMemberId();
+
         Member member = memberRepository.findById(memberId).orElseThrow(() ->
                 new MemberException(ErrorCode.MEMBER_NOT_EXIST));
 
@@ -69,7 +73,9 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void deleteMember(Long memberId, Long currentMemberId) {
+    public void deleteMember(Long memberId) {
+        Long currentMemberId = securityUtil.getCurrentMemberId();
+        
         if(!memberId.equals(currentMemberId)) throw new MemberException(ErrorCode.NOT_MY_MEMBER);
 
         memberRepository.findById(memberId).orElseThrow(() ->

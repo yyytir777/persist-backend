@@ -13,9 +13,9 @@ public interface MemberService {
 
     MemberResponseDto readMember(Long memberId);
 
-    MemberResponseDto updateMember(MemberUpdateRequestDto memberUpdateRequestDto, Long memberId, Long currentMemberId);
+    MemberResponseDto updateMember(MemberUpdateRequestDto memberUpdateRequestDto, Long memberId);
 
-    void deleteMember(Long memberId, Long currentMemberId);
+    void deleteMember(Long memberId);
 
     Member findByEmail(String email);
 

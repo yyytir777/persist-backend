@@ -9,8 +9,6 @@ import yyytir777.persist.domain.member.dto.MemberRegisterRequestDto;
 import yyytir777.persist.domain.member.dto.MemberResponseDto;
 import yyytir777.persist.domain.member.dto.MemberUpdateRequestDto;
 import yyytir777.persist.domain.member.service.MemberService;
-import yyytir777.persist.global.resolver.MemberId;
-import yyytir777.persist.global.resolver.MemberIdDto;
 import yyytir777.persist.global.response.ApiResponse;
 
 @RestController
@@ -37,17 +35,15 @@ public class MemberApiController {
 
     @Operation(summary = "회원 수정", description = "이메일은 변경 불가능")
     @PatchMapping("/update/{member_id}")
-    public ApiResponse<MemberResponseDto> updateMember(@MemberId MemberIdDto memberIdDto,
-                                                       @RequestBody @Valid MemberUpdateRequestDto memberUpdateRequestDto,
+    public ApiResponse<MemberResponseDto> updateMember(@RequestBody @Valid MemberUpdateRequestDto memberUpdateRequestDto,
                                                        @PathVariable(name = "member_id") Long memberId) {
-        return ApiResponse.onSuccess(memberService.updateMember(memberUpdateRequestDto, memberId, memberIdDto.getMemberId()));
+        return ApiResponse.onSuccess(memberService.updateMember(memberUpdateRequestDto, memberId));
     }
 
     @Operation(summary = "회원 삭제")
     @DeleteMapping("/delete/{member_id}")
-    public ApiResponse<?> deleteMember(@MemberId MemberIdDto memberIdDto,
-                                       @PathVariable(name = "member_id") Long memberId) {
-        memberService.deleteMember(memberId, memberIdDto.getMemberId());
+    public ApiResponse<?> deleteMember(@PathVariable(name = "member_id") Long memberId) {
+        memberService.deleteMember(memberId);
         return ApiResponse.onSuccess();
     }
 
