@@ -15,6 +15,7 @@ import yyytir777.persist.domain.member.repository.MemberRepository;
 import yyytir777.persist.global.error.ErrorCode;
 import yyytir777.persist.global.error.exception.CategoryException;
 import yyytir777.persist.global.error.exception.MemberException;
+import yyytir777.persist.global.util.SecurityUtil;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,11 +28,12 @@ public class CategoryServiceImpl implements CategoryService {
     private final MemberRepository memberRepository;
     private final LogRepository logRepository;
 
+    private final SecurityUtil securityUtil;
+
     private final String defaultCategoryName = "Default";
 
-    public Category saveCategory(CategoryCreateRequestDto categoryCreateRequestDto, Long memberId) {
-
-        Member member = memberRepository.findById(memberId).orElseThrow(() ->
+    public Category saveCategory(CategoryCreateRequestDto categoryCreateRequestDto) {
+        Member member = memberRepository.findById(securityUtil.getCurrentMemberId()).orElseThrow(() ->
                 new MemberException(ErrorCode.MEMBER_NOT_EXIST));
 
         Optional<Category> findCategory = categoryRepository.findByName(categoryCreateRequestDto.getName());
@@ -43,7 +45,8 @@ public class CategoryServiceImpl implements CategoryService {
         return category;
     }
 
-    public List<CategoryResponseDto> getAllCategory(Long memberId) {
+    public List<CategoryResponseDto> getAllCategory() {
+        Long memberId = securityUtil.getCurrentMemberId();
         memberRepository.findById(memberId).orElseThrow(() ->
                 new MemberException(ErrorCode.MEMBER_NOT_EXIST));
 
@@ -52,14 +55,14 @@ public class CategoryServiceImpl implements CategoryService {
                 .toList();
     }
 
-    public Category updateCategory(Long memberId, Long categoryId, CategoryUpdateRequestDto categoryUpdateRequestDto) {
-        Member member = memberRepository.findById(memberId).orElseThrow(() ->
+    public Category updateCategory(Long categoryId, CategoryUpdateRequestDto categoryUpdateRequestDto) {
+        Member member = memberRepository.findById(securityUtil.getCurrentMemberId()).orElseThrow(() ->
                 new MemberException(ErrorCode.MEMBER_NOT_EXIST));
 
         Category category = categoryRepository.findById(categoryId).orElseThrow(() ->
                 new CategoryException(ErrorCode.CATEGORY_NOT_EXIST));
 
-        if (!validate(category, member)) {
+        if (IsNotEqual(category, member)) {
             throw new CategoryException(ErrorCode.NO_AUTHORITY);
         }
 
@@ -70,14 +73,14 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     // 지울 카테고리에 존재하는 로그들을 기본 카테고리로 옮긴 후 카테고리 삭제
-    public void deleteCategory(Long memberId, Long categoryId) {
-        Member member = memberRepository.findById(memberId).orElseThrow(() ->
+    public void deleteCategory(Long categoryId) {
+        Member member = memberRepository.findById(securityUtil.getCurrentMemberId()).orElseThrow(() ->
                 new MemberException(ErrorCode.MEMBER_NOT_EXIST));
 
         Category category = categoryRepository.findById(categoryId).orElseThrow(() ->
                 new CategoryException(ErrorCode.CATEGORY_NOT_EXIST));
 
-        if (!validate(category, member)) {
+        if (IsNotEqual(category, member)) {
             throw new CategoryException(ErrorCode.NO_AUTHORITY);
         }
 
@@ -91,7 +94,7 @@ public class CategoryServiceImpl implements CategoryService {
         categoryRepository.delete(category);
     }
 
-    private boolean validate(Category category, Member member) {
-        return category.getMember().equals(member);
+    private boolean IsNotEqual(Category category, Member member) {
+        return !category.getMember().equals(member);
     }
 }

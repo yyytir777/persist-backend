@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface LogService {
 
-    Long saveLog(LogCreateRequestDto logCreateRequest, Long memberId);
+    Long saveLog(LogCreateRequestDto logCreateRequest);
 
     LogDetailResponseDto readLog(Long logId, boolean hasViewed);
 
@@ -17,8 +17,8 @@ public interface LogService {
 
     List<LogThumbnailResponseDto> readAllLogsByMemberId(Long memberId);
 
-    LogDetailResponseDto updateLog(LogUpdateRequestDto logUpdateRequestDto, Long logId, Long memberId);
+    LogDetailResponseDto updateLog(LogUpdateRequestDto logUpdateRequestDto, Long logId);
 
-    void deleteLog(Long logId, Long memberId);
+    void deleteLog(Long logId);
 
 }

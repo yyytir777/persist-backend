@@ -14,8 +14,6 @@ import yyytir777.persist.domain.log.dto.LogThumbnailResponseDto;
 import yyytir777.persist.domain.log.dto.LogCreateRequestDto;
 import yyytir777.persist.domain.log.service.LogService;
 import yyytir777.persist.domain.log.service.ViewCountValidator;
-import yyytir777.persist.global.resolver.memberId.MemberId;
-import yyytir777.persist.global.resolver.memberId.MemberIdDto;
 import yyytir777.persist.global.response.ApiResponse;
 
 import java.util.List;
@@ -32,9 +30,8 @@ public class LogApiController {
 
     @Operation(summary = "작성한 로그 저장")
     @PostMapping("/create")
-    public ApiResponse<Long> createLog(@MemberId MemberIdDto memberIdDto,
-                                    @RequestBody LogCreateRequestDto logCreateRequestDto) {
-        Long logId = logService.saveLog(logCreateRequestDto, memberIdDto.getMemberId());
+    public ApiResponse<Long> createLog(@RequestBody LogCreateRequestDto logCreateRequestDto) {
+        Long logId = logService.saveLog(logCreateRequestDto);
         return ApiResponse.onSuccess(logId);
     }
 
@@ -60,17 +57,15 @@ public class LogApiController {
 
     @Operation(summary = "로그 수정")
     @PatchMapping("/update/{log_id}")
-    public ApiResponse<LogDetailResponseDto> updateLog(@MemberId MemberIdDto memberIdDto,
-                                                       @RequestBody @Valid LogUpdateRequestDto logUpdateRequestDto,
+    public ApiResponse<LogDetailResponseDto> updateLog(@RequestBody @Valid LogUpdateRequestDto logUpdateRequestDto,
                                                        @PathVariable(name = "log_id") Long logId) {
-        return ApiResponse.onSuccess(logService.updateLog(logUpdateRequestDto, logId, memberIdDto.getMemberId()));
+        return ApiResponse.onSuccess(logService.updateLog(logUpdateRequestDto, logId));
     }
 
     @Operation(summary = "로그 삭제")
     @DeleteMapping("/delete/{log_id}")
-    public ApiResponse<?> deleteLog(@MemberId MemberIdDto memberIdDto,
-                                    @PathVariable(name = "log_id") Long logId) {
-        logService.deleteLog(logId, memberIdDto.getMemberId());
+    public ApiResponse<?> deleteLog(@PathVariable(name = "log_id") Long logId) {
+        logService.deleteLog(logId);
         return ApiResponse.onSuccess();
     }
 }
