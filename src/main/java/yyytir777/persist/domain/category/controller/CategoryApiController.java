@@ -24,32 +24,29 @@ public class CategoryApiController {
     private final CategoryService categoryService;
 
     @PostMapping("/create")
-    public ApiResponse<CategoryCreateResponseDto> createCategory(@MemberId MemberIdDto memberIdDto,
-                                                                 @RequestBody CategoryCreateRequestDto categoryCreateRequestDto) {
-        Category category = categoryService.saveCategory(categoryCreateRequestDto, memberIdDto.getMemberId());
+    public ApiResponse<CategoryCreateResponseDto> createCategory(@RequestBody CategoryCreateRequestDto categoryCreateRequestDto) {
+        Category category = categoryService.saveCategory(categoryCreateRequestDto);
         CategoryCreateResponseDto categoryCreateResponseDto = CategoryCreateResponseDto.of(category);
         return ApiResponse.onSuccess(categoryCreateResponseDto);
     }
 
     @GetMapping("/all")
-    public ApiResponse<List<CategoryResponseDto>> getCategoryList(@MemberId MemberIdDto memberIdDto) {
-        List<CategoryResponseDto> categoryResponseDtoList = categoryService.getAllCategory(memberIdDto.getMemberId());
+    public ApiResponse<List<CategoryResponseDto>> getCategoryList() {
+        List<CategoryResponseDto> categoryResponseDtoList = categoryService.getAllCategory();
         return ApiResponse.onSuccess(categoryResponseDtoList);
     }
 
     @PatchMapping("/update/{category_id}")
-    public ApiResponse<CategoryResponseDto> updateCategory(@MemberId MemberIdDto memberIdDto,
-                                                           @RequestBody CategoryUpdateRequestDto categoryUpdateRequestDto,
+    public ApiResponse<CategoryResponseDto> updateCategory(@RequestBody CategoryUpdateRequestDto categoryUpdateRequestDto,
                                                            @PathVariable(name = "category_id") Long categoryId) {
-        Category category = categoryService.updateCategory(memberIdDto.getMemberId(), categoryId, categoryUpdateRequestDto);
+        Category category = categoryService.updateCategory(categoryId, categoryUpdateRequestDto);
         CategoryResponseDto categoryResponseDto = CategoryResponseDto.of(category);
         return ApiResponse.onSuccess(categoryResponseDto);
     }
 
     @DeleteMapping("/delete/{category_id}")
-    public ApiResponse<?> deleteCategory(@MemberId MemberIdDto memberIdDto,
-                                         @PathVariable(name = "category_id") Long categoryId) {
-        categoryService.deleteCategory(memberIdDto.getMemberId(), categoryId);
+    public ApiResponse<?> deleteCategory(@PathVariable(name = "category_id") Long categoryId) {
+        categoryService.deleteCategory(categoryId);
         return ApiResponse.onSuccess();
     }
 }
