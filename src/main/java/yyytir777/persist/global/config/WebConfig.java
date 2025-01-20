@@ -7,7 +7,7 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import yyytir777.persist.global.jwt.JwtUtil;
-import yyytir777.persist.global.resolver.MemberIdArgumentResolver;
+import yyytir777.persist.global.resolver.memberId.MemberIdArgumentResolver;
 
 import java.util.List;
 
