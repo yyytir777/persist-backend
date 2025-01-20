@@ -14,8 +14,6 @@ import yyytir777.persist.domain.log.dto.LogThumbnailResponseDto;
 import yyytir777.persist.domain.log.dto.LogCreateRequestDto;
 import yyytir777.persist.domain.log.service.LogService;
 import yyytir777.persist.domain.log.service.ViewCountValidator;
-import yyytir777.persist.global.resolver.MemberId;
-import yyytir777.persist.global.resolver.MemberIdDto;
 import yyytir777.persist.global.response.ApiResponse;
 
 import java.util.List;
