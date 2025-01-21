@@ -9,8 +9,6 @@ import yyytir777.persist.domain.category.dto.CategoryResponseDto;
 import yyytir777.persist.domain.category.dto.CategoryUpdateRequestDto;
 import yyytir777.persist.domain.category.entity.Category;
 import yyytir777.persist.domain.category.service.CategoryService;
-import yyytir777.persist.global.resolver.memberId.MemberId;
-import yyytir777.persist.global.resolver.memberId.MemberIdDto;
 import yyytir777.persist.global.response.ApiResponse;
 
 import java.util.List;
