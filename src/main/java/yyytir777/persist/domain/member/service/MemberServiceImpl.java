@@ -91,6 +91,12 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public Member findById(Long memberId) {
+        return memberRepository.findById(memberId).orElseThrow(() ->
+                new MemberException(ErrorCode.MEMBER_NOT_EXIST));
+    }
+
+    @Override
     public String getReadme(Long memberId) {
         return memberRepository.findReadmeById(memberId).orElseThrow(() ->
                 new MemberException(ErrorCode.MEMBER_NOT_EXIST));

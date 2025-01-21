@@ -19,5 +19,7 @@ public interface MemberService {
 
     Member findByEmail(String email);
 
+    Member findById(Long memberId);
+
     String getReadme(Long memberId);
 }
