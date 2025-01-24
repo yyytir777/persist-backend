@@ -2,6 +2,8 @@ package yyytir777.persist.domain.log.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import yyytir777.persist.domain.category.entity.QCategory;
 import yyytir777.persist.domain.log.entity.Log;
@@ -51,14 +53,17 @@ public class LogCustomRepositoryImpl implements LogCustomRepository{
                 .execute();
     }
 
-    public List<Log> findAllWithMember() {
+    public Page<Log> findAllWithMember(Pageable pageable) {
         QLog log = QLog.log;
         QCategory category = QCategory.category;
         QMember member = QMember.member;
 
+        //TODO 해당 쿼리를 Page<Log> 자료형으로 변환해야함
         return jpaQueryFactory.selectFrom(log)
                 .join(log.category, category).fetchJoin()
                 .join(log.category.member, member).fetchJoin()
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
     }
 

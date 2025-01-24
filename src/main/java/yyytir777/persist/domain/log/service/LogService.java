@@ -1,5 +1,6 @@
 package yyytir777.persist.domain.log.service;
 
+import org.springframework.data.domain.Page;
 import yyytir777.persist.domain.log.dto.LogDetailResponseDto;
 import yyytir777.persist.domain.log.dto.LogUpdateRequestDto;
 import yyytir777.persist.domain.log.dto.LogThumbnailResponseDto;
@@ -13,7 +14,7 @@ public interface LogService {
 
     LogDetailResponseDto readLog(Long logId, boolean hasViewed);
 
-    List<LogThumbnailResponseDto> readAllLogs();
+    Page<LogThumbnailResponseDto> readAllLogs(int page, int size);
 
     List<LogThumbnailResponseDto> readAllLogsByMemberId(Long memberId);
 
