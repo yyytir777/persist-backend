@@ -3,6 +3,7 @@ package yyytir777.persist.domain.log.repository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import yyytir777.persist.domain.category.entity.QCategory;
@@ -15,7 +16,7 @@ import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
-public class LogCustomRepositoryImpl implements LogCustomRepository{
+public class LogCustomRepositoryImpl implements LogCustomRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 
@@ -58,13 +59,21 @@ public class LogCustomRepositoryImpl implements LogCustomRepository{
         QCategory category = QCategory.category;
         QMember member = QMember.member;
 
-        //TODO 해당 쿼리를 Page<Log> 자료형으로 변환해야함
-        return jpaQueryFactory.selectFrom(log)
+        List<Log> fetch = jpaQueryFactory.selectFrom(log)
+                .distinct()
                 .join(log.category, category).fetchJoin()
                 .join(log.category.member, member).fetchJoin()
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
+
+        Long count = jpaQueryFactory.select(log.count())
+                        .from(log)
+                        .fetchOne();
+
+        if(count == null) count = 0L;
+
+        return new PageImpl<>(fetch, pageable, count);
     }
 
     public List<Log> findAllByCategoryId(Long categoryId) {
