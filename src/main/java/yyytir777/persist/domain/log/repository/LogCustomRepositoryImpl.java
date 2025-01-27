@@ -57,14 +57,12 @@ public class LogCustomRepositoryImpl implements LogCustomRepository {
     public Page<Log> findAllWithMember(Pageable pageable) {
         QLog log = QLog.log;
         QCategory category = QCategory.category;
-        QMember member = QMember.member;
 
         List<Log> fetch = jpaQueryFactory.selectFrom(log)
-                .distinct()
-                .join(log.category, category).fetchJoin()
-                .join(log.category.member, member).fetchJoin()
+                .join(log.category, category)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
+                .where(log.category.name.eq("demo"))
                 .fetch();
 
         Long count = jpaQueryFactory.select(log.count())

@@ -92,10 +92,9 @@ public class LogServiceImpl implements LogService {
         return LogDetailResponseDto.of(findLog);
     }
 
-    @Transactional(readOnly = true)
     public Page<LogThumbnailResponseDto> readAllLogs(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return logRepository.findAllWithMember(pageable)
+        return logRepository.findAll(pageable)
                 .map(LogThumbnailResponseDto::of);
     }
 

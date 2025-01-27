@@ -13,4 +13,7 @@ public class CategoryTestConverter {
         return new Category(categoryId, member);
     }
 
+    public static Category createCategoryInTest(Member member) {
+        return new Category(member);
+    }
 }

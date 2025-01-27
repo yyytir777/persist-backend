@@ -7,4 +7,8 @@ public class LogTestConverter {
     public static Log createLogInTest(Long logId, Category category) {
         return new Log(logId, category);
     }
+
+    public static Log createLogInTest(Category category) {
+        return new Log(null, category);
+    }
 }

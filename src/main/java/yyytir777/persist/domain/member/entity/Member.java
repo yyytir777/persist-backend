@@ -54,7 +54,17 @@ public class Member extends BaseEntity {
 
     public Member(Long id) {
         this.id = id;
-        this.email = "test@test.com";
+        this.email = id.toString() + "email";
+        this.name = "demo";
+        this.memberLogName = "demo";
+        this.readme = "demo";
+        this.thumbnail = "demo";
+        this.role = Role.USER;
+        this.type = Type.KAKAO;
+    }
+
+    public Member(String email) {
+        this.email = email;
         this.name = "demo";
         this.memberLogName = "demo";
         this.readme = "demo";
