@@ -6,8 +6,13 @@ import org.springframework.stereotype.Repository;
 import yyytir777.persist.domain.category.entity.Category;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Long>, CategoryCustomRepository {
+
+    @Query("select c " +
+            "from Category  c " +
+            "join fetch c.logList " +
+            "where c.id = :categoryId ")
+    List<Category> findFetch(Long categoryId);
 }

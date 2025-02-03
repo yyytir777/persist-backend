@@ -24,7 +24,6 @@ import yyytir777.persist.global.error.exception.MemberException;
 import yyytir777.persist.global.util.SecurityUtil;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -92,6 +91,7 @@ public class LogServiceImpl implements LogService {
         return LogDetailResponseDto.of(findLog);
     }
 
+    @Transactional(readOnly = true)
     public Page<LogThumbnailResponseDto> readAllLogs(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         return logRepository.findAll(pageable)

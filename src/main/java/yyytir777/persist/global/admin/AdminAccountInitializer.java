@@ -16,8 +16,6 @@ import yyytir777.persist.domain.member.MemberTestConverter;
 import yyytir777.persist.domain.member.entity.Member;
 import yyytir777.persist.domain.member.repository.MemberRepository;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.UUID;
 
 @Slf4j
