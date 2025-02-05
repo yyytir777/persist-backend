@@ -47,10 +47,4 @@ public class CategoryApiController {
         categoryService.deleteCategory(categoryId);
         return ApiResponse.onSuccess();
     }
-
-    @GetMapping("/test")
-    public ApiResponse<CategoryDto> test() {
-        categoryService.test();
-        return ApiResponse.onSuccess(null);
-    }
 }

@@ -9,10 +9,4 @@ import java.util.List;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Long>, CategoryCustomRepository {
-
-    @Query("select c " +
-            "from Category  c " +
-            "join fetch c.logList " +
-            "where c.id = :categoryId ")
-    List<Category> findFetch(Long categoryId);
 }

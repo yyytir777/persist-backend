@@ -94,14 +94,6 @@ public class CategoryServiceImpl implements CategoryService {
         categoryRepository.delete(category);
     }
 
-    public void test() {
-        List<Category> categories = categoryRepository.findFetch(1512L);
-
-        for (Category category : categories) {
-            System.out.println("category = " + category + ", log = " + category.getLogList());
-        }
-    }
-
     private boolean IsNotEqual(Category category, Member member) {
         return !category.getMember().equals(member);
     }

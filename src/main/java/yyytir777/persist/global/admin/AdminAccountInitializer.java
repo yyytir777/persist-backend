@@ -19,7 +19,7 @@ import yyytir777.persist.domain.member.repository.MemberRepository;
 import java.util.UUID;
 
 @Slf4j
-@Configuration
+//@Configuration
 @RequiredArgsConstructor
 public class AdminAccountInitializer {
 
