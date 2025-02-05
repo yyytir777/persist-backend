@@ -15,7 +15,5 @@ public interface LogCustomRepository {
 
     void increaseViewCountByLogId(Long logId);
 
-    Page<Log> findAllWithMember(Pageable pageable);
-
     List<Log> findAllByCategoryId(Long categoryId);
 }

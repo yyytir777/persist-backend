@@ -6,6 +6,7 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import yyytir777.persist.domain.category.CategoryTestConverter;
@@ -125,7 +126,7 @@ class LogCustomRepositoryTest {
         em.flush();
         em.clear();
 
-        List<Log> logList = logRepository.findAllWithMember();
+        List<Log> logList = logRepository.findAll();
         assertThat(logList.size()).isEqualTo(2L);
         assertThat(logList.get(0).getCategory().getMember().getName()).isNotNull();
     }
