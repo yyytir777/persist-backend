@@ -11,7 +11,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import yyytir777.persist.domain.log.service.LogService;
 import yyytir777.persist.domain.log.service.ViewCountValidator;
-import yyytir777.persist.global.config.security.TestSecurityConfig;
+import yyytir777.persist.config.TestSecurityConfig;
 import yyytir777.persist.global.jwt.JwtUtil;
 
 
