@@ -1,4 +1,4 @@
-package yyytir777.persist.global.config.security;
+package yyytir777.persist.global.config;
 
 
 import lombok.RequiredArgsConstructor;
