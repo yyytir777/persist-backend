@@ -3,9 +3,6 @@ spring:
     activate:
       on-profile: "test"
 
-  datasource:
-    url: ${TEST_DB_URL}
-
   jpa:
     properties:
       hibernate:
