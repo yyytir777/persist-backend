@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import yyytir777.persist.domain.log.dto.LogDetailResponseDto;
 import yyytir777.persist.domain.log.dto.LogUpdateRequestDto;
@@ -51,8 +52,9 @@ public class LogApiController {
 
     @Operation(summary = "모든 로그 조회")
     @GetMapping("/all")
-    public ApiResponse<List<LogThumbnailResponseDto>> readAllLog() {
-        return ApiResponse.onSuccess(logService.readAllLogs());
+    public ApiResponse<Page<LogThumbnailResponseDto>> readAllLog(@RequestParam int page,
+                                                                 @RequestParam int size) {
+        return ApiResponse.onSuccess(logService.readAllLogs(page, size));
     }
 
     @Operation(summary = "로그 수정")

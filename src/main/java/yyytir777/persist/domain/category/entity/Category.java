@@ -47,4 +47,9 @@ public class Category extends BaseEntity {
         this.name = name;
         return this;
     }
+
+    public Category(Member member) {
+        this.member = member;
+        this.name = "demo";
+    }
 }

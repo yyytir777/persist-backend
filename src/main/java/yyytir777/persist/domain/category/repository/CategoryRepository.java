@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 import yyytir777.persist.domain.category.entity.Category;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Long>, CategoryCustomRepository {

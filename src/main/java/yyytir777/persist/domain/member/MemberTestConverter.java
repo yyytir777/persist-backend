@@ -7,4 +7,8 @@ public class MemberTestConverter {
     public static Member createMemberInTest(Long memberId) {
         return new Member(memberId);
     }
+
+    public static Member createMemberInTest(String email) {
+        return new Member(email);
+    }
 }

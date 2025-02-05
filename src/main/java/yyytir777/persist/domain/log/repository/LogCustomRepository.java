@@ -1,5 +1,7 @@
 package yyytir777.persist.domain.log.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import yyytir777.persist.domain.log.entity.Log;
 
 import java.util.List;
@@ -12,8 +14,6 @@ public interface LogCustomRepository {
     Optional<Log> findLogAndMemberById(Long logId);
 
     void increaseViewCountByLogId(Long logId);
-
-    List<Log> findAllWithMember();
 
     List<Log> findAllByCategoryId(Long categoryId);
 }

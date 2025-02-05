@@ -2,6 +2,9 @@ package yyytir777.persist.domain.log.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import yyytir777.persist.domain.category.entity.Category;
@@ -21,7 +24,6 @@ import yyytir777.persist.global.error.exception.MemberException;
 import yyytir777.persist.global.util.SecurityUtil;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -90,10 +92,10 @@ public class LogServiceImpl implements LogService {
     }
 
     @Transactional(readOnly = true)
-    public List<LogThumbnailResponseDto> readAllLogs() {
-        return logRepository.findAllWithMember().stream()
-                .map(LogThumbnailResponseDto::of)
-                .collect(Collectors.toList());
+    public Page<LogThumbnailResponseDto> readAllLogs(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return logRepository.findAll(pageable)
+                .map(LogThumbnailResponseDto::of);
     }
 
     @Transactional(readOnly = true)

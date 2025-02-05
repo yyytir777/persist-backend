@@ -10,7 +10,25 @@ spring:
     username: ${LOCAL_DB_USERNAME}
     password: ${LOCAL_DB_PASSWORD}
 
-# jwt
+
+  jpa:
+    show-sql: true # hibernate sql 로그 활성화
+    properties:
+      hibernate:
+        format_sql: true # sql 로그 formatting
+        default_batch_fetch_size: 100
+        highlight_sql: true # 색상 부여
+
+        logging:
+          level:
+            org:
+            hibernate:
+            orm:
+            jdbc:
+            bind: trace
+
+
+# jwt 
 jwt:
   access_expiration_time: 60000000
 

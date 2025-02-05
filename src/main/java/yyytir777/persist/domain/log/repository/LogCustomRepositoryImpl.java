@@ -2,6 +2,9 @@ package yyytir777.persist.domain.log.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import yyytir777.persist.domain.category.entity.QCategory;
 import yyytir777.persist.domain.log.entity.Log;
@@ -13,7 +16,7 @@ import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
-public class LogCustomRepositoryImpl implements LogCustomRepository{
+public class LogCustomRepositoryImpl implements LogCustomRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 
@@ -49,17 +52,6 @@ public class LogCustomRepositoryImpl implements LogCustomRepository{
                 .set(log.viewCount, log.viewCount.add(1))
                 .where(log.id.eq(logId))
                 .execute();
-    }
-
-    public List<Log> findAllWithMember() {
-        QLog log = QLog.log;
-        QCategory category = QCategory.category;
-        QMember member = QMember.member;
-
-        return jpaQueryFactory.selectFrom(log)
-                .join(log.category, category).fetchJoin()
-                .join(log.category.member, member).fetchJoin()
-                .fetch();
     }
 
     public List<Log> findAllByCategoryId(Long categoryId) {
