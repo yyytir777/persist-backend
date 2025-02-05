@@ -17,7 +17,7 @@ public class Category extends BaseEntity {
 
     @Id
     @Column(name = "category_id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Builder.Default

@@ -17,7 +17,7 @@ public class Log extends BaseEntity {
 
     @Id
     @Column(name = "log_id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "title", nullable = false)
