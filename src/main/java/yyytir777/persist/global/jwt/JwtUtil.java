@@ -3,12 +3,12 @@ package yyytir777.persist.global.jwt;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import yyytir777.persist.domain.member.dto.MemberInfoDto;
 import yyytir777.persist.global.error.ErrorCode;
 import yyytir777.persist.global.error.exception.TokenException;
 import yyytir777.persist.global.jwt.dto.JwtInfoDto;
-import yyytir777.persist.global.properties.JwtProperties;
 
 import java.security.Key;
 import java.util.Date;
@@ -20,11 +20,14 @@ public class JwtUtil {
     private final Long accessTokenExpireTime;
     private final Long refreshTokenExpireTime;
 
-    public JwtUtil(JwtProperties jwtProperties) {
-        byte[] keyBytes = Decoders.BASE64.decode(jwtProperties.getSecret());
+    public JwtUtil(@Value("${jwt.secret}") String secret,
+                   @Value("${jwt.access_expiration_time}") Long accessTokenExpireTime,
+                   @Value("${jwt.refresh_expiration_time}") Long refreshTokenExpireTime) {
+
+        byte[] keyBytes = Decoders.BASE64.decode(secret);
         this.key = Keys.hmacShaKeyFor(keyBytes);
-        this.accessTokenExpireTime = jwtProperties.getAccessExpirationTime();
-        this.refreshTokenExpireTime = jwtProperties.getRefreshExpirationTime();
+        this.accessTokenExpireTime = accessTokenExpireTime;
+        this.refreshTokenExpireTime = refreshTokenExpireTime;
     }
 
     public JwtInfoDto createToken(MemberInfoDto memberInfoDto) {

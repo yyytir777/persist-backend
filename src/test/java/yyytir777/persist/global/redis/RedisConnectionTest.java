@@ -3,14 +3,17 @@ package yyytir777.persist.global.redis;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.data.redis.DataRedisTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
+import yyytir777.persist.config.TestRedisConfig;
 
-@SpringBootTest
+@DataRedisTest
 @ActiveProfiles("test")
+@Import(TestRedisConfig.class)
 @TestPropertySource(locations = "classpath:local.env")
 public class RedisConnectionTest {
 
