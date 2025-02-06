@@ -1,4 +1,4 @@
-package yyytir777.persist.global.jwt;
+package yyytir777.persist.global.jwtToken;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -17,14 +17,14 @@ import yyytir777.persist.domain.member.entity.Member;
 import yyytir777.persist.domain.member.service.MemberService;
 import yyytir777.persist.global.error.ErrorCode;
 import yyytir777.persist.global.error.exception.TokenException;
-import yyytir777.persist.global.jwt.service.TokenService;
+import yyytir777.persist.global.jwtToken.service.TokenService;
 import yyytir777.persist.global.security.PrincipalDetails;
 
 import java.io.IOException;
 
 @Slf4j
 @RequiredArgsConstructor
-public class JwtAuthenticationFilter extends OncePerRequestFilter {
+public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
 
     private final MemberService memberService;
     private final TokenService tokenService;

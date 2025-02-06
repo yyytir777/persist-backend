@@ -18,8 +18,8 @@ import yyytir777.persist.domain.member.service.MemberService;
 import yyytir777.persist.global.geoip.IpAuthenticationFilter;
 import yyytir777.persist.global.handler.CustomAccessDeniedHandler;
 import yyytir777.persist.global.handler.CustomAuthenticationEntryPoint;
-import yyytir777.persist.global.jwt.JwtAuthenticationFilter;
-import yyytir777.persist.global.jwt.service.TokenService;
+import yyytir777.persist.global.jwtToken.JwtTokenAuthenticationFilter;
+import yyytir777.persist.global.jwtToken.service.TokenService;
 
 import java.util.Optional;
 
@@ -77,7 +77,7 @@ public class SecurityConfig {
 
         optionalIpAuthenticationFilter.ifPresent(optionalIpAuthenticationFilter ->
                 httpSecurity
-                    .addFilterBefore(optionalIpAuthenticationFilter, JwtAuthenticationFilter.class));
+                    .addFilterBefore(optionalIpAuthenticationFilter, JwtTokenAuthenticationFilter.class));
 
         httpSecurity
                 .exceptionHandling(exception -> exception
@@ -94,7 +94,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public JwtAuthenticationFilter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter(memberService, tokenService);
+    public JwtTokenAuthenticationFilter jwtAuthenticationFilter() {
+        return new JwtTokenAuthenticationFilter(memberService, tokenService);
     }
 }

@@ -1,4 +1,4 @@
-package yyytir777.persist.global.jwt;
+package yyytir777.persist.global.jwtToken.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,4 +1,4 @@
-package yyytir777.persist.global.jwt.controller;
+package yyytir777.persist.global.jwtToken.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -8,14 +8,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import yyytir777.persist.global.error.ErrorCode;
 import yyytir777.persist.global.error.exception.TokenException;
-import yyytir777.persist.global.jwt.dto.JwtInfoDto;
-import yyytir777.persist.global.jwt.service.TokenService;
+import yyytir777.persist.global.jwtToken.dto.JwtInfoDto;
+import yyytir777.persist.global.jwtToken.service.TokenService;
 import yyytir777.persist.global.response.ApiResponse;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/token")
-public class TokenController {
+public class JwtTokenController {
 
     private final TokenService tokenService;
 

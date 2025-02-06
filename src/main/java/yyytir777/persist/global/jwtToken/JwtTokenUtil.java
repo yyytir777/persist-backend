@@ -1,37 +1,38 @@
-package yyytir777.persist.global.jwt;
+package yyytir777.persist.global.jwtToken;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import yyytir777.persist.global.jwt.repository.TokenRepository;
+import yyytir777.persist.global.jwtToken.dto.RefreshToken;
+import yyytir777.persist.global.jwtToken.repository.JwtTokenRepository;
 import yyytir777.persist.domain.member.dto.MemberInfoDto;
 import yyytir777.persist.global.error.ErrorCode;
 import yyytir777.persist.global.error.exception.TokenException;
-import yyytir777.persist.global.jwt.dto.JwtInfoDto;
+import yyytir777.persist.global.jwtToken.dto.JwtInfoDto;
 
 import java.security.Key;
 import java.util.Date;
 
 @Component
-public class JwtUtil {
+public class JwtTokenUtil {
 
     private final Key key;
     private final Long accessTokenExpireTime;
     private final Long refreshTokenExpireTime;
-    private final TokenRepository tokenRepository;
+    private final JwtTokenRepository jwtTokenRepository;
 
-    public JwtUtil(@Value("${jwt.secret}") String secret,
-                   @Value("${jwt.access_expiration_time}") Long accessTokenExpireTime,
-                   @Value("${jwt.refresh_expiration_time}") Long refreshTokenExpireTime,
-                   TokenRepository tokenRepository) {
+    public JwtTokenUtil(@Value("${jwt.secret}") String secret,
+                        @Value("${jwt.access_expiration_time}") Long accessTokenExpireTime,
+                        @Value("${jwt.refresh_expiration_time}") Long refreshTokenExpireTime,
+                        JwtTokenRepository jwtTokenRepository) {
 
         byte[] keyBytes = Decoders.BASE64.decode(secret);
         this.key = Keys.hmacShaKeyFor(keyBytes);
         this.accessTokenExpireTime = accessTokenExpireTime;
         this.refreshTokenExpireTime = refreshTokenExpireTime;
-        this.tokenRepository = tokenRepository;
+        this.jwtTokenRepository = jwtTokenRepository;
     }
 
     public JwtInfoDto createToken(MemberInfoDto memberInfoDto) {
@@ -79,7 +80,7 @@ public class JwtUtil {
                 .refreshToken(refreshToken)
                 .build();
 
-        tokenRepository.save(token);
+        jwtTokenRepository.save(token);
         return refreshToken;
     }
 

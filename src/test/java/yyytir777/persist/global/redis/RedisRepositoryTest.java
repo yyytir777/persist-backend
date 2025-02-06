@@ -5,8 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
-import yyytir777.persist.global.jwt.RefreshToken;
-import yyytir777.persist.global.jwt.repository.TokenRepository;
+import yyytir777.persist.global.jwtToken.dto.RefreshToken;
+import yyytir777.persist.global.jwtToken.repository.JwtTokenRepository;
 
 
 @SpringBootTest
@@ -14,7 +14,7 @@ import yyytir777.persist.global.jwt.repository.TokenRepository;
 class RedisRepositoryTest {
 
     @Autowired
-    TokenRepository tokenRepository;
+    JwtTokenRepository jwtTokenRepository;
 
     @Test
     void redisConnection() {
@@ -24,8 +24,8 @@ class RedisRepositoryTest {
                 .refreshToken("1234")
                 .build();
 
-        tokenRepository.save(refreshToken);
-        RefreshToken fetchedToken = tokenRepository.findById(1234L).orElseThrow();
+        jwtTokenRepository.save(refreshToken);
+        RefreshToken fetchedToken = jwtTokenRepository.findById(1234L).orElseThrow();
 
         Assertions.assertEquals(fetchedToken.getRefreshToken(), refreshToken.getRefreshToken());
         Assertions.assertEquals(fetchedToken.getMemberId(), refreshToken.getMemberId());
