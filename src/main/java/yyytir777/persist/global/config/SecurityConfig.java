@@ -19,7 +19,7 @@ import yyytir777.persist.global.geoip.IpAuthenticationFilter;
 import yyytir777.persist.global.handler.CustomAccessDeniedHandler;
 import yyytir777.persist.global.handler.CustomAuthenticationEntryPoint;
 import yyytir777.persist.global.jwt.JwtAuthenticationFilter;
-import yyytir777.persist.global.jwt.JwtUtil;
+import yyytir777.persist.global.jwt.service.TokenService;
 
 import java.util.Optional;
 
@@ -29,7 +29,7 @@ import java.util.Optional;
 @Profile({"local", "prod"})
 public class SecurityConfig {
 
-    private final JwtUtil jwtUtil;
+    private final TokenService tokenService;
     private final MemberService memberService;
 
     private final CustomAccessDeniedHandler accessDeniedHandler;
@@ -95,6 +95,6 @@ public class SecurityConfig {
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter(jwtUtil, memberService);
+        return new JwtAuthenticationFilter(memberService, tokenService);
     }
 }

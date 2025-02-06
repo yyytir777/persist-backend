@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import yyytir777.persist.global.error.ErrorCode;
 import yyytir777.persist.global.error.exception.TokenException;
-import yyytir777.persist.global.jwt.dto.AccessTokenResponseDto;
+import yyytir777.persist.global.jwt.dto.JwtInfoDto;
 import yyytir777.persist.global.jwt.service.TokenService;
 import yyytir777.persist.global.response.ApiResponse;
 
@@ -20,12 +20,11 @@ public class TokenController {
     private final TokenService tokenService;
 
     @PostMapping("/reissue")
-    public ApiResponse<AccessTokenResponseDto> createAccessToken(HttpServletRequest httpServletRequest) {
+    public ApiResponse<JwtInfoDto> createAccessToken(HttpServletRequest httpServletRequest) {
         String header = httpServletRequest.getHeader("Authorization");
         if(header == null) throw new TokenException(ErrorCode.HEADER_IS_NULL);
 
         String refreshToken = header.split(" ")[1];
-
         return ApiResponse.onSuccess(tokenService.createAccessTokenByRefreshToken(refreshToken));
     }
 

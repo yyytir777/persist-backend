@@ -26,6 +26,7 @@ public enum ErrorCode {
     REFRESH_TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "T005", "refreshToken이 만료되었습니다."),
     HEADER_IS_NULL(HttpStatus.UNAUTHORIZED, "T006", "헤더가 빈 값입니다."),
     AUTH_NOT_FOUND(HttpStatus.UNAUTHORIZED, "T007", "인증 정보를 찾을 수 없습니다."),
+    NEED_TO_RE_LOGIN(HttpStatus.UNAUTHORIZED, "T008", "서버의 refresh토큰과 일치하지 않습니다."),
 
     // Category
     CATEGORY_NOT_EXIST(HttpStatus.BAD_REQUEST, "C001", "해당 카테고리가 존재하지 않습니다."),

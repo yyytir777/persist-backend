@@ -5,6 +5,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import yyytir777.persist.global.jwt.repository.TokenRepository;
 import yyytir777.persist.domain.member.dto.MemberInfoDto;
 import yyytir777.persist.global.error.ErrorCode;
 import yyytir777.persist.global.error.exception.TokenException;
@@ -19,15 +20,18 @@ public class JwtUtil {
     private final Key key;
     private final Long accessTokenExpireTime;
     private final Long refreshTokenExpireTime;
+    private final TokenRepository tokenRepository;
 
     public JwtUtil(@Value("${jwt.secret}") String secret,
                    @Value("${jwt.access_expiration_time}") Long accessTokenExpireTime,
-                   @Value("${jwt.refresh_expiration_time}") Long refreshTokenExpireTime) {
+                   @Value("${jwt.refresh_expiration_time}") Long refreshTokenExpireTime,
+                   TokenRepository tokenRepository) {
 
         byte[] keyBytes = Decoders.BASE64.decode(secret);
         this.key = Keys.hmacShaKeyFor(keyBytes);
         this.accessTokenExpireTime = accessTokenExpireTime;
         this.refreshTokenExpireTime = refreshTokenExpireTime;
+        this.tokenRepository = tokenRepository;
     }
 
     public JwtInfoDto createToken(MemberInfoDto memberInfoDto) {
@@ -35,14 +39,14 @@ public class JwtUtil {
         Date refreshTokenExpireTime = createExpireTime(this.refreshTokenExpireTime);
 
         String accessToken = createAccessToken(memberInfoDto, accessTokenExpireTime);
-        String refreshToken = createRefreshtoken(memberInfoDto, refreshTokenExpireTime);
+        String refreshToken = createRefreshToken(memberInfoDto, refreshTokenExpireTime);
 
         return JwtInfoDto.builder()
                 .grantType("Bearer")
                 .accessToken(accessToken)
                 .accessTokenExpireTime(accessTokenExpireTime)
                 .refreshToken(refreshToken)
-                .refreshTokenExpiretime(refreshTokenExpireTime)
+                .refreshTokenExpireTime(refreshTokenExpireTime)
                 .build();
     }
 
@@ -59,8 +63,8 @@ public class JwtUtil {
                 .compact();
     }
 
-    private String createRefreshtoken(MemberInfoDto memberInfoDto, Date refreshTokenExpireTime) {
-        return Jwts.builder()
+    public String createRefreshToken(MemberInfoDto memberInfoDto, Date refreshTokenExpireTime) {
+        String refreshToken = Jwts.builder()
                 .setHeaderParam("typ", "JWT")
                 .setSubject("RefreshToken")
                 .setIssuedAt(new Date())
@@ -69,6 +73,14 @@ public class JwtUtil {
                 .claim("email", memberInfoDto.getEmail())
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
+
+        RefreshToken token = RefreshToken.builder()
+                .memberId(memberInfoDto.getMemberId())
+                .refreshToken(refreshToken)
+                .build();
+
+        tokenRepository.save(token);
+        return refreshToken;
     }
 
     public Date createExpireTime(Long expireTime) {
@@ -76,14 +88,14 @@ public class JwtUtil {
     }
 
     public String getEmail(String token) {
-        return parseCliams(token).get("email", String.class);
+        return parseClaims(token).get("email", String.class);
     }
 
     public Long getMemberId(String token) {
-        return parseCliams(token).get("memberId", Long.class);
+        return parseClaims(token).get("memberId", Long.class);
     }
 
-    private Claims parseCliams(String token) {
+    private Claims parseClaims(String token) {
         try {
             return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
         } catch (ExpiredJwtException e) {
