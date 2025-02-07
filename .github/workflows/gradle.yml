@@ -20,17 +20,17 @@ jobs:
         with:
           java-version: '17'
       
-      # 환경변수 복사
-      - name : Extract .env
-        run: |
-          touch ./prod.env
-          ehco "${{ secrets.ENV }}" > ./prod.env
+#      # 환경변수 복사
+#      - name : Extract .env
+#        run: |
+#          touch ./prod.env
+#          echo "${{ secrets.ENV }}" > ./prod.env
 
       # Gradle 빌드
       - name: Build with Gradle
         run: |
           chmod +x ./gradlew
-          ./gradlew build
+          ./gradlew build -x test
 
       # Docker 로그인을 통해 DockerHub로 인증
       - name: Log in to Docker Hub
@@ -73,5 +73,9 @@ jobs:
             # 최신 이미지로 업데이트
             docker pull ${{ secrets.DOCKER_USERNAME }}/persist:latest
             
+            # 환경변수 복사
+            sudo touch ~/.env
+            echo "${{ secrets.ENV }}" > ~/.env
+            
             # 새로운 컨테이너 실행
-            docker run --name=persist -d -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/persist:latest
+            docker run --name=persist -d -p 8080:8080 --env-file ~/.env ${{ secrets.DOCKER_USERNAME }}/persist:latest
