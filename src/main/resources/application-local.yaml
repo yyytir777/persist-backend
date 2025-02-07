@@ -2,7 +2,7 @@ spring:
   config:
     activate:
       on-profile: "local"
-    import: optional:file:local.env
+    import: optional:file:*.env
 
   #datasource
   datasource:
