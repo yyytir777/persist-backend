@@ -2,6 +2,7 @@ spring:
   config:
     activate:
       on-profile: "security"
+    import: optional:file:local.env
 
   security:
     oauth2:
