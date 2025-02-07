@@ -2,6 +2,9 @@ package yyytir777.persist.domain.log.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import yyytir777.persist.domain.category.entity.Category;
@@ -18,9 +21,9 @@ import yyytir777.persist.domain.member.repository.MemberRepository;
 import yyytir777.persist.global.error.ErrorCode;
 import yyytir777.persist.global.error.exception.LogException;
 import yyytir777.persist.global.error.exception.MemberException;
+import yyytir777.persist.global.util.SecurityUtil;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -32,14 +35,16 @@ public class LogServiceImpl implements LogService {
     private final MemberRepository memberRepository;
     private final CategoryRepository categoryRepository;
 
+    private final SecurityUtil securityUtil;
+
     private final String defaultCategoryName = "Default";
 
     /*
     log를 저장하는 로직
     Category가 살아있다면
      */
-    public String saveLog(LogCreateRequestDto logCreateRequestDto, String memberId) {
-        Member member = memberRepository.findById(memberId).orElseThrow(() ->
+    public Long saveLog(LogCreateRequestDto logCreateRequestDto) {
+        Member member = memberRepository.findById(securityUtil.getCurrentMemberId()).orElseThrow(() ->
                 new MemberException(ErrorCode.MEMBER_NOT_EXIST));
 
         String categoryName = logCreateRequestDto.getCategoryName();
@@ -75,7 +80,7 @@ public class LogServiceImpl implements LogService {
                 .build());
     }
 
-    public LogDetailResponseDto readLog(String logId, boolean hasViewed) {
+    public LogDetailResponseDto readLog(Long logId, boolean hasViewed) {
 
         // 게시글 조회가 유효하지 않다면 조회수 증가
         if(!hasViewed) logRepository.increaseViewCountByLogId(logId);
@@ -87,24 +92,26 @@ public class LogServiceImpl implements LogService {
     }
 
     @Transactional(readOnly = true)
-    public List<LogThumbnailResponseDto> readAllLogs() {
-        return logRepository.findAllWithMember().stream()
-                .map(LogThumbnailResponseDto::of)
-                .collect(Collectors.toList());
+    public Page<LogThumbnailResponseDto> readAllLogs(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return logRepository.findAll(pageable)
+                .map(LogThumbnailResponseDto::of);
     }
 
     @Transactional(readOnly = true)
-    public List<LogThumbnailResponseDto> readAllLogsByMemberId(String memberId) {
+    public List<LogThumbnailResponseDto> readAllLogsByMemberId(Long memberId) {
         return logRepository.findByMemberId(memberId).stream()
                 .map(LogThumbnailResponseDto::of)
                 .toList();
     }
 
-    public LogDetailResponseDto updateLog(LogUpdateRequestDto logUpdateRequestDto, String logId, String memberId) {
+    public LogDetailResponseDto updateLog(LogUpdateRequestDto logUpdateRequestDto, Long logId) {
+        Long memberId = securityUtil.getCurrentMemberId();
+
         Log log = logRepository.findById(logId).orElseThrow(() ->
                 new LogException(ErrorCode.LOG_NOT_EXIST));
 
-        String logMemberId = log.getCategory().getMember().getId();
+        Long logMemberId = log.getCategory().getMember().getId();
         if(!memberId.equals(logMemberId)) throw new LogException(ErrorCode.NOT_MY_LOG);
 
         String categoryName = logUpdateRequestDto.getCategoryName();
@@ -117,11 +124,13 @@ public class LogServiceImpl implements LogService {
     }
 
 
-    public void deleteLog(String logId, String memberId) {
+    public void deleteLog(Long logId) {
+        Long memberId = securityUtil.getCurrentMemberId();
+
         Log log = logRepository.findById(logId).orElseThrow(() ->
                 new LogException(ErrorCode.LOG_NOT_EXIST));
 
-        String logMemberId = log.getCategory().getMember().getId();
+        Long logMemberId = log.getCategory().getMember().getId();
 
         if(!memberId.equals(logMemberId)) throw new LogException(ErrorCode.NOT_MY_LOG);
 

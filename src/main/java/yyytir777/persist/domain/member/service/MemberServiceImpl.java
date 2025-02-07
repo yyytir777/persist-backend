@@ -10,6 +10,7 @@ import yyytir777.persist.domain.member.dto.MemberResponseDto;
 import yyytir777.persist.domain.member.dto.MemberUpdateRequestDto;
 import yyytir777.persist.global.error.ErrorCode;
 import yyytir777.persist.global.error.exception.MemberException;
+import yyytir777.persist.global.util.SecurityUtil;
 
 import java.util.Optional;
 
@@ -18,7 +19,9 @@ import java.util.Optional;
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
+    private final SecurityUtil securityUtil;
 
+    @Override
     public void register(MemberRegisterRequestDto memberRegisterRequestDto) {
 
         Optional<Member> findMember = memberRepository.findByEmail(memberRegisterRequestDto.getEmail());
@@ -38,14 +41,18 @@ public class MemberServiceImpl implements MemberService {
         }
     }
 
-    public MemberResponseDto readMember(String memberId) {
+    @Override
+    public MemberResponseDto readMember(Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(()
                 -> new MemberException(ErrorCode.MEMBER_NOT_EXIST));
 
         return MemberResponseDto.of(member);
     }
 
-    public MemberResponseDto updateMember(MemberUpdateRequestDto memberUpdateRequestDto, String memberId, String currentMemberId) {
+    @Override
+    public MemberResponseDto updateMember(MemberUpdateRequestDto memberUpdateRequestDto, Long memberId) {
+        Long currentMemberId = securityUtil.getCurrentMemberId();
+
         Member member = memberRepository.findById(memberId).orElseThrow(() ->
                 new MemberException(ErrorCode.MEMBER_NOT_EXIST));
 
@@ -65,7 +72,10 @@ public class MemberServiceImpl implements MemberService {
         return MemberResponseDto.of(member);
     }
 
-    public void deleteMember(String memberId, String currentMemberId) {
+    @Override
+    public void deleteMember(Long memberId) {
+        Long currentMemberId = securityUtil.getCurrentMemberId();
+        
         if(!memberId.equals(currentMemberId)) throw new MemberException(ErrorCode.NOT_MY_MEMBER);
 
         memberRepository.findById(memberId).orElseThrow(() ->
@@ -74,8 +84,21 @@ public class MemberServiceImpl implements MemberService {
         memberRepository.deleteById(memberId);
     }
 
+    @Override
     public Member findByEmail(String email) {
         return memberRepository.findByEmail(email).orElseThrow(() ->
+                new MemberException(ErrorCode.MEMBER_NOT_EXIST));
+    }
+
+    @Override
+    public Member findById(Long memberId) {
+        return memberRepository.findById(memberId).orElseThrow(() ->
+                new MemberException(ErrorCode.MEMBER_NOT_EXIST));
+    }
+
+    @Override
+    public String getReadme(Long memberId) {
+        return memberRepository.findReadmeById(memberId).orElseThrow(() ->
                 new MemberException(ErrorCode.MEMBER_NOT_EXIST));
     }
 

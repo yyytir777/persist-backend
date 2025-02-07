@@ -7,7 +7,7 @@ import yyytir777.persist.domain.category.entity.Category;
 @Getter
 @Builder
 public class CategoryResponseDto {
-    private String categoryId;
+    private Long categoryId;
     private String name;
 
     public static CategoryResponseDto of(Category category) {

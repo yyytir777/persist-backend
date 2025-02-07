@@ -1,10 +1,10 @@
 package yyytir777.persist.global.oauth.service;
 
-import yyytir777.persist.global.jwt.dto.JwtInfoDto;
+import yyytir777.persist.global.oauth.dto.CallbackResponse;
 
 public interface SocialLoginService {
 
     String login();
 
-    JwtInfoDto callback(String authCode);
+    CallbackResponse callback(String authCode);
 }

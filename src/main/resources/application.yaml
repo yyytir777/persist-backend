@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: "persist"
+
+  profiles:
+    group:
+      test: "test"
+      local: "local"
+      prod: "prod"
+    include: # 공통 사항 추가
+      - redis
+      - security
+  threads:
+    virtual:
+      enabled: true
+
+#jpa
+  jpa:
+    show-sql: true
+    open-in-view: false
+    hibernate:
+      ddl-auto: update

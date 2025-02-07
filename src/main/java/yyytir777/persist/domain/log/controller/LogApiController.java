@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import yyytir777.persist.domain.log.dto.LogDetailResponseDto;
 import yyytir777.persist.domain.log.dto.LogUpdateRequestDto;
@@ -14,8 +15,6 @@ import yyytir777.persist.domain.log.dto.LogThumbnailResponseDto;
 import yyytir777.persist.domain.log.dto.LogCreateRequestDto;
 import yyytir777.persist.domain.log.service.LogService;
 import yyytir777.persist.domain.log.service.ViewCountValidator;
-import yyytir777.persist.global.resolver.MemberId;
-import yyytir777.persist.global.resolver.MemberIdDto;
 import yyytir777.persist.global.response.ApiResponse;
 
 import java.util.List;
@@ -32,45 +31,43 @@ public class LogApiController {
 
     @Operation(summary = "작성한 로그 저장")
     @PostMapping("/create")
-    public ApiResponse<String> createLog(@MemberId MemberIdDto memberIdDto,
-                                    @RequestBody LogCreateRequestDto logCreateRequestDto) {
-        String logId = logService.saveLog(logCreateRequestDto, memberIdDto.getMemberId());
+    public ApiResponse<Long> createLog(@RequestBody LogCreateRequestDto logCreateRequestDto) {
+        Long logId = logService.saveLog(logCreateRequestDto);
         return ApiResponse.onSuccess(logId);
     }
 
     // TODO 로그 조회시 본인의 로그인지 체크 필요
     @Operation(summary = "id로 로그 조회")
     @GetMapping("/{log_id}")
-    public ApiResponse<LogDetailResponseDto> readLog(HttpServletRequest request, HttpServletResponse response, @PathVariable(name = "log_id") String logId) {
+    public ApiResponse<LogDetailResponseDto> readLog(HttpServletRequest request, HttpServletResponse response, @PathVariable(name = "log_id") Long logId) {
         boolean hasViewed = viewCountValidator.hasViewedInCoookie(request, response, logId);
         return ApiResponse.onSuccess(logService.readLog(logId, hasViewed));
     }
 
     @Operation(summary = "사용자의 모든 로그 조회")
     @GetMapping("/member/{member_id}")
-    public ApiResponse<List<LogThumbnailResponseDto>> getAllLogsByMemberId(@PathVariable(name = "member_id") String memberId) {
+    public ApiResponse<List<LogThumbnailResponseDto>> getAllLogsByMemberId(@PathVariable(name = "member_id") Long memberId) {
         return ApiResponse.onSuccess(logService.readAllLogsByMemberId(memberId));
     }
 
     @Operation(summary = "모든 로그 조회")
     @GetMapping("/all")
-    public ApiResponse<List<LogThumbnailResponseDto>> readAllLog() {
-        return ApiResponse.onSuccess(logService.readAllLogs());
+    public ApiResponse<Page<LogThumbnailResponseDto>> readAllLog(@RequestParam int page,
+                                                                 @RequestParam int size) {
+        return ApiResponse.onSuccess(logService.readAllLogs(page, size));
     }
 
     @Operation(summary = "로그 수정")
     @PatchMapping("/update/{log_id}")
-    public ApiResponse<LogDetailResponseDto> updateLog(@MemberId MemberIdDto memberIdDto,
-                                                       @RequestBody @Valid LogUpdateRequestDto logUpdateRequestDto,
-                                                       @PathVariable(name = "log_id") String logId) {
-        return ApiResponse.onSuccess(logService.updateLog(logUpdateRequestDto, logId,memberIdDto.getMemberId()));
+    public ApiResponse<LogDetailResponseDto> updateLog(@RequestBody @Valid LogUpdateRequestDto logUpdateRequestDto,
+                                                       @PathVariable(name = "log_id") Long logId) {
+        return ApiResponse.onSuccess(logService.updateLog(logUpdateRequestDto, logId));
     }
 
     @Operation(summary = "로그 삭제")
     @DeleteMapping("/delete/{log_id}")
-    public ApiResponse<?> deleteLog(@MemberId MemberIdDto memberIdDto,
-                                    @PathVariable(name = "log_id") String logId) {
-        logService.deleteLog(logId, memberIdDto.getMemberId());
+    public ApiResponse<?> deleteLog(@PathVariable(name = "log_id") Long logId) {
+        logService.deleteLog(logId);
         return ApiResponse.onSuccess();
     }
 }

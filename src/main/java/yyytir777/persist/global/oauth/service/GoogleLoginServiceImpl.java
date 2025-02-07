@@ -15,8 +15,9 @@ import yyytir777.persist.domain.member.entity.Member;
 import yyytir777.persist.domain.member.repository.MemberRepository;
 import yyytir777.persist.global.error.ErrorCode;
 import yyytir777.persist.global.error.exception.MemberException;
-import yyytir777.persist.global.jwt.JwtUtil;
-import yyytir777.persist.global.jwt.dto.JwtInfoDto;
+import yyytir777.persist.global.jwtToken.JwtTokenUtil;
+import yyytir777.persist.global.jwtToken.dto.JwtInfoDto;
+import yyytir777.persist.global.oauth.dto.CallbackResponse;
 import yyytir777.persist.global.oauth.dto.google.GoogleInfoResponseDto;
 import yyytir777.persist.global.oauth.dto.google.GoogleTokenDto;
 
@@ -26,11 +27,11 @@ import yyytir777.persist.global.oauth.dto.google.GoogleTokenDto;
 public class GoogleLoginServiceImpl implements SocialLoginService{
 
     private final MemberRepository memberRepository;
-    private final JwtUtil jwtUtil;
+    private final JwtTokenUtil jwtTokenUtil;
 
     private final RestTemplate restTemplate = new RestTemplate();
 
-    @Value("${spring.security.oauth2.client.registration.google.client_id}")
+    @Value("${spring.security.oauth2.client.registration.google.client-id}")
     private String clientId;
 
     @Value("${spring.security.oauth2.client.registration.google.client-secret}")
@@ -55,14 +56,16 @@ public class GoogleLoginServiceImpl implements SocialLoginService{
     }
 
     @Override
-    public JwtInfoDto callback(String authCode) {
+    public CallbackResponse callback(String authCode) {
         GoogleTokenDto.Response responseDto = getToken(authCode);
         String email = getEmail(responseDto.getAccessToken());
 
         Member member = memberRepository.findByEmail(email).orElseThrow(() ->
                 new MemberException(ErrorCode.MEMBER_NOT_EXIST));
 
-        return jwtUtil.createToken(MemberInfoDto.of(member));
+        JwtInfoDto jwtInfoDto = jwtTokenUtil.createToken(MemberInfoDto.of(member));
+
+        return CallbackResponse.getJwtInfoDto(jwtInfoDto);
     }
 
     private GoogleTokenDto.Response getToken(String authCode) {

@@ -8,7 +8,7 @@ import yyytir777.persist.domain.member.entity.Member;
 @Getter
 @Builder
 public class MemberInfoDto {
-    private String memberId;
+    private Long memberId;
     private String email;
     private Role role;
 
@@ -20,7 +20,7 @@ public class MemberInfoDto {
                 .build();
     }
 
-    public static MemberInfoDto of(String id, String email, Role role) {
+    public static MemberInfoDto of(Long id, String email, Role role) {
         return MemberInfoDto.builder()
                 .memberId(id)
                 .email(email)
