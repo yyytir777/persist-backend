@@ -24,7 +24,7 @@ jobs:
       - name : Extract .env
         run: |
           touch ./prod.env
-          ehco "${{ secrets.ENV }}" > ./prod.env
+          echo "${{ secrets.ENV }}" > ./prod.env
 
       # Gradle 빌드
       - name: Build with Gradle

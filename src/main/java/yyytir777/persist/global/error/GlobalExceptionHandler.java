@@ -25,6 +25,7 @@ public class GlobalExceptionHandler {
     public ApiResponse<?> handlerMemberException(MemberException e) {
         log.info("[" + e.getClass().getSimpleName() + "] : " + e.getMessage() + " (ErrorCode : " + e.getErrorCode().getHttpStatus().value() + ")");
         return new ApiResponse<>(false, e.getErrorCode().getCode(), null, e.getErrorCode().getMessage());
+    }
 
     @ExceptionHandler(IPException.class)
     public ApiResponse<?> handlerIPException(IPException e) {
