@@ -34,8 +34,8 @@ public class IpAuthenticationFilter extends OncePerRequestFilter {
             Country country = databaseReader.country(ipAddress).getCountry();
 
             if(!"KR".equalsIgnoreCase(country.getIsoCode())) {
+                log.warn("{} was access deined from URL {} in {}", clientIp, url, country.getIsoCode());
                 response.sendError(HttpServletResponse.SC_FORBIDDEN, "Access Denied");
-                log.warn("{} was access deined from URL {}", clientIp, url);
                 return;
             }
         } catch (GeoIp2Exception e) {

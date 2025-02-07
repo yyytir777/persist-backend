@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import yyytir777.persist.global.error.exception.BusinessException;
 import yyytir777.persist.global.error.exception.MemberException;
+import yyytir777.persist.global.error.exception.IPException;
 import yyytir777.persist.global.error.exception.TokenException;
 import yyytir777.persist.global.response.ApiResponse;
 
@@ -24,6 +25,11 @@ public class GlobalExceptionHandler {
     public ApiResponse<?> handlerMemberException(MemberException e) {
         log.info("[" + e.getClass().getSimpleName() + "] : " + e.getMessage() + " (ErrorCode : " + e.getErrorCode().getHttpStatus().value() + ")");
         return new ApiResponse<>(false, e.getErrorCode().getCode(), null, e.getErrorCode().getMessage());
+
+    @ExceptionHandler(IPException.class)
+    public ApiResponse<?> handlerIPException(IPException e) {
+        log.warn("[" + e.getClass().getSimpleName() + "] : " + e.getMessage() + " (ErrorCode : " + e.getErrorCode().getHttpStatus().value() + ")");
+        return ApiResponse.onFailure(e.getErrorCode());
     }
 
     @ExceptionHandler(TokenException.class)
@@ -40,7 +46,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ApiResponse<?> handlerException(Exception e) {
-        log.error("Exception : " + e.getMessage(), e);
+        log.error("Exception : " + e.getMessage());
         return ApiResponse.onFailure(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
     }
 }
