@@ -13,4 +13,4 @@ spring:
 # geoip2
 geoip2:
   database:
-    path: C:\\Users\\yyyti\\Desktop\\GeoLite2-Country.mmdb
+    path: ./src/main/resources/db/GeoLite2-Country.mmdb
