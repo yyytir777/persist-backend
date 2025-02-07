@@ -2,7 +2,6 @@ spring:
   config:
     activate:
       on-profile: "redis"
-    import: optional:file:*.env
 
   data:
     redis:
