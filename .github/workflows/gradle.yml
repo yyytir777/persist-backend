@@ -20,11 +20,11 @@ jobs:
         with:
           java-version: '17'
       
-      # 환경변수 복사
-      - name : Extract .env
-        run: |
-          touch ./prod.env
-          echo "${{ secrets.ENV }}" > ./prod.env
+#      # 환경변수 복사
+#      - name : Extract .env
+#        run: |
+#          touch ./prod.env
+#          echo "${{ secrets.ENV }}" > ./prod.env
 
       # Gradle 빌드
       - name: Build with Gradle
