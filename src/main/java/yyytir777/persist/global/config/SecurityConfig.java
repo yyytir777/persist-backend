@@ -1,10 +1,11 @@
-package yyytir777.persist.global.config.security;
+package yyytir777.persist.global.config;
 
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -17,17 +18,18 @@ import yyytir777.persist.domain.member.service.MemberService;
 import yyytir777.persist.global.geoip.IpAuthenticationFilter;
 import yyytir777.persist.global.handler.CustomAccessDeniedHandler;
 import yyytir777.persist.global.handler.CustomAuthenticationEntryPoint;
-import yyytir777.persist.global.jwt.JwtAuthenticationFilter;
-import yyytir777.persist.global.jwt.JwtUtil;
+import yyytir777.persist.global.jwtToken.JwtTokenAuthenticationFilter;
+import yyytir777.persist.global.jwtToken.service.TokenService;
 
 import java.util.Optional;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+@Profile({"local", "prod"})
 public class SecurityConfig {
 
-    private final JwtUtil jwtUtil;
+    private final TokenService tokenService;
     private final MemberService memberService;
 
     private final CustomAccessDeniedHandler accessDeniedHandler;
@@ -75,7 +77,7 @@ public class SecurityConfig {
 
         optionalIpAuthenticationFilter.ifPresent(optionalIpAuthenticationFilter ->
                 httpSecurity
-                    .addFilterBefore(optionalIpAuthenticationFilter, JwtAuthenticationFilter.class));
+                    .addFilterBefore(optionalIpAuthenticationFilter, JwtTokenAuthenticationFilter.class));
 
         httpSecurity
                 .exceptionHandling(exception -> exception
@@ -92,7 +94,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public JwtAuthenticationFilter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter(jwtUtil, memberService);
+    public JwtTokenAuthenticationFilter jwtAuthenticationFilter() {
+        return new JwtTokenAuthenticationFilter(memberService, tokenService);
     }
 }

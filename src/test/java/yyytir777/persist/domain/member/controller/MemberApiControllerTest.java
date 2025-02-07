@@ -16,19 +16,15 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import yyytir777.persist.domain.common.Type;
 import yyytir777.persist.domain.member.dto.MemberRegisterRequestDto;
 import yyytir777.persist.domain.member.service.MemberService;
-import yyytir777.persist.global.jwt.JwtUtil;
 
 @WebMvcTest(MemberApiController.class)
 @AutoConfigureMockMvc(addFilters = false)
 class MemberApiControllerTest {
 
     @Autowired MockMvc mockMvc;
-
     @Autowired ObjectMapper objectMapper;
-
     @MockBean MemberService memberService;
-    @MockBean JwtUtil jwtUtil;
-
+    
     @Test
     @DisplayName("유저 회원가입")
     void register() throws Exception {

@@ -8,6 +8,7 @@ spring:
       local: "local"
       prod: "prod"
     include: # 공통 사항 추가
+      - redis
       - security
   threads:
     virtual:

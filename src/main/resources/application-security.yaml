@@ -1,12 +1,8 @@
-
-# jwt
-jwt:
-  secret: ${JWT_TOKEN_SECRET}
-  access_expiration_time: ${ACCESS_TOKEN_EXPIRATION:10000}
-  refresh_expiration_time: ${REFRESH_TOKEN_EXPIRATION:2592000000}
-
-# kakao oauth
 spring:
+  config:
+    activate:
+      on-profile: "security"
+
   security:
     oauth2:
       client:
@@ -27,3 +23,9 @@ spring:
             token-uri: https://oauth2.googleapis.com/token
             user-info-uri: https://www.googleapis.com/userinfo/v2/me
             authorization-uri: https://accounts.google.com/o/oauth2/v2/auth
+
+# jwt
+jwt:
+  secret: ${JWT_TOKEN_SECRET}
+  access_expiration_time: ${ACCESS_TOKEN_EXPIRATION:10000}
+  refresh_expiration_time: ${REFRESH_TOKEN_EXPIRATION:2592000000}
