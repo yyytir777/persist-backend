@@ -8,3 +8,9 @@ spring:
     url: ${PROD_DB_URL}
     username: ${PROD_DB_USERNAME}
     password: ${PROD_DB_PASSWORD}
+
+
+# geoip2
+geoip2:
+  database:
+    path: C:\\Users\\yyyti\\Desktop\\GeoLite2-Country.mmdb
