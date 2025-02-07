@@ -75,7 +75,7 @@ jobs:
             
             # 환경변수 복사
             sudo touch ~/.env
-            ehco "${{ secrets.ENV }}" > ~/.env
+            echo "${{ secrets.ENV }}" > ~/.env
             
             # 새로운 컨테이너 실행
             docker run --name=persist -d -p 8080:8080 --env-file ~/.env ${{ secrets.DOCKER_USERNAME }}/persist:latest
