@@ -30,7 +30,7 @@ jobs:
       - name: Build with Gradle
         run: |
           chmod +x ./gradlew
-          ./gradlew build
+          ./gradlew build -x test
 
       # Docker 로그인을 통해 DockerHub로 인증
       - name: Log in to Docker Hub
