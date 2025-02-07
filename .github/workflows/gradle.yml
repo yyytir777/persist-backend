@@ -20,11 +20,11 @@ jobs:
         with:
           java-version: '17'
       
-      # 환경변수 복사
-      - name : Extract .env
-        run: |
-          touch ./prod.env
-          echo "${{ secrets.ENV }}" > ./prod.env
+#      # 환경변수 복사
+#      - name : Extract .env
+#        run: |
+#          touch ./prod.env
+#          echo "${{ secrets.ENV }}" > ./prod.env
 
       # Gradle 빌드
       - name: Build with Gradle
@@ -73,5 +73,8 @@ jobs:
             # 최신 이미지로 업데이트
             docker pull ${{ secrets.DOCKER_USERNAME }}/persist:latest
             
+            # 환경변수 복사
+            cp .env ${{ secrets.ENV }}
+            
             # 새로운 컨테이너 실행
-            docker run --name=persist -d -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/persist:latest
+            docker run --name=persist -d -p 8080:8080 --env-file .env ${{ secrets.DOCKER_USERNAME }}/persist:latest
