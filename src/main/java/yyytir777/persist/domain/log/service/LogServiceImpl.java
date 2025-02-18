@@ -80,6 +80,7 @@ public class LogServiceImpl implements LogService {
                 .build());
     }
 
+    @Transactional()
     public LogDetailResponseDto readLog(Long logId, boolean hasViewed) {
 
         // 게시글 조회가 유효하지 않다면 조회수 증가
