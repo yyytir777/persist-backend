@@ -5,7 +5,7 @@ spring:
   profiles:
     group:
       test: "test"
-      local: "local"
+      local: "local,actuator"
       prod: "prod"
     include: # 공통 사항 추가
       - redis
