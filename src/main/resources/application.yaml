@@ -5,8 +5,8 @@ spring:
   profiles:
     group:
       test: "test"
-      local: "local"
-      prod: "prod"
+      local: "local,actuator"
+      prod: "prod, actuator"
     include: # 공통 사항 추가
       - redis
       - security
@@ -20,6 +20,10 @@ spring:
     open-in-view: false
     hibernate:
       ddl-auto: update
+
+  output:
+    ansi:
+      enabled: always
 
 springdoc:
   swagger-ui:
