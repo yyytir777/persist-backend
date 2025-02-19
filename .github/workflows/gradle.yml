@@ -87,7 +87,7 @@ jobs:
             echo "${{ secrets.ENV }}" > ~/.env
             
             # docker pull 
-            docker pull persist:latest
+            docker pull ${{ secrets.DOCKER_USERNAME }}/persist:latest
             
             # docker compose 중지
             docker compose down
