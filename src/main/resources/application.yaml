@@ -21,6 +21,10 @@ spring:
     hibernate:
       ddl-auto: update
 
+  output:
+    ansi:
+      enabled: always
+
 springdoc:
   swagger-ui:
     display-request-duration: true  # 요청 소요 시간 표시 활성화
