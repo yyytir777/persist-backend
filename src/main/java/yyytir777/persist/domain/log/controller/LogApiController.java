@@ -52,8 +52,8 @@ public class LogApiController {
 
     @Operation(summary = "모든 로그 조회")
     @GetMapping("/all")
-    public ApiResponse<Page<LogThumbnailResponseDto>> readAllLog(@RequestParam int page,
-                                                                 @RequestParam int size) {
+    public ApiResponse<Page<LogThumbnailResponseDto>> readAllLog(@RequestParam(defaultValue = "0") int page,
+                                                                 @RequestParam(defaultValue = "10") int size) {
         return ApiResponse.onSuccess(logService.readAllLogs(page, size));
     }
 

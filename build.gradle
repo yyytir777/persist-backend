@@ -72,6 +72,15 @@ dependencies {
 
     // GeoIp2
     implementation group: 'com.maxmind.geoip2', name: 'geoip2', version: '2.15.0'
+
+    // cache
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
+
+    // actuator
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    // prometheus
+    implementation 'io.micrometer:micrometer-registry-prometheus'
 }
 
 configurations.configureEach {

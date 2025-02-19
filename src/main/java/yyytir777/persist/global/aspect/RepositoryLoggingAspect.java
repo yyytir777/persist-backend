@@ -11,7 +11,7 @@ import java.lang.reflect.Method;
 
 @Slf4j
 @Aspect
-@Component
+//@Component
 public class RepositoryLoggingAspect {
 
     @Before("@within(org.springframework.stereotype.Repository)")

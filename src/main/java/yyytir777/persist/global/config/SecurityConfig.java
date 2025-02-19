@@ -58,6 +58,8 @@ public class SecurityConfig {
 
             // reissue accessToken by refreshToken
             "/api/v1/token/reissue",
+
+            "/actuator/**",
     };
 
     @Bean

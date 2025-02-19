@@ -19,7 +19,7 @@ import yyytir777.persist.domain.member.repository.MemberRepository;
 import java.util.UUID;
 
 @Slf4j
-//@Configuration
+@Configuration
 @RequiredArgsConstructor
 public class AdminAccountInitializer {
 
@@ -48,22 +48,22 @@ public class AdminAccountInitializer {
         };
     }
 
-    @Bean
-    public CommandLineRunner init2() {
-
-        return args -> {
-            for(int i = 0; i < 10; i++) {
-                String email = UUID.randomUUID().toString();
-                Member member = MemberTestConverter.createMemberInTest(email);
-
-                memberRepository.save(member);
-
-                Category category = CategoryTestConverter.createCategoryInTest(member);
-                categoryRepository.save(category);
-
-                Log log = LogTestConverter.createLogInTest(category);
-                logRepository.save(log);
-            }
-        };
-    }
+//    @Bean
+//    public CommandLineRunner init2() {
+//
+//        return args -> {
+//            for(int i = 0; i < 10; i++) {
+//                String email = UUID.randomUUID().toString();
+//                Member member = MemberTestConverter.createMemberInTest(email);
+//
+//                memberRepository.save(member);
+//
+//                Category category = CategoryTestConverter.createCategoryInTest(member);
+//                categoryRepository.save(category);
+//
+//                Log log = LogTestConverter.createLogInTest(category);
+//                logRepository.save(log);
+//            }
+//        };
+//    }
 }

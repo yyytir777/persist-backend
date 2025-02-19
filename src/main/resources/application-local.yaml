@@ -15,7 +15,6 @@ spring:
     show-sql: true # hibernate sql 로그 활성화
     properties:
       hibernate:
-        format_sql: true # sql 로그 formatting
         default_batch_fetch_size: 100
         highlight_sql: true # 색상 부여
 
@@ -37,8 +36,8 @@ geoip2:
   database:
     path: C:\\Users\\yyyti\\Desktop\\GeoLite2-Country.mmdb
 
-logging:
-  level:
-    org:
-      springframework:
-        security: DEBUG
+#logging:
+#  level:
+#    org:
+#      springframework:
+#        security: DEBUG

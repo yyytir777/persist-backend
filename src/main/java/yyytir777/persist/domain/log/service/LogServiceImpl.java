@@ -2,6 +2,7 @@ package yyytir777.persist.domain.log.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -80,6 +81,7 @@ public class LogServiceImpl implements LogService {
                 .build());
     }
 
+    @Transactional()
     public LogDetailResponseDto readLog(Long logId, boolean hasViewed) {
 
         // 게시글 조회가 유효하지 않다면 조회수 증가
@@ -92,6 +94,7 @@ public class LogServiceImpl implements LogService {
     }
 
     @Transactional(readOnly = true)
+    @Cacheable(value = "log", key = "'page=' + #page + ',size=' + #size")
     public Page<LogThumbnailResponseDto> readAllLogs(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         return logRepository.findAll(pageable)
