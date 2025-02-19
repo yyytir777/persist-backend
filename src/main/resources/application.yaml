@@ -6,7 +6,7 @@ spring:
     group:
       test: "test"
       local: "local,actuator"
-      prod: "prod"
+      prod: "prod, actuator"
     include: # 공통 사항 추가
       - redis
       - security
