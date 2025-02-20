@@ -1,0 +1,13 @@
+spring:
+  config:
+    activate:
+      on-profile: "actuator"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,caches,metrics,beans,prometheus
+  endpoint:
+    health:
+      show-details: always    # health 세부 정보 표시

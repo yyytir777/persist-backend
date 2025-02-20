@@ -36,7 +36,7 @@ out/
 ### VS Code ###
 .vscode/
 
+# env
 *.env
 
-/src/main/resources/application.properties
-/src/main/resources/application-prod.properties
+.DS_Store

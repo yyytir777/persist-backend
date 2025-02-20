@@ -20,17 +20,17 @@ jobs:
         with:
           java-version: '17'
       
-      # 환경변수 복사
-      - name: Extract application-prod.properties
-        run: |
-          touch ./src/main/resources/application-prod.properties
-          echo "${{ secrets.APPLICATION_PROD_PROPERTIES }}" > src/main/resources/application-prod.properties
+#      # 환경변수 복사
+#      - name : Extract .env
+#        run: |
+#          touch ./prod.env
+#          echo "${{ secrets.ENV }}" > ./prod.env
 
       # Gradle 빌드
       - name: Build with Gradle
         run: |
           chmod +x ./gradlew
-          ./gradlew build
+          ./gradlew build -x test
 
       # Docker 로그인을 통해 DockerHub로 인증
       - name: Log in to Docker Hub
@@ -39,14 +39,39 @@ jobs:
       # Docker 이미지를 빌드하고 DockerHub로 푸시
       - name: Build and push Docker image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/persist:latest .
+          docker build --platform linux/amd64 -t ${{ secrets.DOCKER_USERNAME }}/persist:latest .
           docker push ${{ secrets.DOCKER_USERNAME }}/persist:latest
+  
+  
 
   deploy:
     runs-on: ubuntu-latest
     needs: build
 
     steps:
+      # Prometheus 설정 파일을 원격 서버로 복사
+      - name: Upload Prometheus config file
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          source: "./prometheus.yml"
+          target: "/home/ubuntu/"
+
+      # docker compose 설정 파일을 원격 서버로 복사
+      - name: Upload Prometheus config file
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          source: "./docker-compose.yaml"
+          target: "/home/ubuntu/"
+
+
       # SSH를 통해 원격 서버에 접속하고 Docker 이미지를 pull한 후 컨테이너 실행
       - name: SSH into server and deploy
         uses: appleboy/ssh-action@v0.1.6
@@ -56,22 +81,19 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            # 기존 실행 중인 컨테이너가 있으면 중지 및 삭제
-            if [ "$(docker ps -q -f name=persist)" ]; then
-              docker stop persist
-              docker rm persist
-            fi
             
-            # 동일한 이름의 중지된 컨테이너가 있으면 삭제
-            if [ "$(docker ps -a -q -f status=exited -f name=persist)" ]; then
-              docker rm persist
-            fi
+            # 환경변수 복사
+            sudo touch ~/.env
+            echo "${{ secrets.ENV }}" > ~/.env
             
-            # 사용되지 않는 이미지 삭제
-            docker image prune -f
-
-            # 최신 이미지로 업데이트
+            # docker pull 
             docker pull ${{ secrets.DOCKER_USERNAME }}/persist:latest
             
-            # 새로운 컨테이너 실행
-            docker run --name=persist -d -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/persist:latest
+            # docker compose 중지
+            docker compose down
+            
+            # docker compose 실행
+            docker compose up -d
+            
+            # 사용되지 않는 이미지 삭제
+            docker image prune -a -f

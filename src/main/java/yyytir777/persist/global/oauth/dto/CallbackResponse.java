@@ -2,7 +2,7 @@ package yyytir777.persist.global.oauth.dto;
 
 import lombok.Builder;
 import lombok.Getter;
-import yyytir777.persist.global.jwt.dto.JwtInfoDto;
+import yyytir777.persist.global.jwtToken.dto.JwtInfoDto;
 
 @Getter
 @Builder

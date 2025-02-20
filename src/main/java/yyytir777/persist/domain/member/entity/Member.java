@@ -21,8 +21,8 @@ public class Member extends BaseEntity {
 
     @Id
     @Column(name = "member_id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(name = "email", nullable = false, unique = true)
     private String email;
@@ -30,7 +30,7 @@ public class Member extends BaseEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "log_name", nullable = false)
+    @Column(name = "log_name")
     private String memberLogName;
 
     @Builder.Default
@@ -41,10 +41,35 @@ public class Member extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @Column(name = "type", nullable = false)
+    @Column(name = "type")
     @Enumerated(EnumType.STRING)
     private Type type;
 
+    @Lob
+    @Column(name = "readme", columnDefinition = "TEXT")
+    private String readme;
+
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Category> categoryList;
+
+    public Member(Long id) {
+        this.id = id;
+        this.email = id.toString() + "email";
+        this.name = "demo";
+        this.memberLogName = "demo";
+        this.readme = "demo";
+        this.thumbnail = "demo";
+        this.role = Role.USER;
+        this.type = Type.KAKAO;
+    }
+
+    public Member(String email) {
+        this.email = email;
+        this.name = "demo";
+        this.memberLogName = "demo";
+        this.readme = "demo";
+        this.thumbnail = "demo";
+        this.role = Role.USER;
+        this.type = Type.KAKAO;
+    }
 }

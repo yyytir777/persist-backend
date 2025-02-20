@@ -1,4 +1,4 @@
-package yyytir777.persist.global.jwt.controller;
+package yyytir777.persist.global.jwtToken.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -6,28 +6,33 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import yyytir777.persist.global.jwt.dto.AccessTokenResponseDto;
-import yyytir777.persist.global.jwt.service.TokenService;
+import yyytir777.persist.global.error.ErrorCode;
+import yyytir777.persist.global.error.exception.TokenException;
+import yyytir777.persist.global.jwtToken.dto.JwtInfoDto;
+import yyytir777.persist.global.jwtToken.service.TokenService;
 import yyytir777.persist.global.response.ApiResponse;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/token")
-public class TokenController {
+public class JwtTokenController {
 
     private final TokenService tokenService;
 
     @PostMapping("/reissue")
-    public ApiResponse<AccessTokenResponseDto> createAccessToken(HttpServletRequest httpServletRequest) {
+    public ApiResponse<JwtInfoDto> createAccessToken(HttpServletRequest httpServletRequest) {
         String header = httpServletRequest.getHeader("Authorization");
-        String refreshToken = header.split(" ")[1];
+        if(header == null) throw new TokenException(ErrorCode.HEADER_IS_NULL);
 
+        String refreshToken = header.split(" ")[1];
         return ApiResponse.onSuccess(tokenService.createAccessTokenByRefreshToken(refreshToken));
     }
 
     @GetMapping("/memberId")
-    public ApiResponse<String> getMemberIdByAccessToken(HttpServletRequest httpServletRequest) {
+    public ApiResponse<Long> getMemberIdByAccessToken(HttpServletRequest httpServletRequest) {
         String header = httpServletRequest.getHeader("Authorization");
+        if(header == null) throw new TokenException(ErrorCode.HEADER_IS_NULL);
+
         String accessToken = header.split(" ")[1];
 
         return ApiResponse.onSuccess(tokenService.getMemberIdByAccessToken(accessToken));

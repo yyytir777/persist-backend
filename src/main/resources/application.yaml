@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: "persist"
+
+  profiles:
+    group:
+      test: "test"
+      local: "local,actuator"
+      prod: "prod, actuator"
+    include: # 공통 사항 추가
+      - redis
+      - security
+  threads:
+    virtual:
+      enabled: true
+
+#jpa
+  jpa:
+    show-sql: true
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+
+  output:
+    ansi:
+      enabled: always
+
+springdoc:
+  swagger-ui:
+    display-request-duration: true  # 요청 소요 시간 표시 활성화
