@@ -41,35 +41,35 @@ jobs:
         run: |
           docker build --platform linux/amd64 -t ${{ secrets.DOCKER_USERNAME }}/persist:latest .
           docker push ${{ secrets.DOCKER_USERNAME }}/persist:latest
-  
-  
+
+      # Prometheus 설정 파일을 원격 서버로 복사
+      - name: Copy prometheus.yml file to EC2
+        uses: burnett01/rsync-deployments@7.0.1
+        with:
+          switches: -avzr --delete
+          remote_host: ${{ secrets.REMOTE_HOST }}
+          remote_user: ${{ secrets.REMOTE_USER }}
+          remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
+          path: ./prometheus.yml
+          remote_path: /home/ubuntu/
+
+      # docker compose 설정 파일을 원격 서버로 복사
+      - name: Copy docker-compose.yaml file to EC2
+        uses: burnett01/rsync-deployments@7.0.1
+        with:
+          switches: -avzr --delete
+          remote_host: ${{ secrets.REMOTE_HOST }}
+          remote_user: ${{ secrets.REMOTE_USER }}
+          remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
+          path: ./docker-compose.yaml
+          remote_path: /home/ubuntu/
+
 
   deploy:
     runs-on: ubuntu-latest
     needs: build
 
     steps:
-      # Prometheus 설정 파일을 원격 서버로 복사
-      - name: Upload Prometheus config file
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.REMOTE_HOST }}
-          username: ${{ secrets.REMOTE_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: 22
-          source: "./prometheus.yml"
-          target: "/home/ubuntu/"
-
-      # docker compose 설정 파일을 원격 서버로 복사
-      - name: Upload Prometheus config file
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.REMOTE_HOST }}
-          username: ${{ secrets.REMOTE_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: 22
-          source: "./docker-compose.yaml"
-          target: "/home/ubuntu/"
 
 
       # SSH를 통해 원격 서버에 접속하고 Docker 이미지를 pull한 후 컨테이너 실행
