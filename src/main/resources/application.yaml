@@ -28,3 +28,4 @@ spring:
 springdoc:
   swagger-ui:
     display-request-duration: true  # 요청 소요 시간 표시 활성화
+#  show-actuator: true swagger ui에 actuator url enable
